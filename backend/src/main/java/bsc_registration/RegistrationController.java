@@ -5,6 +5,7 @@ import bsc_registration.dto.FormData;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class RegistrationController {
@@ -16,12 +17,13 @@ public class RegistrationController {
     }
 
     @GetMapping("/")
-    public String getFrontend(){
+    public String getFrontend() {
         return "frontend";
     }
 
+    @ResponseBody
     @PostMapping("/registrate")
-    public void validateRegistration(FormData formData){
+    public void validateRegistration(FormData formData) {
         registrationModule.saveFormData(formData);
     }
 

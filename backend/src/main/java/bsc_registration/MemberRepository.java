@@ -1,11 +1,9 @@
 package bsc_registration;
 
-import bsc_registration.dto.FormData;
+import bsc_registration.dto.Member;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FormDataRepository extends CrudRepository<FormData, Long> {
-
-
+public interface MemberRepository extends CrudRepository<Member, Long> {
 }
