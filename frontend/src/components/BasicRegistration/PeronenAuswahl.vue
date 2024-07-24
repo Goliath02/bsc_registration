@@ -5,7 +5,7 @@ export default {
 </script>
 
 <template>
-  <div >
+  <div>
 
     <div class="w-full">
       <div class="font-bold text-[1.2em]">Wen möchten Sie anmelden?</div>

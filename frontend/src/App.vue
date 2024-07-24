@@ -4,14 +4,74 @@ import Header from "@/components/BSC_Header.vue";
 </script>
 
 <template>
-  <div class="bg-black h-screen  flex flex-col ">
+  <div class="bg-black h-screen flex flex-col ">
     <Header></Header>
-    <div class="flex flex-1 px-[15%] py-[2%] ">
-      <div class="flex-1 rounded-[40px] overflow-hidden  bg-bsc-gray ">
-        <RouterView></RouterView>
-      </div>
-    </div>
 
+    <router-view></router-view>
+
+
+    <!--    <div class="flex h-full min-h-0">-->
+
+    <!--      <div class="flex-1 border-white border"></div>-->
+    <!--      <div class="flex-1 border-white border overflow-y-auto text-white min-h-0 flex flex-col">-->
+
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+    <!--        <p>text</p>-->
+
+    <!--      </div>-->
+
+
+    <!--    </div>-->
 
   </div>
 
