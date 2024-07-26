@@ -8,7 +8,8 @@ export default {
 
         extend: {
             colors: {
-                'bsc-gray': '#222222'
+                'bsc-gray': '#222222',
+                'bsc-lightgray': '#404040'
             },
 
             screens: {
