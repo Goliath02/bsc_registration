@@ -11,7 +11,10 @@ export default {
 
     <label for="datenschutzCheckbox" class="text-white font-bold text-[1.2em]">
       <!--      //TODO change a tag into vue view link to route to "Datenschutz" page -->
-      <p>Hiermit stimme ich den <a href="" class="text-blue-600 underline">Datenschutzrichtlinien</a> zu.</p>
+      <p>Hiermit stimme ich den
+        <router-link to="/datenschutz" class="text-blue-600 underline">Datenschutzrichtlinien</router-link>
+        zu.
+      </p>
     </label>
 
   </div>

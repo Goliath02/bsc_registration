@@ -56,8 +56,8 @@ export default {
   <FormHeader/>
 
   <div class="flex flex-1 flex-col gap-[1em] max-h-[65vh] overflow-y-auto px-[2em] py-[1em] ">
-    <PeronenAuswahl/>
-    <GrundAuwahl/>
+    <PeronenAuswahl v-model.modelValue="mainPerson.type"/>
+    <GrundAuwahl v-model.modelValue="mainPerson.reason"/>
 
     <div class="flex gap-[1.5em]">
       <ReworkedBSCInput v-model.modelValue="mainPerson.name" header-field="Vorname" input-type="text"></ReworkedBSCInput>

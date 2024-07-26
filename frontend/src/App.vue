@@ -7,71 +7,11 @@ import Header from "@/components/BSC_Header.vue";
   <div class="bg-black h-screen flex flex-col ">
     <Header></Header>
 
-    <router-view></router-view>
-
-
-    <!--    <div class="flex h-full min-h-0">-->
-
-    <!--      <div class="flex-1 border-white border"></div>-->
-    <!--      <div class="flex-1 border-white border overflow-y-auto text-white min-h-0 flex flex-col">-->
-
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-    <!--        <p>text</p>-->
-
-    <!--      </div>-->
-
-
-    <!--    </div>-->
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component"/>
+      </transition>
+    </router-view>
 
   </div>
 
@@ -80,5 +20,15 @@ import Header from "@/components/BSC_Header.vue";
 <style scoped>
 body {
   background-color: #000000;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
