@@ -10,55 +10,62 @@ import DatenschutzCheckbox from "@/components/FinancesRegistration/DatenschutzCh
 import ReworkedBSCInput from "@/components/BasicRegistration/ReworkedBSCInput.vue";
 
 export default {
-  name: "FinanzialRegistration",
-  components: {
-    ReworkedBSCInput,
-    DatenschutzCheckbox, BSCCheckbox, IBANInput, BscInput, GenderSelection, GrundAuwahl, FormHeader, PeronenAuswahl
-  },
-  data() {
-    return {
-      financial: {
-        bankName: "",
-        bankPlace: "",
-        bankOwnerName: "",
-        bankOwnerSureName: "",
-      }
-    }
-  }
+	name: "FinanzialRegistration",
+	components: {
+		ReworkedBSCInput,
+		DatenschutzCheckbox, BSCCheckbox, IBANInput, BscInput, GenderSelection, GrundAuwahl, FormHeader, PeronenAuswahl
+	},
+	data() {
+		return {
+			financial: {
+				iban: "",
+				bankName: "",
+				bankPlace: "",
+				bankOwnerName: "",
+				bankOwnerSureName: "",
+			},
+
+			datenschutz: "",
+			richtigkeit: "",
+			hiddenSecurityCheck: ""
+		}
+	},
+
+	methods: {
+		receiveIBAN(iban) {
+			this.financial.iban = iban;
+		},
+	}
 }
 </script>
 
 <template>
 
+	<FormHeader/>
 
-  <FormHeader/>
+	<div class="flex flex-1 flex-col gap-[1em] max-h-[65vh] overflow-y-auto px-[2em] py-[1em]">
+		<div class="flex gap-[1em]">
+			<reworked-b-s-c-input v-model="financial.bankName" header-field="Bankname"/>
+			<reworked-b-s-c-input v-model="financial.bankPlace" header-field="Bankort"/>
+		</div>
 
-  <div class="flex flex-1 flex-col gap-[1em] max-h-[65vh] overflow-y-auto px-[2em] py-[1em]">
-    <div class="flex gap-[1em]">
+		<i-b-a-n-input @IBAN-change="receiveIBAN"/>
 
+		<div>
+			<bsc-input header-field="BIC" input-type="text"/>
+		</div>
 
-      <reworked-b-s-c-input v-model="financial.bankName" header-field="Bankname"/>
-      <reworked-b-s-c-input v-model="financial.bankPlace" header-field="Bankort"/>
-    </div>
+		<div class="flex gap-[1em]">
+			<reworked-b-s-c-input v-model="financial.bankOwnerName" header-field="Vorname des Kontoinhabers"/>
+			<reworked-b-s-c-input v-model="financial.bankOwnerSureName" header-field="Nachname des Kontoinhabers"/>
+		</div>
 
-    <i-b-a-n-input/>
+		<datenschutz-checkbox v-model="datenschutz"/>
+		<b-s-c-checkbox v-model="richtigkeit" label-text="Hiermit bestätige ich, dass alle angegebenen Daten der richtigkeit ensprechen."/>
 
-    <div>
-      <bsc-input header-field="BIC" input-type="text"/>
-    </div>
+		<input v-model="hiddenSecurityCheck" class="invisible h-0" type="checkbox">
 
-    <div class="flex gap-[1em]">
-
-
-      <reworked-b-s-c-input v-model="financial.bankOwnerName" header-field="Vorname des Kontoinhabers"/>
-      <reworked-b-s-c-input v-model="financial.bankOwnerSureName" header-field="Nachname des Kontoinhabers"/>
-    </div>
-
-
-    <datenschutz-checkbox/>
-    <b-s-c-checkbox label-text="Hiermit bestätige ich, dass alle angegebenen Daten der richtigkeit ensprechen."/>
-
-  </div>
+	</div>
 
 </template>
 

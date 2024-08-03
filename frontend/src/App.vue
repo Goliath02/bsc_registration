@@ -7,8 +7,8 @@ import Header from "@/components/BSC_Header.vue";
   <div class="bg-black h-screen flex flex-col ">
     <Header></Header>
 
-    <router-view v-slot="{ Component }">
-      <transition name="fade" mode="out-in">
+    <router-view :key="$route.fullPath" v-slot="{ Component  } ">
+      <transition name="fade" mode="out-in" >
         <component :is="Component"/>
       </transition>
     </router-view>
@@ -24,7 +24,7 @@ body {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s ease;
+  transition: opacity 0.2s ease;
 }
 
 .fade-enter-from,

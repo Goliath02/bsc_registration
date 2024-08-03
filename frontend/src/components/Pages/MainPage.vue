@@ -21,7 +21,7 @@ export default {
 </script>
 
 <template>
-  <main class="flex flex-1 justify-center items-center  px-[7%] py-[2%] min-h-0 ">
+  <main class="flex flex-1 justify-center items-center  lg:px-[7%] lg:py-[2%] min-h-0 ">
     <div class="w-full h-full bg-bsc-gray rounded-lg overflow-hidden flex min-h-0">
 
 
@@ -29,38 +29,31 @@ export default {
 
       <div class=" text-white flex-1 overflow-y-hidden flex flex-col">
 
-        <!--        //TODO--> Make Transition on Nested routerview possible
-
-        <router-view v-slot="{ Component }">
-          <transition name="slide-fade">
-            <component :is="Component"/>
-          </transition>
-        </router-view>
+       <router-view></router-view>
 
         <registration-navigation class="sticky bottom-0 bg-bsc-gray"/>
-
 
       </div>
     </div>
   </main>
 </template>
 
-<style>
-/*
-  Enter and leave animations can use different
-  durations and timing functions.
-*/
-.slide-fade-enter-active {
-  transition: all 0.3s ease-out;
+<style >
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.5s ease;
 }
-
-.slide-fade-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateX(20px);
+.slide-enter, .slide-leave-to /* .slide-leave-active in <2.1.8 */ {
+  transform: translateX(100%);
   opacity: 0;
 }
+
+@keyframes opacityFromZero {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 </style>
