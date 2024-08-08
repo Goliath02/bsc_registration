@@ -1,34 +1,37 @@
 <script setup>
 
 import Header from "@/components/BSC_Header.vue";
+import {useRegistrationStore} from "@/stores/RegistrationStore.js";
+
+const store = useRegistrationStore();
 </script>
 
 <template>
-  <div class="bg-black h-screen flex flex-col ">
-    <Header></Header>
+	<div class="bg-black h-screen flex flex-col ">
+		<Header></Header>
 
-    <router-view :key="$route.fullPath" v-slot="{ Component  } ">
-      <transition name="fade" mode="out-in" >
-        <component :is="Component"/>
-      </transition>
-    </router-view>
+		<router-view :key="$route.fullPath" v-slot="{ Component  } ">
+			<transition name="fade" mode="out-in">
+				<component :is="Component"/>
+			</transition>
+		</router-view>
 
-  </div>
+	</div>
 
 </template>
 
 <style scoped>
 body {
-  background-color: #000000;
+    background-color: #000000;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  opacity: 0;
+    opacity: 0;
 }
 </style>

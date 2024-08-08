@@ -7,12 +7,12 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="flex gap-[0.5em]">
-    <input v-model="modelValue" name="datenschutzCheckbox" id="bscCehckbox" type="checkbox" class="min-w-[1.5em] min-h-[1.5em]">
+	<div class="flex gap-[0.5em]">
+		<input v-model="modelValue" name="datenschutzCheckbox" id="bscCehckbox" type="checkbox" class="min-w-[1.5em] min-h-[1.5em]">
 
-    <label for="bscCehckbox" class="text-white font-bold text-[1.2em]">{{ labelText }}</label>
+		<label for="bscCehckbox" class="text-white font-bold text-[1.2em]">{{ labelText }}</label>
 
-  </div>
+	</div>
 </template>
 
 <style scoped>
