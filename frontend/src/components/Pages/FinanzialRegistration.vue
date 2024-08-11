@@ -13,7 +13,7 @@ export default {
 	name: "FinanzialRegistration",
 	components: {
 		BSCInput: ReworkedBSCInput,
-		DatenschutzCheckbox, BSCCheckbox, IBANInput,  GenderSelection, GrundAuwahl, FormHeader, PeronenAuswahl
+		DatenschutzCheckbox, BSCCheckbox, IBANInput, GenderSelection, GrundAuwahl, FormHeader, PeronenAuswahl
 	},
 	data() {
 		return {
@@ -49,21 +49,45 @@ export default {
 
 	<div class="flex flex-1 flex-col gap-[1em] max-h-[65vh] overflow-y-auto px-[2em] py-[1em]">
 		<div class="flex gap-[1em]">
-			<BSCInput v-model="useRegistrationStore().registrationData.financial.bankName" header-field="Bankname"/>
-			<BSCInput v-model="useRegistrationStore().registrationData.financial.bankPlace" header-field="Bankort"/>
+
+			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.bankName"
+			          :is-not-valid="!useRegistrationStore().isFilled.financialData.bankname && useRegistrationStore().triedToValidateFinancialForm"
+			          header-field="Bankname"
+			          input-type="text"
+			          @input="useRegistrationStore().updateFinancialValidation()"/>
+
+			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.bankPlace"
+			          :is-not-valid="!useRegistrationStore().isFilled.financialData.bankPlace && useRegistrationStore().triedToValidateFinancialForm"
+			          header-field="Bankort"
+			          input-type="text"
+			          @input="useRegistrationStore().updateFinancialValidation()"/>
+
 		</div>
 
-		<i-b-a-n-input @IBAN-change="receiveIBAN"/>
+		<i-b-a-n-input is-not-valid="" @IBAN-change="receiveIBAN"/>
 
 		<div>
-			<BSCInput v-model="useRegistrationStore().registrationData.financial.bic" header-field="BIC"/>
+			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.bic"
+			          :is-not-valid="!useRegistrationStore().isFilled.financialData.bic && useRegistrationStore().triedToValidateFinancialForm"
+			          header-field="BIC"
+			          input-type="text"
+			          @input="useRegistrationStore().updateFinancialValidation()"/>
+
 		</div>
 
 		<div class="flex gap-[1em]">
-			<BSCInput v-model="useRegistrationStore().registrationData.financial.bankOwnerName"
-			                      header-field="Vorname des Kontoinhabers"/>
-			<BSCInput v-model="useRegistrationStore().registrationData.financial.bankOwnerSureName"
-			                      header-field="Nachname des Kontoinhabers"/>
+			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.nameOfBankOwner"
+			          :is-not-valid="!useRegistrationStore().isFilled.financialData.nameOfBankOwner && useRegistrationStore().triedToValidateFinancialForm"
+			          header-field="Vorname des Kontoinhabers"
+			          input-type="text"
+			          @input="useRegistrationStore().updateFinancialValidation()"/>
+
+			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.sureNameBankOwner"
+			          :is-not-valid="!useRegistrationStore().isFilled.financialData.surenameOfBankOwner && useRegistrationStore().triedToValidateFinancialForm"
+			          header-field="Nachname des Kontoinhabers"
+			          input-type="text"
+			          @input="useRegistrationStore().updateFinancialValidation()"/>
+
 		</div>
 
 		<datenschutz-checkbox v-model="useRegistrationStore().registrationData.dataProtection"/>

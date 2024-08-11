@@ -11,10 +11,20 @@ export default {
 
 		routerToNextSite() {
 
-			if (useRegistrationStore().isFormCorrect()) {
+			if (useRegistrationStore().isDefaultDataFormCorrect()) {
 				router.push("/kontodaten");
 			} else {
 				console.log("Form is not correct");
+			}
+
+		},
+
+		postFormData() {
+			if (useRegistrationStore().isFinancialFormCorrect()) {
+				// useRegistrationStore().postData();
+				console.log("Post data");
+			} else {
+				console.log("Financial form is not correct");
 			}
 
 		},
@@ -65,7 +75,7 @@ export default {
 			<button v-if="!isLastPage" class="font-bold bg-red-600 px-[1em] py-[0.5em] rounded" @click="routerToNextSite">
 				{{ getLastPageButtonText }}
 			</button>
-			<button v-else class="font-bold bg-red-600 px-[1em] py-[0.5em] rounded" @click="useRegistrationStore().postData()">
+			<button v-else class="font-bold bg-red-600 px-[1em] py-[0.5em] rounded" @click="postFormData">
 				{{ getLastPageButtonText }}
 			</button>
 

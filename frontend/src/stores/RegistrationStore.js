@@ -20,12 +20,12 @@ export const useRegistrationStore = defineStore('registrationStore', {
 			},
 
 			financial: {
-				iban: "",
-				bic: "",
 				bankName: "",
 				bankPlace: "",
-				bankOwnerName: "",
-				bankOwnerSureName: "",
+				iban: "",
+				bic: "",
+				nameOfBankOwner: "",
+				sureNameBankOwner: "",
 			},
 
 			dataProtection: false,
@@ -58,13 +58,14 @@ export const useRegistrationStore = defineStore('registrationStore', {
 				bic: false,
 				nameOfBankOwner: false,
 				surenameOfBankOwner: false,
-				dataProtection: false,
-				correctness: false,
-			}
 
+			},
+			dataProtection: false,
+			correctness: false,
 		},
 
-		triedToValidate: false
+		triedToValidateBasicForm: false,
+		triedToValidateFinancialForm: false
 
 	}),
 
@@ -79,11 +80,11 @@ export const useRegistrationStore = defineStore('registrationStore', {
 			useRegistrationStore().registrationData.morePersons.splice(index, 1);
 		},
 
-		isFormCorrect() {
+		isDefaultDataFormCorrect() {
 
-			useRegistrationStore().triedToValidate = true;
+			useRegistrationStore().triedToValidateBasicForm = true;
 
-			useRegistrationStore().updateValidation();
+			useRegistrationStore().updateBasicValidation();
 
 			return useRegistrationStore().isFilled.defaultData.type &&
 				useRegistrationStore().isFilled.defaultData.reason &&
@@ -95,15 +96,32 @@ export const useRegistrationStore = defineStore('registrationStore', {
 				useRegistrationStore().isFilled.defaultData.phone &&
 				useRegistrationStore().isFilled.defaultData.street &&
 				useRegistrationStore().isFilled.defaultData.plz &&
-				useRegistrationStore().isFilled.defaultData.place;
+				useRegistrationStore().isFilled.defaultData.place &&
+				useRegistrationStore().checkMorePersonsData();
 		},
 
-		updateValidation() {
+		isFinancialFormCorrect() {
+
+			useRegistrationStore().triedToValidateFinancialForm = true;
+
+			useRegistrationStore().updateFinancialValidation();
+
+			return useRegistrationStore().isFilled.financialData.bankname &&
+				useRegistrationStore().isFilled.financialData.bankPlace &&
+				useRegistrationStore().isFilled.financialData.iban &&
+				useRegistrationStore().isFilled.financialData.bic &&
+				useRegistrationStore().isFilled.financialData.nameOfBankOwner &&
+				useRegistrationStore().isFilled.financialData.surenameOfBankOwner &&
+				useRegistrationStore().isFilled.dataProtection &&
+				useRegistrationStore().isFilled.correctness;
+		},
+
+		updateBasicValidation() {
 			useRegistrationStore().isFilled.defaultData.type = !(!useRegistrationStore().registrationData.mainData.type);
 			useRegistrationStore().isFilled.defaultData.reason = !(!useRegistrationStore().registrationData.mainData.reason);
 			useRegistrationStore().isFilled.defaultData.name = !(!useRegistrationStore().registrationData.mainData.name);
 			useRegistrationStore().isFilled.defaultData.surename = !(!useRegistrationStore().registrationData.mainData.surename);
-			useRegistrationStore().isFilled.defaultData.birthday = !(!useRegistrationStore().registrationData.mainData.birtday);
+			useRegistrationStore().isFilled.defaultData.birthday = !(!useRegistrationStore().registrationData.mainData.birthday);
 			useRegistrationStore().isFilled.defaultData.gender = !(!useRegistrationStore().registrationData.mainData.gender);
 			useRegistrationStore().isFilled.defaultData.email = !(!useRegistrationStore().registrationData.mainData.email);
 			useRegistrationStore().isFilled.defaultData.phone = !(!useRegistrationStore().registrationData.mainData.phone);
@@ -112,16 +130,29 @@ export const useRegistrationStore = defineStore('registrationStore', {
 			useRegistrationStore().isFilled.defaultData.place = !(!useRegistrationStore().registrationData.mainData.place);
 		},
 
+		updateFinancialValidation() {
+			useRegistrationStore().isFilled.financialData.bankname = !(!useRegistrationStore().registrationData.financial.bankName);
+			useRegistrationStore().isFilled.financialData.bankPlace = !(!useRegistrationStore().registrationData.financial.bankPlace);
+			useRegistrationStore().isFilled.financialData.iban = !(!useRegistrationStore().registrationData.financial.iban);
+			useRegistrationStore().isFilled.financialData.bic = !(!useRegistrationStore().registrationData.financial.bic);
+			useRegistrationStore().isFilled.financialData.nameOfBankOwner = !(!useRegistrationStore().registrationData.financial.nameOfBankOwner);
+			useRegistrationStore().isFilled.financialData.surenameOfBankOwner = !(!useRegistrationStore().registrationData.financial.sureNameBankOwner);
+			useRegistrationStore().isFilled.dataProtection = !(!useRegistrationStore().registrationData.dataProtection);
+			useRegistrationStore().isFilled.correctness = !(!useRegistrationStore().registrationData.correctness);
+
+		},
+
 		checkMorePersonsData() {
 
 			const morePersons = useRegistrationStore().registrationData.morePersons;
 
 			for (let i = 0; i < morePersons.length; i++) {
 
-				if (!morePersons[i].name || !morePersons[i].surename || !morePersons[i].birtday || !morePersons[i].gender) {
+				if (!morePersons[i].name || !morePersons[i].surename || !morePersons[i].birthday || !morePersons[i].gender) {
 					return false;
 				}
 			}
+			return true;
 		}
 	}
 })

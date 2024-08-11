@@ -10,6 +10,10 @@ export default {
 
 	},
 
+	props: {
+		isNotValid: Boolean
+	},
+
 	data() {
 		return {
 			IBANSection1: "",
@@ -75,30 +79,35 @@ export default {
 		<div class="font-bold text-[1.2em]">IBAN</div>
 		<div class="flex gap-[1em] -lg:gap-[0.5em]">
 			<input ref="input-1" v-model="IBANSection1"
+			       :class="isNotValid ? 'border-2 border-red-700' : '' "
 			       class="w-full flex-2 h-[3em] lg:px-[0.5em]  bg-[#585858] rounded-lg font-medium appearance-none text-center"
 			       data-index="1"
-			       @input="focusNext($event,4)"
 			       maxlength="4"
+			       @input="focusNext($event,4)"
 			       @keydown="isNumber($event)">
 			<input ref="input-2" v-model="IBANSection2"
+			       :class="isNotValid ? 'border-2 border-red-700' : '' "
 			       class="w-full flex-2 h-[3em] lg:px-[0.5em]  bg-[#585858] rounded-lg font-medium appearance-none text-center"
 			       data-index="2"
 			       maxlength="4"
 			       @input="focusNext($event,4)"
 			       @keydown="isNumber($event)">
 			<input ref="input-3" v-model="IBANSection3"
+			       :class="isNotValid ? 'border-2 border-red-700' : '' "
 			       class="w-full flex-2 h-[3em] lg:px-[0.5em]  bg-[#585858] rounded-lg font-medium appearance-none text-center"
 			       data-index="3"
 			       maxlength="4"
 			       @input="focusNext($event,4)"
 			       @keydown="isNumber($event)">
 			<input ref="input-4" v-model="IBANSection4"
+			       :class="isNotValid ? 'border-2 border-red-700' : '' "
 			       class="w-full flex-2 h-[3em] lg:px-[0.5em]  bg-[#585858] rounded-lg font-medium appearance-none text-center"
 			       data-index="4"
 			       maxlength="4"
 			       @input="focusNext($event,4)"
 			       @keydown="isNumber($event)">
 			<input ref="input-5" v-model="IBANSection5"
+			       :class="isNotValid ? 'border-2 border-red-700' : '' "
 			       class="w-full flex-2 h-[3em] lg:px-[0.5em]  bg-[#585858] rounded-lg font-medium appearance-none text-center"
 			       data-index="5"
 			       maxlength="4"
@@ -106,6 +115,7 @@ export default {
 			       @keydown="isNumber($event)">
 
 			<input ref="input-6" v-model="IBANSection6"
+			       :class="isNotValid ? 'border-2 border-red-700' : '' "
 			       class="w-1/2 flex-2  h-[3em] lg:px-[0.5em]  bg-[#585858] rounded-lg font-medium appearance-none text-center"
 			       data-index="6"
 			       maxlength="2"

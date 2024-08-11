@@ -20,20 +20,22 @@ const isValid = reactive({
 )
 // a computed ref
 const isValidName = computed(() => {
-	return !(!this.props.inputData.name);
-
+	return !(!props.inputData.name);
 })
 
 const isValidSurename = computed(() => {
-	return  !(!this.props.inputData.surename);
+	return !(!props.inputData.surename);
 })
 
 const isValidBirthday = computed(() => {
-	return !(!this.props.inputData.birthday);
+
+	console.log(props.inputData.birthday);
+
+	return !(!props.inputData.birthday);
 })
 
 const isValidGender = computed(() => {
-	return !(!this.props.inputData.gender);
+	return !(!props.inputData.gender);
 })
 
 function updateValidation() {
@@ -56,13 +58,21 @@ function updateValidation() {
 		</div>
 
 		<div class="flex gap-[1.5em]">
-			<ReworkedBSCInput v-model.modelValue="extraModelValues.name" :is-not-valid="!this.isValidName && useRegistrationStore().triedToValidate" @input="useRegistrationStore().updateValidation()" header-field="Vorname" input-type="text"/>
-			<ReworkedBSCInput v-model.modelValue="extraModelValues.surename" :is-not-valid="!this.isValidSurename && useRegistrationStore().triedToValidate" @input="useRegistrationStore().updateValidation()" header-field="Nachname" input-type="text"/>
+			<ReworkedBSCInput v-model.modelValue="extraModelValues.name"
+			                  :is-not-valid="!isValidName && useRegistrationStore().triedToValidateBasicForm"
+			                  header-field="Vorname" input-type="text" @input="useRegistrationStore().updateBasicValidation()"/>
+			<ReworkedBSCInput v-model.modelValue="extraModelValues.surename"
+			                  :is-not-valid="!isValidSurename && useRegistrationStore().triedToValidateBasicForm"
+			                  header-field="Nachname" input-type="text" @input="useRegistrationStore().updateBasicValidation()"/>
 		</div>
 
 		<div class="flex gap-[1.5em]">
-			<ReworkedBSCInput v-model.modelValue="extraModelValues.birtday" :is-not-valid="!this.isValidBirthday && useRegistrationStore().triedToValidate" @input="useRegistrationStore().updateValidation()" header-field="Geburtsdatum" input-type="date"/>
-			<gender-selection v-model.modelValue="extraModelValues.gender" :is-not-valid="!this.isValidGender && useRegistrationStore().triedToValidate" @input="useRegistrationStore().updateValidation()" class="flex-1 w-1/2"/>
+			<ReworkedBSCInput v-model.modelValue="extraModelValues.birthday"
+			                  :is-not-valid="!isValidBirthday && useRegistrationStore().triedToValidateBasicForm"
+			                  header-field="Geburtsdatum" input-type="date" @input="useRegistrationStore().updateBasicValidation()"/>
+			<gender-selection v-model.modelValue="extraModelValues.gender"
+			                  :is-not-valid="!isValidGender && useRegistrationStore().triedToValidateBasicForm"
+			                  class="flex-1 w-1/2" @input="useRegistrationStore().updateBasicValidation()"/>
 
 		</div>
 	</div>
