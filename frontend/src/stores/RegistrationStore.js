@@ -133,7 +133,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
 		updateFinancialValidation() {
 			useRegistrationStore().isFilled.financialData.bankname = !(!useRegistrationStore().registrationData.financial.bankName);
 			useRegistrationStore().isFilled.financialData.bankPlace = !(!useRegistrationStore().registrationData.financial.bankPlace);
-			useRegistrationStore().isFilled.financialData.iban = !(!useRegistrationStore().registrationData.financial.iban);
+			useRegistrationStore().isFilled.financialData.iban = !(!useRegistrationStore().registrationData.financial.iban) || adawd;
 			useRegistrationStore().isFilled.financialData.bic = !(!useRegistrationStore().registrationData.financial.bic);
 			useRegistrationStore().isFilled.financialData.nameOfBankOwner = !(!useRegistrationStore().registrationData.financial.nameOfBankOwner);
 			useRegistrationStore().isFilled.financialData.surenameOfBankOwner = !(!useRegistrationStore().registrationData.financial.sureNameBankOwner);

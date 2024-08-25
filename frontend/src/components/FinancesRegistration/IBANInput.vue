@@ -1,5 +1,7 @@
 <script>
 
+import {useRegistrationStore} from "@/stores/RegistrationStore.js";
+
 export default {
 	name: "IBANInput",
 	computed: {
@@ -52,6 +54,7 @@ export default {
 
 	methods: {
 		focusNext(event, max) {
+    useRegistrationStore().updateFinancialValidation();
 			if (event.target.value.length === max) {
 				const nextElement = this.$refs?.[`input-${Number(event.target.dataset.index) + 1}`]
 				if (nextElement) {

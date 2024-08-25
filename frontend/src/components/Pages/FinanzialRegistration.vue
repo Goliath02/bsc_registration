@@ -64,7 +64,7 @@ export default {
 
 		</div>
 
-		<i-b-a-n-input is-not-valid="" @IBAN-change="receiveIBAN"/>
+		<i-b-a-n-input :is-not-valid="!useRegistrationStore().isFilled.financialData.iban && useRegistrationStore().triedToValidateFinancialForm" @IBAN-change="receiveIBAN"/>
 
 		<div>
 			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.bic"
