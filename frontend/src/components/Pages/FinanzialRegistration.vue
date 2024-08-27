@@ -64,7 +64,7 @@ export default {
 
 		</div>
 
-		<i-b-a-n-input :is-not-valid="!useRegistrationStore().isFilled.financialData.iban && useRegistrationStore().triedToValidateFinancialForm" @IBAN-change="receiveIBAN"/>
+		<i-b-a-n-input />
 
 		<div>
 			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.bic"
@@ -90,9 +90,14 @@ export default {
 
 		</div>
 
-		<datenschutz-checkbox v-model="useRegistrationStore().registrationData.dataProtection"/>
+		<datenschutz-checkbox v-model="useRegistrationStore().registrationData.dataProtection"
+		                      :is-not-valid="!useRegistrationStore().isFilled.dataProtection && useRegistrationStore().triedToValidateFinancialForm"
+		                      @change="useRegistrationStore().updateFinancialValidation()"/>
+
 		<b-s-c-checkbox v-model="useRegistrationStore().registrationData.correctness"
-		                label-text="Hiermit bestätige ich, dass alle angegebenen Daten der richtigkeit ensprechen."/>
+		                :is-not-valid="!useRegistrationStore().isFilled.correctness && useRegistrationStore().triedToValidateFinancialForm"
+		                label-text="Hiermit bestätige ich, dass alle angegebenen Daten der Richtigkeit ensprechen."
+		                @change="useRegistrationStore().updateFinancialValidation()"/>
 
 		<input v-model="useRegistrationStore().registrationData.hiddenSecurityCheck" class="invisible h-0" type="checkbox">
 
