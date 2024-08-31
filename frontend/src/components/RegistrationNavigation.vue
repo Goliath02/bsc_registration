@@ -16,12 +16,11 @@ export default {
 			} else {
 				console.log("Form is not correct");
 			}
-
 		},
 
 		postFormData() {
 			if (useRegistrationStore().isFinancialFormCorrect()) {
-				// useRegistrationStore().postData();
+				useRegistrationStore().postData();
 				console.log("Post data");
 			} else {
 				console.log("Financial form is not correct");
