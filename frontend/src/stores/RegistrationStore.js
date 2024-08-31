@@ -6,17 +6,17 @@ export const useRegistrationStore = defineStore('registrationStore', {
 
 		registrationData: {
 			mainData: {
-				type: "Erwachsener",
-				reason: "Nichtschwimmerkurs",
-				name: "Kevin",
-				surename: "Krüger",
-				birthday: "2002-04-10",
-				gender: "Männlich",
-				email: "test@mail.com",
-				phone: "123",
-				street: "Straße 1",
-				plz: "75191",
-				place: "Pforzheim",
+				type: "",
+				reason: "",
+				name: "",
+				surename: "",
+				birthday: "",
+				gender: "",
+				email: "",
+				phone: "",
+				street: "",
+				plz: "",
+				place: "",
 			},
 
 			financial: {
@@ -71,9 +71,13 @@ export const useRegistrationStore = defineStore('registrationStore', {
 
 	actions: {
 		postData() {
-			var data = this.registrationData;
 
-			axios.post("/registrate", data);
+			this.updateFinancialValidation();
+			if (!useRegistrationStore().registrationData.hiddenSecurityCheck) {
+				axios.post("/registrate", useRegistrationStore().registrationData);
+				console.log("Poested");
+			}
+			console.log("Did not post");
 		},
 
 		removeExtraPersonForm(index) {
@@ -133,18 +137,12 @@ export const useRegistrationStore = defineStore('registrationStore', {
 		updateFinancialValidation() {
 			useRegistrationStore().isFilled.financialData.bankname = !(!useRegistrationStore().registrationData.financial.bankName);
 			useRegistrationStore().isFilled.financialData.bankPlace = !(!useRegistrationStore().registrationData.financial.bankPlace);
-			useRegistrationStore().isFilled.financialData.iban =useRegistrationStore().registrationData.financial.iban.length === 27;
 			useRegistrationStore().isFilled.financialData.bic = !(!useRegistrationStore().registrationData.financial.bic);
 			useRegistrationStore().isFilled.financialData.nameOfBankOwner = !(!useRegistrationStore().registrationData.financial.nameOfBankOwner);
 			useRegistrationStore().isFilled.financialData.surenameOfBankOwner = !(!useRegistrationStore().registrationData.financial.sureNameBankOwner);
 			useRegistrationStore().isFilled.dataProtection = !(!useRegistrationStore().registrationData.dataProtection);
 			useRegistrationStore().isFilled.correctness = !(!useRegistrationStore().registrationData.correctness);
 
-		},
-
-		//TODO write method to check if Iban has been entered and is correct & fix iban input to not show last result before real input
-		checkIbanInput() {
-			return useRegistrationStore().registrationData.financial.iban.length === 27;
 		},
 
 		checkMorePersonsData() {

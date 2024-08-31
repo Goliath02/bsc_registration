@@ -33,11 +33,7 @@ export default {
 	},
 
 	methods: {
-		useRegistrationStore,
-
-		receiveIBAN(iban) {
-			useRegistrationStore().registrationData.financial.iban = iban;
-		},
+		useRegistrationStore
 	},
 
 }
@@ -64,7 +60,7 @@ export default {
 
 		</div>
 
-		<i-b-a-n-input />
+		<i-b-a-n-input/>
 
 		<div>
 			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.bic"
