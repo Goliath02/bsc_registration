@@ -14,7 +14,7 @@ export default {
 	components: {
 		FinanzialRegistration,
 		RegistrationNavigation,
-		DefaultRegistration, Bsc_header, GenderSelection, FormHeader, BSCBanner,  GrundAuwahl, PeronenAuswahl
+		DefaultRegistration, Bsc_header, GenderSelection, FormHeader, BSCBanner, GrundAuwahl, PeronenAuswahl
 	},
 }
 

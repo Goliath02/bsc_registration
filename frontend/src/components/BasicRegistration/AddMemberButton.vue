@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "AddMemberButton"
+	name: "AddMemberButton"
 }
 </script>
 
