@@ -13,10 +13,21 @@ export default {
 		isValidGermanIBAN() {
 
 			const s = [this.IBANSection2, this.IBANSection3, this.IBANSection4, this.IBANSection5, this.IBANSection6, this.IBANSection1].join('')
-				.replace("DE", "1314");
+				.toUpperCase()
+				.replace("D", "13")
+				.replace("E", "14");
 
 			const validIbanLength = (this.IBANSection1 + this.IBANSection2 + this.IBANSection3 + this.IBANSection4 + this.IBANSection5 + this.IBANSection6).length === 22;
-			const validIban = BigInt(s) % 97n === BigInt(1);
+
+			let validIban;
+
+			const regex = new RegExp(/\D+/);
+
+			if (regex.test(s) || s.length === 0) {
+				validIban = false;
+			} else {
+				validIban = BigInt(s) % 97n === BigInt(1);
+			}
 
 			useRegistrationStore().isFilled.financialData.iban = validIban && validIbanLength;
 
