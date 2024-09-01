@@ -21,9 +21,7 @@ export default {
 
 			let validIban;
 
-			var regex = new RegExp(/\D+/);
-
-			var doesRegexMatch = regex.test(s);
+			const regex = new RegExp(/\D+/);
 
 			if (regex.test(s) || s.length === 0) {
 				validIban = false;
@@ -36,7 +34,7 @@ export default {
 			return useRegistrationStore().triedToValidateFinancialForm && (!validIban || !validIbanLength);
 		},
 	},
-F
+
 	props: {
 		isNotValid: Boolean
 	},
