@@ -4,6 +4,8 @@ import DefaultRegistration from "@/components/Pages/DefaultRegistration.vue";
 import {useRegistrationStore} from "@/stores/RegistrationStore.js";
 import router from "@/router.js";
 
+//TODO Add loading animation for post and confirmation
+
 export default {
 	name: "RegistrationNavigation",
 	methods: {

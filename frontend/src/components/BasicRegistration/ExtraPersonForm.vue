@@ -38,10 +38,6 @@ const isValidGender = computed(() => {
 	return !(!props.inputData.gender);
 })
 
-function updateValidation() {
-// TODO fix validation for more persons
-}
-
 </script>
 
 <template>
