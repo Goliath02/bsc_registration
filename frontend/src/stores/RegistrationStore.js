@@ -33,7 +33,10 @@ export const useRegistrationStore = defineStore('registrationStore', {
 			hiddenSecurityCheck: false,
 
 			morePersons: [],
+
 		},
+
+		studentIdentification: [],
 
 		isFilled: {
 
@@ -50,6 +53,8 @@ export const useRegistrationStore = defineStore('registrationStore', {
 				plz: false,
 				place: false,
 			},
+
+			studentIdentification: false,
 
 			financialData: {
 				bankname: false,
@@ -74,10 +79,18 @@ export const useRegistrationStore = defineStore('registrationStore', {
 
 			this.updateFinancialValidation();
 			if (!useRegistrationStore().registrationData.hiddenSecurityCheck) {
-				axios.post("/registrate", useRegistrationStore().registrationData);
+
+				var formData = new FormData();
+
+				formData.append('formData', new Blob([JSON.stringify(useRegistrationStore().registrationData)], {type: 'application/json'}))
+
+				useRegistrationStore().studentIdentification.forEach((file, index) => {
+					formData.append(`studentIdentificationFiles`, file);
+				});
+
+				axios.post("/registrate", formData, {headers: {'Content-Type': 'multipart/form-data'}});
 				console.log("Poested");
 			}
-			console.log("Did not post");
 		},
 
 		removeExtraPersonForm(index) {
@@ -92,6 +105,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
 
 			return useRegistrationStore().isFilled.defaultData.type &&
 				useRegistrationStore().isFilled.defaultData.reason &&
+				(useRegistrationStore().isFilled.studentIdentification || !this.isStudenIdentificationActive()) &&
 				useRegistrationStore().isFilled.defaultData.name &&
 				useRegistrationStore().isFilled.defaultData.surename &&
 				useRegistrationStore().isFilled.defaultData.birthday &&
@@ -102,6 +116,14 @@ export const useRegistrationStore = defineStore('registrationStore', {
 				useRegistrationStore().isFilled.defaultData.plz &&
 				useRegistrationStore().isFilled.defaultData.place &&
 				useRegistrationStore().checkMorePersonsData();
+		},
+
+		isStudenIdentificationActive() {
+
+			if (useRegistrationStore().registrationData.mainData.type === 'Schüler/Student über 18') {
+				return true;
+			}
+			return useRegistrationStore().isFilled.studentIdentification;
 		},
 
 		isFinancialFormCorrect() {
@@ -123,6 +145,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
 		updateBasicValidation() {
 			useRegistrationStore().isFilled.defaultData.type = !(!useRegistrationStore().registrationData.mainData.type);
 			useRegistrationStore().isFilled.defaultData.reason = !(!useRegistrationStore().registrationData.mainData.reason);
+			useRegistrationStore().isFilled.studentIdentification = !((useRegistrationStore().studentIdentification.length === 0 || !this.isStudenIdentificationActive()));
 			useRegistrationStore().isFilled.defaultData.name = !(!useRegistrationStore().registrationData.mainData.name);
 			useRegistrationStore().isFilled.defaultData.surename = !(!useRegistrationStore().registrationData.mainData.surename);
 			useRegistrationStore().isFilled.defaultData.birthday = !(!useRegistrationStore().registrationData.mainData.birthday);
