@@ -52,7 +52,41 @@ export default {
 
 	methods: {
 
+		postInput(input) {
+
+			if (input.length > 4) {
+
+				var slices = [];
+
+				for (let i = 0; slices.length !== 6; i += 4) {
+					slices.push(input.slice(i, i + 4));
+				}
+
+				slices[5] = slices[5].slice(0, 2);
+
+				switch (slices.length) {
+
+					case 6:
+						this.IBANSection6 = slices[5];
+					case 5:
+						this.IBANSection5 = slices[4];
+					case 4:
+						this.IBANSection4 = slices[3];
+					case 3:
+						this.IBANSection3 = slices[2];
+					case 2:
+						this.IBANSection2 = slices[1];
+					case 1:
+						this.IBANSection1 = slices[0];
+						break;
+
+				}
+
+			}
+		},
+
 		onIbanInput(event, max) {
+			this.postInput(event.data);
 			useRegistrationStore().registrationData.financial.iban = this.getIBAN;
 			this.focusNext(event, max);
 		},
