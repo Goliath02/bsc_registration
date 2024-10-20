@@ -7,13 +7,17 @@ import AddMemberButton from "@/components/BasicRegistration/AddMemberButton.vue"
 import ReworkedBSCInput from "@/components/BasicRegistration/BSCInput.vue";
 import ExtraPersonForm from "@/components/BasicRegistration/ExtraPersonForm.vue";
 import {useRegistrationStore} from "@/stores/RegistrationStore.js";
+import NachweisFeld from "@/components/BasicRegistration/NachweisFeld.vue";
 
 export default {
 
 	// TODO add studenten beweis
 
 	name: "DefaultRegistration",
-	components: {BSCInput: ReworkedBSCInput, ExtraPersonForm, AddMemberButton, GenderSelection, FormHeader, GrundAuwahl, PeronenAuswahl},
+	components: {
+		NachweisFeld,
+		BSCInput: ReworkedBSCInput, ExtraPersonForm, AddMemberButton, GenderSelection, FormHeader, GrundAuwahl, PeronenAuswahl
+	},
 
 	data() {
 		return {
@@ -47,6 +51,14 @@ export default {
 			useRegistrationStore().registrationData.morePersons.push(newPerson);
 		},
 	},
+
+	computed: {
+		toggleNachweisActivation() {
+			useRegistrationStore().isFilled.studentIdentification = !useRegistrationStore().registrationData.mainData.type === 'Schüler/Student über 18';
+			return useRegistrationStore().registrationData.mainData.type === 'Schüler/Student über 18';
+		},
+	}
+
 }
 </script>
 
@@ -58,6 +70,12 @@ export default {
 		<PeronenAuswahl v-model.modelValue="useRegistrationStore().registrationData.mainData.type"
 		                :is-not-valid="!useRegistrationStore().isFilled.defaultData.type && useRegistrationStore().triedToValidateBasicForm"
 		                @change="useRegistrationStore().updateBasicValidation()"/>
+
+		<NachweisFeld :is-active="toggleNachweisActivation"
+		              :is-not-valid="!useRegistrationStore().isFilled.studentIdentification && useRegistrationStore().triedToValidateBasicForm"
+		              @change="useRegistrationStore().updateBasicValidation()"
+		/>
+
 		<GrundAuwahl v-model.modelValue="useRegistrationStore().registrationData.mainData.reason"
 		             :is-not-valid="!useRegistrationStore().isFilled.defaultData.reason && useRegistrationStore().triedToValidateBasicForm"
 		             @change="useRegistrationStore().updateBasicValidation()"/>

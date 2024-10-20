@@ -5,9 +5,9 @@ import java.util.List;
 public record FormData(
 		MainData mainData,
 		FinancialData financial,
-		Boolean dataProtection,
-		Boolean correctness,
-		Boolean hiddenSecurityCheck,
+		boolean dataProtection,
+		boolean correctness,
+		boolean hiddenSecurityCheck,
 		List<ExtraPerson> morePersons
 ) {
 }
