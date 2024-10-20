@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 
 @Service
@@ -28,7 +30,7 @@ public class EmailService {
 	@Value("${mail.to}")
 	private String sendTo;
 
-	public void sendMail(String csv) throws MessagingException {
+	public void sendMail(String csv, List<MultipartFile> files) throws MessagingException {
 
 		final JavaMailSender mailSender = mailSenderConfig.getJavaMailSender();
 
@@ -44,6 +46,10 @@ public class EmailService {
 		messageHelper.setTo(InternetAddress.parse(sendTo));
 		messageHelper.setSubject("Neue Anmeldung vom für den 1.BSC!");
 		messageHelper.setText("Neue Anmeldedaten im Anhang");
+
+		for (MultipartFile file : files) {
+			messageHelper.addAttachment(file.getOriginalFilename(), file);
+		}
 
 		ByteArrayDataSource inputStream = new ByteArrayDataSource(csv.getBytes(StandardCharsets.UTF_8), "application/octet-stream");
 
