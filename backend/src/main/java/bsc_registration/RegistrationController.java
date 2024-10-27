@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -33,22 +35,39 @@ public class RegistrationController {
 		return "index";
 	}
 
-
+	//Remove if not in developing mode
+	@CrossOrigin(origins = "http://localhost:5173/")
 	@PostMapping(value = "/registrate", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity validateRegistration(@RequestPart FormData formData,
-	                                           @RequestPart List<MultipartFile> studentIdentificationFiles) {
+	                                           @RequestPart(required = false) List<MultipartFile> studentIdentificationFiles) {
 
 		if (formData == null) {
-			return ResponseEntity.status(400).build();
+			return ResponseEntity.status(400).body("Form-data is empty");
+		}
+
+		if (studentIdentificationFiles != null) {
+
+			for (MultipartFile file : studentIdentificationFiles) {
+				//Is bigger than 8MB
+				if (file.getSize() > ((1024 + 1024) * 8)) {
+					return ResponseEntity.status(413).body("File Size is too big");
+				}
+			}
 		}
 
 		try {
-			registrationModule.sendEmail(formData, studentIdentificationFiles);
+			registrationModule.sendEmailToRegistratedUser(formData);
+			registrationModule.sendEmailToRegistration(formData, studentIdentificationFiles);
 		} catch (MessagingException | IOException e) {
 			logger.error(format("Registration failed with Excpetion: %s", e.getMessage()));
 			return ResponseEntity.status(500).build();
+		} catch (MailSendException e) {
+			logger.error(format("Registration failed with Excpetion: %s", e.getMessage()));
+
+			return ResponseEntity.status(400).build();
 		}
 
-		return ResponseEntity.status(200).build();
+
+		return ResponseEntity.ok().build();
 	}
 }
