@@ -2,6 +2,7 @@
 
 import Header from "@/components/BSC_Header.vue";
 import {useRegistrationStore} from "@/stores/RegistrationStore.js";
+import ResponseModal from "@/components/ResponseModal.vue";
 
 const store = useRegistrationStore();
 </script>
@@ -17,6 +18,8 @@ const store = useRegistrationStore();
 		</router-view>
 
 	</div>
+
+	<ResponseModal v-if="useRegistrationStore().requestFailed"/>
 
 </template>
 

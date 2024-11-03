@@ -6,10 +6,6 @@ export default {
 	name: "IBANInput",
 	computed: {
 
-		getIBAN() {
-			return [this.IBANSection1, this.IBANSection2, this.IBANSection3, this.IBANSection4, this.IBANSection5, this.IBANSection6].join('');
-		},
-
 		isValidGermanIBAN() {
 
 			const s = [this.IBANSection2, this.IBANSection3, this.IBANSection4, this.IBANSection5, this.IBANSection6, this.IBANSection1].join('')
@@ -39,6 +35,10 @@ export default {
 		isNotValid: Boolean
 	},
 
+	created() {
+		this.setIbanIfAlreadyTyped();
+	},
+
 	data() {
 		return {
 			IBANSection1: null,
@@ -52,11 +52,36 @@ export default {
 
 	methods: {
 
+		setIbanIfAlreadyTyped() {
+			const currentInputIban = useRegistrationStore().registrationData.financial.iban;
+
+			if (currentInputIban) {
+				let slicedIban = [];
+
+				for (let i = 0; slicedIban.length !== 6; i+=4) {
+					slicedIban.push(currentInputIban.slice(i, i + 4));
+				}
+
+				this.IBANSection1 = slicedIban[0];
+				this.IBANSection2 = slicedIban[1];
+				this.IBANSection3 = slicedIban[2];
+				this.IBANSection4 = slicedIban[3];
+				this.IBANSection5 = slicedIban[4];
+				this.IBANSection6 = slicedIban[5];
+			}
+
+
+		},
+
+		getIBAN() {
+			return [this.IBANSection1, this.IBANSection2, this.IBANSection3, this.IBANSection4, this.IBANSection5, this.IBANSection6].join('');
+		},
+
 		postInput(input) {
 
 			if (input.length > 4) {
 
-				var slices = [];
+				let slices = [];
 
 				for (let i = 0; slices.length !== 6; i += 4) {
 					slices.push(input.slice(i, i + 4));
@@ -87,7 +112,7 @@ export default {
 
 		onIbanInput(event, max) {
 			this.postInput(event.data);
-			useRegistrationStore().registrationData.financial.iban = this.getIBAN;
+			useRegistrationStore().registrationData.financial.iban = this.getIBAN();
 			this.focusNext(event, max);
 		},
 

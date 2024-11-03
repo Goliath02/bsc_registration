@@ -70,28 +70,14 @@ export const useRegistrationStore = defineStore('registrationStore', {
 		},
 
 		triedToValidateBasicForm: false,
-		triedToValidateFinancialForm: false
+		triedToValidateFinancialForm: false,
 
+		isLoadingRequest: false,
+		requestFailed: false,
+		requestFailedWithWrongNonExistingEmail: false,
 	}),
 
 	actions: {
-		postData() {
-
-			this.updateFinancialValidation();
-			if (!useRegistrationStore().registrationData.hiddenSecurityCheck) {
-
-				var formData = new FormData();
-
-				formData.append('formData', new Blob([JSON.stringify(useRegistrationStore().registrationData)], {type: 'application/json'}))
-
-				useRegistrationStore().studentIdentification.forEach((file, index) => {
-					formData.append(`studentIdentificationFiles`, file);
-				});
-
-				axios.post("/registrate", formData, {headers: {'Content-Type': 'multipart/form-data'}});
-				console.log("Poested");
-			}
-		},
 
 		removeExtraPersonForm(index) {
 			useRegistrationStore().registrationData.morePersons.splice(index, 1);

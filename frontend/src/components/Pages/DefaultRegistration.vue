@@ -11,8 +11,6 @@ import NachweisFeld from "@/components/BasicRegistration/NachweisFeld.vue";
 
 export default {
 
-	// TODO add studenten beweis
-
 	name: "DefaultRegistration",
 	components: {
 		NachweisFeld,
