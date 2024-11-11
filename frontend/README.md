@@ -14,6 +14,7 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ```sh
 npm install
+npx tailwindcss init -p
 ```
 
 ### Compile and Hot-Reload for Development
