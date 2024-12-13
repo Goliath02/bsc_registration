@@ -1,5 +1,4 @@
 import {defineStore} from 'pinia'
-import axios from "axios";
 
 export const useRegistrationStore = defineStore('registrationStore', {
 	state: () => ({
@@ -20,10 +19,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
 			},
 
 			financial: {
-				bankName: "",
-				bankPlace: "",
 				iban: "",
-				bic: "",
 				nameOfBankOwner: "",
 				sureNameBankOwner: "",
 			},
@@ -57,10 +53,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
 			studentIdentification: false,
 
 			financialData: {
-				bankname: false,
-				bankPlace: false,
 				iban: false,
-				bic: false,
 				nameOfBankOwner: false,
 				surenameOfBankOwner: false,
 
@@ -118,10 +111,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
 
 			useRegistrationStore().updateFinancialValidation();
 
-			return useRegistrationStore().isFilled.financialData.bankname &&
-				useRegistrationStore().isFilled.financialData.bankPlace &&
-				useRegistrationStore().isFilled.financialData.iban &&
-				useRegistrationStore().isFilled.financialData.bic &&
+			return useRegistrationStore().isFilled.financialData.iban &&
 				useRegistrationStore().isFilled.financialData.nameOfBankOwner &&
 				useRegistrationStore().isFilled.financialData.surenameOfBankOwner &&
 				useRegistrationStore().isFilled.dataProtection &&
@@ -144,9 +134,6 @@ export const useRegistrationStore = defineStore('registrationStore', {
 		},
 
 		updateFinancialValidation() {
-			useRegistrationStore().isFilled.financialData.bankname = !(!useRegistrationStore().registrationData.financial.bankName);
-			useRegistrationStore().isFilled.financialData.bankPlace = !(!useRegistrationStore().registrationData.financial.bankPlace);
-			useRegistrationStore().isFilled.financialData.bic = !(!useRegistrationStore().registrationData.financial.bic);
 			useRegistrationStore().isFilled.financialData.nameOfBankOwner = !(!useRegistrationStore().registrationData.financial.nameOfBankOwner);
 			useRegistrationStore().isFilled.financialData.surenameOfBankOwner = !(!useRegistrationStore().registrationData.financial.sureNameBankOwner);
 			useRegistrationStore().isFilled.dataProtection = !(!useRegistrationStore().registrationData.dataProtection);
