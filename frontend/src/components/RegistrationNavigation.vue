@@ -15,9 +15,13 @@ export default {
 		routerToNextSite() {
 
 			if (useRegistrationStore().isDefaultDataFormCorrect() && this.isFirstPage) {
-				router.push("/kontodaten");
+        useRegistrationStore().triedToValidateBasicForm = false;
+        useRegistrationStore().triedToValidateFinancialForm = false;
+        router.push("/kontodaten");
 			}
 			else if (useRegistrationStore().isFinancialFormCorrect() && this.isSecondPage) {
+        useRegistrationStore().triedToValidateBasicForm = false;
+        useRegistrationStore().triedToValidateFinancialForm = false;
 				router.push("/zusammenfassung")
 			}
 		},
