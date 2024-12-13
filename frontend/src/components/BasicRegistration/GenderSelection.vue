@@ -12,6 +12,7 @@ const props = defineProps({
 		        class="w-full h-[3em] px-[1em]  bg-[#585858] rounded-lg font-medium" value="Bitte auswählen">
 			<option>Männlich</option>
 			<option>Weiblich</option>
+			<option>Divers</option>
 		</select>
 	</div>
 </template>
