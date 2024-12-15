@@ -2,8 +2,8 @@
   "registrationReceiver": [
     "example@mail.com"
   ],
-  "courseReciever": {
-    "testCourse": [
+  "courses": {
+    "Test": [
       "example@mail.com"
     ]
   }

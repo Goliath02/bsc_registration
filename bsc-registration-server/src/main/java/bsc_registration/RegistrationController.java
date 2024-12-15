@@ -1,6 +1,5 @@
 package bsc_registration;
 
-
 import bsc_registration.dto.FormData;
 import jakarta.mail.MessagingException;
 import org.slf4j.Logger;
@@ -9,10 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -21,25 +17,31 @@ import java.util.List;
 import static java.lang.String.format;
 
 @Controller
+//TODO Remove if not in developing mode
+@CrossOrigin(origins = "http://localhost:5173/")
 public class RegistrationController {
 
 	private final RegistrationModule registrationModule;
-	Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+	final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
-	public RegistrationController(RegistrationModule registrationModule) {
+	public RegistrationController(final RegistrationModule registrationModule) {
 		this.registrationModule = registrationModule;
-	}
+    }
 
 	@GetMapping("/")
 	public String getFrontend() {
 		return "index";
 	}
 
-	//Remove if not in developing mode
-	@CrossOrigin(origins = "http://localhost:5173/")
+	@GetMapping("/courses")
+	@ResponseBody()
+	public ResponseEntity<List<String>> getConfig() {
+		return ResponseEntity.ok(registrationModule.getCourses());
+	}
+
 	@PostMapping(value = "/registrate", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity validateRegistration(@RequestPart FormData formData,
-	                                           @RequestPart(required = false) List<MultipartFile> studentIdentificationFiles) {
+	public ResponseEntity validateRegistration(@RequestPart final FormData formData,
+	                                           @RequestPart(required = false) final List<MultipartFile> studentIdentificationFiles) {
 
 		if (formData == null) {
 			return ResponseEntity.status(400).body("Form-data is empty");
@@ -56,9 +58,10 @@ public class RegistrationController {
 		}
 
 		try {
-			registrationModule.sendEmailToRegistratedUser(formData);
-			registrationModule.sendEmailToRegistration(formData, studentIdentificationFiles);
-		} catch (MessagingException | IOException e) {
+                registrationModule.sendEmailToRegistratedUser(formData);
+                registrationModule.sendEmailToRegistration(formData, studentIdentificationFiles);
+				registrationModule.sendEmailToCourseOwner(formData);
+        } catch (MessagingException | IOException e) {
 			logger.error(format("Registration failed with Excpetion: %s", e.getMessage()));
 			return ResponseEntity.status(500).build();
 		} catch (MailSendException e) {
@@ -66,7 +69,6 @@ public class RegistrationController {
 
 			return ResponseEntity.status(400).build();
 		}
-
 
 		return ResponseEntity.ok().build();
 	}
