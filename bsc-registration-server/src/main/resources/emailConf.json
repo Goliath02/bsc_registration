@@ -1,0 +1,10 @@
+{
+  "registrationReceiver": [
+    "example@mail.com"
+  ],
+  "courseReciever": {
+    "testCourse": [
+      "example@mail.com"
+    ]
+  }
+}
