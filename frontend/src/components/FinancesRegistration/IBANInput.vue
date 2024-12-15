@@ -86,6 +86,7 @@ export default {
         event.target.value = event.target.value.substring(0, max);
         this.focusNext(event, max);
       }
+      this.fixPostInputSection();
       useRegistrationStore().registrationData.financial.iban = this.getIBAN();
 		},
 
@@ -132,6 +133,9 @@ export default {
 			}
 		},
 
+    fixPostInputSection() {
+      this.IBANSection1 = this.IBANSection1.substring(0, 4);
+    }
 	}
 }
 </script>
