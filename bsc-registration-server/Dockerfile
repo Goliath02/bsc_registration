@@ -1,4 +1,5 @@
-FROM openjdk:23-jdk
+FROM openjdk:25-slim
+
 
 MAINTAINER "Kevin Krüger"
 
