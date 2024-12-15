@@ -20,8 +20,6 @@ export default {
 
 			financial: {
 				iban: "",
-				bankName: "",
-				bankPlace: "",
 				bankOwnerName: "",
 				bankOwnerSureName: "",
 			},
@@ -46,30 +44,9 @@ export default {
 	<div class="flex flex-1 flex-col gap-[1em] max-h-[65vh] overflow-y-auto px-[2em] py-[1em]">
 		<div class="flex gap-[1em]">
 
-			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.bankName"
-			          :is-not-valid="!useRegistrationStore().isFilled.financialData.bankname && useRegistrationStore().triedToValidateFinancialForm"
-			          header-field="Bankname"
-			          input-type="text"
-			          @input="useRegistrationStore().updateFinancialValidation()"/>
-
-			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.bankPlace"
-			          :is-not-valid="!useRegistrationStore().isFilled.financialData.bankPlace && useRegistrationStore().triedToValidateFinancialForm"
-			          header-field="Bankort"
-			          input-type="text"
-			          @input="useRegistrationStore().updateFinancialValidation()"/>
-
 		</div>
 
 		<i-b-a-n-input/>
-
-		<div>
-			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.bic"
-			          :is-not-valid="!useRegistrationStore().isFilled.financialData.bic && useRegistrationStore().triedToValidateFinancialForm"
-			          header-field="BIC"
-			          input-type="text"
-			          @input="useRegistrationStore().updateFinancialValidation()"/>
-
-		</div>
 
 		<div class="flex gap-[1em]">
 			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.financial.nameOfBankOwner"

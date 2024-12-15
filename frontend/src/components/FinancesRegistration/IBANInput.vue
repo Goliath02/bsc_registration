@@ -77,48 +77,55 @@ export default {
 			return [this.IBANSection1, this.IBANSection2, this.IBANSection3, this.IBANSection4, this.IBANSection5, this.IBANSection6].join('');
 		},
 
-		postInput(input) {
-
-			if (input.length > 4) {
-
-				let slices = [];
-
-				for (let i = 0; slices.length !== 6; i += 4) {
-					slices.push(input.slice(i, i + 4));
-				}
-
-				slices[5] = slices[5].slice(0, 2);
-
-				switch (slices.length) {
-
-					case 6:
-						this.IBANSection6 = slices[5];
-					case 5:
-						this.IBANSection5 = slices[4];
-					case 4:
-						this.IBANSection4 = slices[3];
-					case 3:
-						this.IBANSection3 = slices[2];
-					case 2:
-						this.IBANSection2 = slices[1];
-					case 1:
-						this.IBANSection1 = slices[0];
-						break;
-
-				}
-
-			}
-		},
-
 		onIbanInput(event, max) {
 			this.postInput(event.data);
-			useRegistrationStore().registrationData.financial.iban = this.getIBAN();
-			this.focusNext(event, max);
+
+      if (event.target.value && event.target.value.length < max) {
+
+      } else {
+        event.target.value = event.target.value.substring(0, max);
+        this.focusNext(event, max);
+      }
+      this.fixPostInputSection();
+      useRegistrationStore().registrationData.financial.iban = this.getIBAN();
 		},
+
+    postInput(input) {
+
+      if (input != null && input.length > 4) {
+
+        let slices = [];
+
+        for (let i = 0; slices.length !== 6; i += 4) {
+          slices.push(input.slice(i, i + 4));
+        }
+
+        slices[5] = slices[5].slice(0, 2);
+
+        switch (slices.length) {
+
+          case 6:
+            this.IBANSection6 = slices[5];
+          case 5:
+            this.IBANSection5 = slices[4];
+          case 4:
+            this.IBANSection4 = slices[3];
+          case 3:
+            this.IBANSection3 = slices[2];
+          case 2:
+            this.IBANSection2 = slices[1];
+          case 1:
+            this.IBANSection1 = slices[0];
+            break;
+
+        }
+
+      }
+    },
 
 		focusNext(event, max) {
 			useRegistrationStore().updateFinancialValidation();
-			if (event.target.value.length === max) {
+			if (event.target.value.length >= max) {
 				const nextElement = this.$refs?.[`input-${Number(event.target.dataset.index) + 1}`]
 				if (nextElement) {
 					nextElement.focus()
@@ -126,6 +133,9 @@ export default {
 			}
 		},
 
+    fixPostInputSection() {
+      this.IBANSection1 = this.IBANSection1.substring(0, 4);
+    }
 	}
 }
 </script>
@@ -139,7 +149,6 @@ export default {
 			       :class="isValidGermanIBAN ? 'border-2 border-red-700' : '' "
 			       class="w-full flex-2 h-[3em] lg:px-[0.5em]  bg-[#585858] rounded-lg font-medium appearance-none text-center"
 			       data-index="1"
-			       maxlength="4"
 			       @input="onIbanInput($event,4)"
 			>
 			<input ref="input-2" v-model="IBANSection2"
