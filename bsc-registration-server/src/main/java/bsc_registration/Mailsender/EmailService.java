@@ -8,12 +8,10 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.util.ByteArrayDataSource;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.apache.commons.codec.CharEncoding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSendException;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +32,6 @@ public class EmailService {
 	@Value("${mail.from}")
 	private String sendFrom;
 
-	@SneakyThrows
     public void sendMailToRegistration(final List<String> targetEmails, final String csv, final List<MultipartFile> files) throws MessagingException {
 
 		final var mailSender = mailSenderConfig.getJavaMailSender();
@@ -64,7 +61,6 @@ public class EmailService {
 		mailSender.send(message);
 	}
 
-    @SneakyThrows
     public void sendEmailToCourseOwner(final List<String> targetEmails, final FormData formData) throws MessagingException {
 
         final var mailSender = mailSenderConfig.getJavaMailSender();
@@ -89,7 +85,7 @@ public class EmailService {
 
 	public void sendEmailToUser(final String email, final String type) throws MessagingException, MailSendException {
 
-		final JavaMailSender mailSender = mailSenderConfig.getJavaMailSender();
+		final var mailSender = mailSenderConfig.getJavaMailSender();
 
 		final var message = mailSender.createMimeMessage();
 

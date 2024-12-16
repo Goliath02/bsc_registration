@@ -111,7 +111,7 @@ export default {
 			          @input="useRegistrationStore().updateBasicValidation()"/>
 			<BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.phone"
 			          :is-not-valid="!useRegistrationStore().isFilled.defaultData.phone && useRegistrationStore().triedToValidateBasicForm"
-			          header-field="Teleon/Mobil"
+			          header-field="Telefon/Mobil"
 			          input-type="text"
 			          @input="useRegistrationStore().updateBasicValidation()"/>
 

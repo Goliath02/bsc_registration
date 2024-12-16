@@ -17,8 +17,6 @@ import java.util.List;
 import static java.lang.String.format;
 
 @Controller
-//TODO Remove if not in developing mode
-@CrossOrigin(origins = "http://localhost:5173/")
 public class RegistrationController {
 
 	private final RegistrationModule registrationModule;

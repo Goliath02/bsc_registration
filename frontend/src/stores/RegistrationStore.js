@@ -152,6 +152,10 @@ export const useRegistrationStore = defineStore('registrationStore', {
 				}
 			}
 			return true;
+		},
+
+		getTargetURL() {
+			return import.meta.env.DEV ? "http://localhost:8080" : "";
 		}
 	}
 })
