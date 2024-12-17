@@ -39,7 +39,7 @@ public class RegistrationModule {
         final var config = configLoader.loadConfig();
         final var courseOwner = config.courses().get(formData.mainData().reason());
 
-            emailService.sendEmailToCourseOwner(courseOwner, formData);
+        emailService.sendEmailToCourseOwner(courseOwner, formData);
     }
 
     public void sendEmailToRegistratedUser(FormData formData) throws MessagingException, MailSendException {

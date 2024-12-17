@@ -9,21 +9,21 @@ import RequestSuccessPage from "@/components/Pages/RequestSuccessPage.vue";
 
 const routes = [
 
-	{
-		path: '/', component: MainPage,
-		children: [
-			{path: '', component: DefaultRegistration, name: "DefaultRegistration"},
-			{path: '/kontodaten', component: FinanzialRegistration, name: "FinanzialRegistration"},
-			{path: '/zusammenfassung', component: ConfirmationPage, name: "ConfirmationPage"}
-		]
-	},
-	{path: '/datenschutz', component: DatenschutzPage},
-	{path: '/erfolg', component: RequestSuccessPage, name: "Erfolg"},
+    {
+        path: '/', component: MainPage,
+        children: [
+            {path: '', component: DefaultRegistration, name: "DefaultRegistration"},
+            {path: '/kontodaten', component: FinanzialRegistration, name: "FinanzialRegistration"},
+            {path: '/zusammenfassung', component: ConfirmationPage, name: "ConfirmationPage"}
+        ]
+    },
+    {path: '/datenschutz', component: DatenschutzPage},
+    {path: '/erfolg', component: RequestSuccessPage, name: "Erfolg"},
 ]
 
 const router = createRouter({
-	history: createMemoryHistory(),
-	routes,
+    history: createMemoryHistory(),
+    routes,
 })
 
 export default router

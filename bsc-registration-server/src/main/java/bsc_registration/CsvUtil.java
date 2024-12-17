@@ -15,31 +15,31 @@ import java.util.List;
 public class CsvUtil {
 
 
-	public String createCsvFromFormData(FormData formData) {
+    public String createCsvFromFormData(FormData formData) {
 
-		final MainData mainData = formData.mainData();
-		List<ExtraPerson> extraPeople = formData.morePersons();
+        final MainData mainData = formData.mainData();
+        List<ExtraPerson> extraPeople = formData.morePersons();
 
-		CSVFormat csvFormat = CSVFormat.EXCEL.builder().build();
+        CSVFormat csvFormat = CSVFormat.EXCEL.builder().build();
 
-		StringWriter stringWriter = new StringWriter();
+        StringWriter stringWriter = new StringWriter();
 
-		try {
-			CSVPrinter csvPrinter = new CSVPrinter(stringWriter, csvFormat);
+        try {
+            CSVPrinter csvPrinter = new CSVPrinter(stringWriter, csvFormat);
 
-			csvPrinter.printRecord(mainData.name(), mainData.surename(), mainData.gender(), mainData.birthday());
+            csvPrinter.printRecord(mainData.name(), mainData.surename(), mainData.gender(), mainData.birthday());
 
-			for (var extra: extraPeople) {
-				csvPrinter.printRecord(extra.name(), extra.surename(), extra.gender(), extra.birthday());
-			}
-
-
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
-		return stringWriter.toString().trim();
+            for (var extra : extraPeople) {
+                csvPrinter.printRecord(extra.name(), extra.surename(), extra.gender(), extra.birthday());
+            }
 
 
-	}
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return stringWriter.toString().trim();
+
+
+    }
 }
