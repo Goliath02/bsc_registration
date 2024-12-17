@@ -1,6 +1,8 @@
 package bsc_registration.Mailsender;
 
 
+import bsc_registration.dto.FormData;
+import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -10,12 +12,12 @@ import org.apache.commons.codec.CharEncoding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSendException;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -30,21 +32,19 @@ public class EmailService {
 	@Value("${mail.from}")
 	private String sendFrom;
 
-	@Value("${mail.to}")
-	private String sendTo;
+    public void sendMailToRegistration(final List<String> targetEmails, final String csv, final List<MultipartFile> files) throws MessagingException {
 
-	public void sendMail(String csv, List<MultipartFile> files) throws MessagingException {
+		final var mailSender = mailSenderConfig.getJavaMailSender();
 
-		final JavaMailSender mailSender = mailSenderConfig.getJavaMailSender();
-
-		MimeMessage message = mailSender.createMimeMessage();
+		final var message = mailSender.createMimeMessage();
 
 		message.setFrom(new InternetAddress(sendFrom));
-		message.setRecipients(MimeMessage.RecipientType.TO, sendTo);
+
+		message.setRecipients(Message.RecipientType.TO, String.join(",", targetEmails));
 
 		MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
 		messageHelper.setFrom(sendFrom);
-		messageHelper.setTo(InternetAddress.parse(sendTo));
+		messageHelper.setTo(targetEmails.toArray(new String[0]));
 		messageHelper.setSubject("Neue Anmeldung vom für den 1.BSC!");
 		messageHelper.setText("Neue Anmeldedaten im Anhang");
 
@@ -59,30 +59,50 @@ public class EmailService {
 		messageHelper.addAttachment("NeueMitglieder.csv", inputStream);
 
 		mailSender.send(message);
-
 	}
 
+    public void sendEmailToCourseOwner(final List<String> targetEmails, final FormData formData) throws MessagingException {
 
-	public void sendEmailToUser(String email, String type) throws MessagingException, MailSendException {
+        final var mailSender = mailSenderConfig.getJavaMailSender();
 
-		final JavaMailSender mailSender = mailSenderConfig.getJavaMailSender();
+        final var message = mailSender.createMimeMessage();
 
-		MimeMessage message = mailSender.createMimeMessage();
+        message.setFrom(new InternetAddress(sendFrom));
+
+        message.setRecipients(Message.RecipientType.TO, String.join(",", targetEmails));
+
+        MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
+        messageHelper.setFrom(sendFrom);
+        messageHelper.setTo(targetEmails.toArray(new String[0]));
+        messageHelper.setSubject("1.BSC Pforzheim Info");
+
+        messageHelper.setText(buildCourseOwnerHtml(formData),true);
+
+        mailSender.send(message);
+
+    }
+
+
+	public void sendEmailToUser(final String email, final String type) throws MessagingException, MailSendException {
+
+		final var mailSender = mailSenderConfig.getJavaMailSender();
+
+		final var message = mailSender.createMimeMessage();
 
 		message.setFrom(new InternetAddress(sendFrom));
 		message.setRecipients(MimeMessage.RecipientType.TO, email);
 
-		MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
+		final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
 		messageHelper.setFrom(sendFrom);
 		messageHelper.setTo(InternetAddress.parse(email));
 		messageHelper.setSubject("1.BSC Pforzheim Info");
 
-		messageHelper.setText(buildHtml(type),true);
+		messageHelper.setText(buildUserMailHtml(type),true);
 
 		mailSender.send(message);
 	}
 
-	private String buildHtml(String option) {
+	private String buildUserMailHtml(String option) {
 
 		String selectedTable;
 
@@ -123,6 +143,55 @@ public class EmailService {
 				          	<p>Wenn Sie wetiere Fragen haben kontaktieren Sie gerne <a href="mailto: test@mail.com" style="color: cornflowerblue">test@mail.com</a>.</p>
 				""", CSS, selectedTable);
 	}
+
+    private String buildCourseOwnerHtml(final FormData formData) {
+
+        final var mainData = formData.mainData();
+
+        return format("""
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Registration</title>
+                    </head>
+                    <body>
+                        <h1>Neue Registration</h1>
+                        <div>
+                         Name: %s %s
+                        </div>
+                        <div>
+                         Geschlecht: %s
+                        </div>
+                        <div>
+                         Geburtstag: %s (%d)
+                        </div>
+                        <div>
+                         Email: %s
+                        </div>
+                        <div>
+                         Telefon: %s
+                        </div>
+                    </body>
+                </html>
+                """,
+                mainData.name(),
+				mainData.surename(),
+                mainData.gender(),
+                mainData.birthday(),
+                this.calculateAge(mainData.birthday()),
+                mainData.email(),
+                mainData.phone()
+        );
+    }
+
+    private int calculateAge(String birthday) {
+
+		LocalDate birthdayDate = LocalDate.parse(birthday);
+		LocalDate today = LocalDate.now();
+
+		return today.getYear() - birthdayDate.getYear();
+    }
 
 	private static String NICHTSCHWIMMER_TABLE = """
 			<tbody class="table-auto overflow-hidden">

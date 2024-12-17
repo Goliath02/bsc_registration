@@ -56,7 +56,7 @@ export default {
 					formData.append(`studentIdentificationFiles`, file);
 				});
 
-				axios.post(this.getTargetURL() + "/registrate", formData, {headers: {'Content-Type': 'multipart/form-data'}})
+				axios.post(useRegistrationStore().getTargetURL() + "/registrate", formData, {headers: {'Content-Type': 'multipart/form-data'}})
 					.then(function (response) {
 						console.log("Response: " + response);
 						useRegistrationStore().isLoadingRequest = false;
@@ -73,10 +73,6 @@ export default {
 						useRegistrationStore().requestFailed = true;
 					});
 			}
-		},
-
-		getTargetURL() {
-			return import.meta.env.DEV ? "http://localhost:8080" : "";
 		},
 	},
 
