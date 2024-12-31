@@ -1,11 +1,13 @@
 package bsc_registration.dto;
 
+import java.time.LocalDate;
+
 public record MainData(
         String type,
         String reason,
         String name,
         String surename,
-        String birthday,
+        LocalDate birthday,
         String gender,
         String email,
         String phone,

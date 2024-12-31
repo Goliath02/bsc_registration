@@ -1,9 +1,11 @@
 package bsc_registration.dto;
 
+import java.time.LocalDate;
+
 public record ExtraPerson(
         String name,
         String surename,
-        String birthday,
+        LocalDate birthday,
         String gender
 ) {
 }

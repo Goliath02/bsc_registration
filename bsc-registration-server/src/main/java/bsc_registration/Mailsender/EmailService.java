@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.util.List;
 
+import static bsc_registration.Utils.FormUtil.*;
 import static java.lang.String.format;
 
 
@@ -130,7 +130,7 @@ public class EmailService {
                 
                           <div class="bodyWrapper">
                           	<h1>Information zu Ihrer Registrierung</h1>
-                          	<p>Mit dieser Email erhalten Sie alle nötigen Informationenn für Ihr erstes Training</p>
+                          	<p>Mit dieser Email erhalten Sie alle nötigen Informationen für Ihr erstes Training</p>
                           	<p>Trainingszeiten anhand Ihrere Daten:</p>
                 
                           	<div class="tableWrapper">
@@ -140,7 +140,7 @@ public class EmailService {
                           	</div>
                 
                           	<p>Weitere Informationen finden Sie unter der <a href="https://erster-bsc-pforzheim.de/kursplan-schwimmen" style="color: cornflowerblue">Website</a>.</p>
-                          	<p>Wenn Sie wetiere Fragen haben kontaktieren Sie gerne <a href="mailto: test@mail.com" style="color: cornflowerblue">test@mail.com</a>.</p>
+                          	<p>Wenn Sie weitere Fragen haben kontaktieren Sie gerne <a href="mailto: test@mail.com" style="color: cornflowerblue">test@mail.com</a>.</p>
                 """, CSS, selectedTable);
     }
 
@@ -178,20 +178,14 @@ public class EmailService {
                 mainData.name(),
                 mainData.surename(),
                 mainData.gender(),
-                mainData.birthday(),
-                this.calculateAge(mainData.birthday()),
+                formatDate(mainData.birthday()),
+                calculateAge(mainData.birthday()),
                 mainData.email(),
                 mainData.phone()
         );
     }
 
-    private int calculateAge(String birthday) {
 
-        LocalDate birthdayDate = LocalDate.parse(birthday);
-        LocalDate today = LocalDate.now();
-
-        return today.getYear() - birthdayDate.getYear();
-    }
 
     private static String NICHTSCHWIMMER_TABLE = """
             <tbody class="table-auto overflow-hidden">

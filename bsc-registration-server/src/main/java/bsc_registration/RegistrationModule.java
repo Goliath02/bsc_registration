@@ -2,6 +2,7 @@ package bsc_registration;
 
 import bsc_registration.Configuration.ConfigLoader;
 import bsc_registration.Mailsender.EmailService;
+import bsc_registration.Utils.CsvUtil;
 import bsc_registration.dto.FormData;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class RegistrationModule {
 
         final var config = configLoader.loadConfig();
 
-        final String csvFromFormData = csvUtil.createCsvFromFormData(formData);
+        final var csvFromFormData = csvUtil.createCsvFromFormData(formData);
 
         final var registrationReceiver = config.registrationReceiver();
 
