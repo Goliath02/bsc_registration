@@ -118,12 +118,6 @@ export default {
         <div>{{ useRegistrationStore().registrationData.financial.iban }}</div>
       </div>
 
-
-      <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
-        <div class="font-bold">BIC</div>
-        <div>{{ useRegistrationStore().registrationData.financial.bic }}</div>
-      </div>
-
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">Name des Kontoinhabers</div>
         <div>{{ useRegistrationStore().registrationData.financial.nameOfBankOwner }}</div>
@@ -134,15 +128,6 @@ export default {
         <div>{{ useRegistrationStore().registrationData.financial.sureNameBankOwner }}</div>
       </div>
 
-      <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
-        <div class="font-bold">Name der Bank</div>
-        <div>{{ useRegistrationStore().registrationData.financial.bankName }}</div>
-      </div>
-
-      <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
-        <div class="font-bold">Bank Ort</div>
-        <div>{{ useRegistrationStore().registrationData.financial.bankPlace }}</div>
-      </div>
     </div>
 
 
