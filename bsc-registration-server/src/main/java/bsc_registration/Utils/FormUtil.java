@@ -21,7 +21,7 @@ public class FormUtil {
     public static int calculateAge(final LocalDate birthday) {
 
         final var today = LocalDate.now();
-
+// Bug: Es wird nicht geprüft ob es nach oder vor seinem 18. Geburtstag ist
         return today.getYear() - birthday.getYear();
     }
 }
