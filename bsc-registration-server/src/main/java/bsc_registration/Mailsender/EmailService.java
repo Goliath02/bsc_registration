@@ -24,7 +24,7 @@ import static java.lang.String.format;
 
 
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor()
 public class EmailService {
 
     private final MailSenderConfig mailSenderConfig;
