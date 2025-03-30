@@ -19,6 +19,7 @@ import static java.lang.String.format;
 @Controller
 public class RegistrationController {
 
+    public static final long EIGHT_MB = 8000000L;
     private final RegistrationModule registrationModule;
     final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
@@ -49,8 +50,8 @@ public class RegistrationController {
 
             for (MultipartFile file : studentIdentificationFiles) {
                 //Is bigger than 8MB
-                if (file.getSize() > ((1024 + 1024) * 8)) {
-                    return ResponseEntity.status(413).body("File Size is too big");
+                if (file.getSize() > EIGHT_MB) {
+                    return ResponseEntity.status(413).body("IMAGE_TOO_LARGE");
                 }
             }
         }
