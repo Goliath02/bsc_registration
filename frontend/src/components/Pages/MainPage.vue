@@ -1,6 +1,6 @@
 <script>
-import PeronenAuswahl from "@/components/BasicRegistration/PeronenAuswahl.vue";
-import GrundAuwahl from "@/components/BasicRegistration/GrundAuwahl.vue";
+import CategoryPicker from "@/components/BasicRegistration/CategoryPicker.vue";
+import DepartmentPicker from "@/components/BasicRegistration/DepartmentPicker.vue";
 import BSCBanner from "@/components/BSCBanner.vue";
 import FormHeader from "@/components/FormHeader.vue";
 import GenderSelection from "@/components/BasicRegistration/GenderSelection.vue";
@@ -14,7 +14,7 @@ export default {
   components: {
     FinanzialRegistration,
     RegistrationNavigation,
-    DefaultRegistration, Bsc_header, GenderSelection, FormHeader, BSCBanner, GrundAuwahl, PeronenAuswahl
+    DefaultRegistration, Bsc_header, GenderSelection, FormHeader, BSCBanner, GrundAuwahl: DepartmentPicker, PeronenAuswahl: CategoryPicker
   },
 }
 

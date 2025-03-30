@@ -1,7 +1,7 @@
 <script>
-import PeronenAuswahl from "@/components/BasicRegistration/PeronenAuswahl.vue";
+import CategoryPicker from "@/components/BasicRegistration/CategoryPicker.vue";
 import FormHeader from "@/components/FormHeader.vue";
-import GrundAuwahl from "@/components/BasicRegistration/GrundAuwahl.vue";
+import DepartmentPicker from "@/components/BasicRegistration/DepartmentPicker.vue";
 import GenderSelection from "@/components/BasicRegistration/GenderSelection.vue";
 import IBANInput from "@/components/FinancesRegistration/IBANInput.vue";
 import BSCCheckbox from "@/components/FinancesRegistration/BSCCheckbox.vue";
@@ -13,7 +13,7 @@ export default {
   name: "FinanzialRegistration",
   components: {
     BSCInput: ReworkedBSCInput,
-    DatenschutzCheckbox, BSCCheckbox, IBANInput, GenderSelection, GrundAuwahl, FormHeader, PeronenAuswahl
+    DatenschutzCheckbox, BSCCheckbox, IBANInput, GenderSelection, GrundAuwahl: DepartmentPicker, FormHeader, PeronenAuswahl: CategoryPicker
   },
   data() {
     return {

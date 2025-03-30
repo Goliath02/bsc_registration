@@ -3,8 +3,8 @@ package bsc_registration.dto;
 import java.time.LocalDate;
 
 public record MainData(
-        String type,
-        String reason,
+        String category,
+        String department,
         String name,
         String surename,
         LocalDate birthday,

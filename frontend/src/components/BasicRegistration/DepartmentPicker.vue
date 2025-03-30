@@ -15,7 +15,6 @@ onMounted(() => {
   axios.get(useRegistrationStore().getTargetURL() + "/courses").then((res) => {
     courses.value = res.data;
   }).catch((err) => {
-    console.log(err);
   })
 })
 
@@ -23,7 +22,7 @@ onMounted(() => {
 
 <template>
   <div class="w-full">
-    <div class="font-bold text-[1.2em]">Aus welchen Grund registrieren Sie die Person?</div>
+    <div class="font-bold text-[1.2em]">Abteilung</div>
     <select v-model="modelValue" :class="props.isNotValid ? 'border-2 border-red-700' : '' "
             class="w-full h-[3em] px-[1em]  bg-[#585858] rounded-lg font-medium" value="Bitte auswählen">
 

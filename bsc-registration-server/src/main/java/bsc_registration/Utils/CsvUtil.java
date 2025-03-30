@@ -41,7 +41,7 @@ public class CsvUtil {
                     mainData.place(),
                     mainData.plz(),
                     getTypeByBirthday(mainData.birthday()),
-                    mainData.reason(),
+                    mainData.department(),
                     financial.iban(),
                     financial.nameOfBankOwner(),
                     financial.sureNameBankOwner()
@@ -58,7 +58,7 @@ public class CsvUtil {
                         mainData.place(),
                         mainData.plz(),
                         getTypeByBirthday(mainData.birthday()),
-                        mainData.reason(),
+                        mainData.department(),
                         financial.iban(),
                         financial.nameOfBankOwner(),
                         financial.sureNameBankOwner()

@@ -29,8 +29,6 @@ const isValidSurename = computed(() => {
 
 const isValidBirthday = computed(() => {
 
-  console.log(props.inputData.birthday);
-
   return !(!props.inputData.birthday);
 })
 

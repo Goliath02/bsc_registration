@@ -56,7 +56,6 @@ export default {
 
         axios.post(useRegistrationStore().getTargetURL() + "/registrate", formData, {headers: {'Content-Type': 'multipart/form-data'}})
             .then(function (response) {
-              console.log("Response: " + response);
               useRegistrationStore().isLoadingRequest = false;
               router.push("/erfolg");
             })
@@ -64,9 +63,9 @@ export default {
 
               if (error.status === 400) {
                 useRegistrationStore().requestFailedWithWrongNonExistingEmail = true;
+				useRegistrationStore().requestFailedWithError = error.message;
               }
 
-              console.log("Error: " + error);
               useRegistrationStore().isLoadingRequest = false;
               useRegistrationStore().requestFailed = true;
             });
