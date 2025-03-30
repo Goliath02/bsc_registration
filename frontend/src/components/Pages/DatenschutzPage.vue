@@ -7,7 +7,7 @@ import FormHeader from "@/components/FormHeader.vue";
   <main class="flex flex-1 justify-center items-center  lg:px-[7%] lg:py-[2%] min-h-0 ">
     <div class="w-full h-full bg-bsc-gray rounded-lg overflow-hidden flex flex-col min-h-0 text-white">
 
-      <FormHeader header-text="Datenschutzrichtlinien"/>
+      <FormHeader class="-sm:text-lg" header-text="Datenschutzerklärung für die digitale Beitrittserklärung zum Schwimmverein"/>
 
       <div class="flex p-[1em] gap-[1em] -lg:flex-col overflow-y-auto">
 
@@ -17,83 +17,67 @@ import FormHeader from "@/components/FormHeader.vue";
             <span class="font-bold"> 1. Verantwortlicher</span>
             <span></span>
             <br>
-            Verantwortlich für die Erhebung, Verarbeitung und Nutzung Ihrer personenbezogenen Daten im Sinne der
-            Datenschutz-Grundverordnung (DSGVO) ist:
-            Schwimmverein [Name] [Adresse] [E-Mail] [Telefonnummer]
+	          Verantwortlich für die Verarbeitung Ihrer personenbezogenen Daten im Rahmen der digitalen Beitrittserklärung sind die Verantwortlichen gemäß dem nachträglich verlinkten Impressumshinweises.
+	          <br>
+	          <a class="text-blue-400" href="https://erster-bsc-pforzheim.de/impressum">https://erster-bsc-pforzheim.de/impressum</a>
           </p>
           <br>
           <p>
             <span class="font-bold">2. Zweck der Datenerhebung</span>
-
             <br>
-            Wir erheben und verarbeiten Ihre personenbezogenen Daten ausschließlich zur Verwaltung und Pflege unserer
-            Mitgliederliste sowie zur Kommunikation mit unseren Mitgliedern. Diese Daten werden insbesondere benötigt
-            für:
-            Die Registrierung und Verwaltung Ihrer Mitgliedschaft.
-            Die Zusendung von Informationen und Mitteilungen rund um den Schwimmverein.
+	          Die Erhebung und Verarbeitung Ihrer personenbezogenen Daten erfolgt ausschließlich zur Bearbeitung und Verwaltung Ihrer Mitgliedschaft im Schwimmverein. Dazu gehören insbesondere:<br>
+				&#x2022; Die Verwaltung der Mitgliederdaten<br>
+				&#x2022; Die Kommunikation mit Mitgliedern<br>
+				&#x2022; Die Erstellung und Pflege von Mitgliederlisten<br>
+				&#x2022; DDer Bankeinzug des jeweilig fälligen Mitgliedsbeitrages<br>
+	          Es werden keine weiteren Daten über den Beitrittsprozess hinaus verarbeitet.<br>
           </p>
           <br>
           <p>
             <span class="font-bold">3. Erhobene Daten</span>
 
             <br>
-            Im Rahmen der Registrierung erheben wir die folgenden personenbezogenen Daten:
-            Name
-            Adresse
-            Geburtsdatum
-            E-Mail-Adresse
-            Telefonnummer
-            Notfallkontakt
+	          Im Rahmen der digitalen Beitrittserklärung werden folgende personenbezogene Daten erhoben und verarbeitet:<br>
+	       &#x2022;  Name<br>
+           &#x2022;Adresse<br>
+           &#x2022;Geburtsdatum<br>
+           &#x2022;E-Mail-Adresse<br>
+           &#x2022;Telefonnummer<br>
+           &#x2022;Notfallkontakt<br>
           </p>
           <br>
-          <p>
-            <span class="font-bold">4. Datenübermittlung und -speicherung</span>
-
-            <br>
-            Die erhobenen Daten werden per E-Mail an das jeweilige Mitglied zur Überprüfung und Pflege der
-            Mitgliederliste
-            versandt. Anschließend werden die Daten in eine Excel-Liste eingetragen, die auf einem passwortgeschützten
-            Computer
-            gespeichert wird.
-          </p>
-          <br>
-          <p>
-            <span class="font-bold">5. Weitergabe von Daten</span>
-
-            <br>
-            Eine Weitergabe Ihrer personenbezogenen Daten an Dritte erfolgt grundsätzlich nicht, außer in folgenden
-            Fällen:
-            Mit Ihrer ausdrücklichen Einwilligung.
-            Wenn eine gesetzliche Verpflichtung zur Weitergabe besteht.
-          </p>
 
         </div>
 
         <div class="flex-1">
 
-          <p>
-            <span class="font-bold">6. Sicherheit Ihrer Daten</span>
+	        <p>
+		        <span class="font-bold">4. Rechtsgrundlage der Verarbeitung</span>
 
-            <br>
-            Wir treffen technische und organisatorische Maßnahmen, um Ihre personenbezogenen Daten vor Verlust,
-            Missbrauch und
-            unbefugtem Zugriff zu schützen. Unsere Sicherheitsmaßnahmen werden entsprechend der technologischen
-            Entwicklung
-            fortlaufend verbessert.
-          </p>
-          <br>
+		        <br>
+		        DDie Verarbeitung Ihrer personenbezogenen Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) im Rahmen Ihrer Mitgliedschaft.
+	        </p>
+	        <br>
+	        <p>
+		        <span class="font-bold">6. Speicherung und Schutz von Daten</span>
+		        <br>
+		        Die erhobenen Daten werden elektronisch gespeichert und ausschließlich für die Mitgliederverwaltung genutzt. Der Zugriff ist nur autorisierten Personen gestattet. Technische und organisatorische Maßnahmen werden getroffen, um den Schutz Ihrer Daten vor Verlust, Missbrauch oder unbefugtem Zugriff sicherzustellen.
+	        </p>
+
           <p>
             <span class="font-bold">7. Ihre Rechte</span>
-
             <br>
-            Sie haben das Recht:
-            Auskunft über Ihre bei uns gespeicherten Daten zu erhalten.
-            Die Berichtigung unrichtiger Daten zu verlangen.
-            Die Löschung Ihrer Daten zu verlangen, sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen.
-            Die Einschränkung der Verarbeitung Ihrer Daten zu verlangen.
-            Der Verarbeitung Ihrer Daten zu widersprechen.
-            Ihre Einwilligung zur Datenverarbeitung jederzeit zu widerrufen.
-            Zur Ausübung dieser Rechte wenden Sie sich bitte an die oben genannten Kontaktdaten.
+	          Sie haben gemäß der DSGVO folgende Rechte:
+				<br>
+	          &#x2022; Recht auf Auskunft über die gespeicherten Daten (Art. 15 DSGVO)<br>
+	          &#x2022; Recht auf Berichtigung unrichtiger Daten (Art. 16 DSGVO)<br>
+	          &#x2022; Recht auf Löschung Ihrer Daten (Art. 17 DSGVO), sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen<br>
+	          &#x2022; Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO)<br>
+	          &#x2022; Recht auf Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)<br>
+	          &#x2022; Recht auf Datenübertragbarkeit (Art. 20 DSGVO)<br>
+
+	          Zur Ausübung Ihrer Rechte können Sie sich jederzeit an den Verantwortlichen wenden.
+
           </p>
           <br>
 
@@ -101,19 +85,15 @@ import FormHeader from "@/components/FormHeader.vue";
             <span class="font-bold">8. Änderungen dieser Datenschutzrichtlinie</span>
 
             <br>
-            Wir behalten uns das Recht vor, diese Datenschutzrichtlinie anzupassen, damit sie stets den aktuellen
-            rechtlichen
-            Anforderungen entspricht oder um Änderungen unserer Leistungen in der Datenschutzrichtlinie umzusetzen. Für
-            Ihren
-            erneuten Besuch gilt dann die neue Datenschutzrichtlinie.
+	          Wir behalten uns das Recht vor, diese Datenschutzerklärung anzupassen, um sie an gesetzliche Änderungen oder neue Funktionalitäten der Anwendung anzupassen.
           </p>
           <br>
 
           <p>
             <span class="font-bold">9. Kontakt</span>
             <br>
-            Bei Fragen zum Datenschutz oder zur Ausübung Ihrer Rechte kontaktieren Sie uns bitte unter:
-            Schwimmverein [Name] [Adresse] [E-Mail] [Telefonnummer]
+	          Bei Fragen zum Datenschutz oder zur Ausübung Ihrer Rechte wenden Sie sich bitte an
+	          <a class="text-blue-400" href="mailto:datenschutz@erster-bsc-pforzheim.de">datenschutz@erster-bsc-pforzheim.de</a>
           </p>
 
         </div>
