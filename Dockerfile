@@ -11,17 +11,15 @@ WORKDIR /server
 
 COPY ./bsc-registration-server .
 
-COPY --from=node ./frontend/dist/assets ./bsc-registration-server/src/main/resources/static
-COPY --from=node ./frontend/dist/BSCSpear.ico ./bsc-registration-server/src/main/resources/static
-COPY --from=node ./frontend/index.html ./bsc-registration-server/src/main/resources/templates
+COPY --from=node ./frontend/dist/assets ./src/main/resources/static
+COPY --from=node ./frontend/dist/BSCSpear.ico ./src/main/resources/static
+COPY --from=node ./frontend/dist/index.html ./src/main/resources/templates/index.html
 
-RUN cd /server && mvn package
+RUN mvn package
 
 FROM amazoncorretto:21-alpine
 
 WORKDIR /app
-
-MAINTAINER "Kevin Krüger"
 
 COPY --from=serverBuilder ./server/target/*.jar app.jar
 ENTRYPOINT ["java","-jar","app.jar"]
