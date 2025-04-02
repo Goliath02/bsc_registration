@@ -2,26 +2,30 @@ FROM node:21-alpine AS node
 
 WORKDIR /frontend
 
-COPY ./frontend .
-RUN npm install && npm run build
+COPY ./frontend ./
+RUN npm install && npx tailwindcss init && npm run build
 
-FROM maven:3-amazoncorretto-21-alpine AS serverBuilder
+ FROM maven:3-amazoncorretto-21-alpine AS serverbuilder
 
 WORKDIR /server
 
-COPY ./bsc-registration-server .
+COPY ./bsc-registration-server ./
 
-COPY --from=node ./frontend/dist/assets ./src/main/resources/static
-COPY --from=node ./frontend/dist/BSCSpear.ico ./src/main/resources/static
-COPY --from=node ./frontend/dist/index.html ./src/main/resources/templates/index.html
+COPY --from=node ./frontend/dist/assets ./src/main/resources/static/assets
+COPY --from=node ./frontend/dist/BSCSpear.ico ./src/main/resources/static/assets
+COPY --from=node ./frontend/dist/*.html ./src/main/resources/templates/index.html
 
-RUN mvn package
+RUN cd /server && mvn package
 
 FROM amazoncorretto:21-alpine
 
 WORKDIR /app
 
-COPY --from=serverBuilder ./server/target/*.jar app.jar
+
+
+COPY --from=node . ./frontend
+
+COPY --from=serverbuilder ./server/target/*.jar app.jar
 ENTRYPOINT ["java","-jar","app.jar"]
 
 EXPOSE 8080

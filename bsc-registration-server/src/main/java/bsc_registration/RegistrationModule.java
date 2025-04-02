@@ -38,13 +38,13 @@ public class RegistrationModule {
     public void sendEmailToCourseOwner(final FormData formData) throws MessagingException {
 
         final var config = configLoader.loadConfig();
-        final var courseOwner = config.courses().get(formData.mainData().reason());
+        final var courseOwner = config.courses().get(formData.mainData().department());
 
         emailService.sendEmailToCourseOwner(courseOwner, formData);
     }
 
     public void sendEmailToRegistratedUser(FormData formData) throws MessagingException, MailSendException {
-        emailService.sendEmailToUser(formData.mainData().email(), formData.mainData().reason());
+        emailService.sendEmailToUser(formData.mainData().email(), formData);
     }
 
     public List<String> getCourses() {
