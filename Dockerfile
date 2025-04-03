@@ -3,7 +3,7 @@ FROM node:21-alpine AS node
 WORKDIR /frontend
 
 COPY ./frontend ./
-RUN npm install && npx tailwindcss init && npm run build
+RUN npm install &&  npm run build
 
  FROM maven:3-amazoncorretto-21-alpine AS serverbuilder
 
@@ -20,10 +20,6 @@ RUN cd /server && mvn package
 FROM amazoncorretto:21-alpine
 
 WORKDIR /app
-
-
-
-COPY --from=node . ./frontend
 
 COPY --from=serverbuilder ./server/target/*.jar app.jar
 ENTRYPOINT ["java","-jar","app.jar"]
