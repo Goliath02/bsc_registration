@@ -16,7 +16,7 @@ export default {
 
     <h2 class="font-bold text-xl">Personen Angaben</h2>
 
-    <div class="p-[1em] bg-[#141414] rounded-lg flex flex-wrap -lg:flex-col">
+    <div class="p-[1em] bg-[#141414] rounded-lg flex flex-wrap max-[1024px]:flex-col">
 
       <div class="flex flex-row gap-[0.8em] px-[1em] py-[0.5em] w-1/2">
         <div class="font-bold">Name</div>
@@ -33,14 +33,14 @@ export default {
         <div>{{ useRegistrationStore().registrationData.mainData.gender }}</div>
       </div>
 
-      <div class="flex flex-row gap-[1em]  px-[1em] py-[0.5em] w-1/2">
+      <div class="flex flex-row gap-[1em] px-[1em] py-[0.5em] w-1/2">
         <div class="font-bold">Geburtstag</div>
         <div>{{ useRegistrationStore().registrationData.mainData.birthday }}</div>
       </div>
     </div>
 
     <div v-for="person in useRegistrationStore().registrationData.morePersons"
-         class="p-[1em] bg-[#141414] rounded-lg flex flex-wrap -lg:flex-col ">
+         class="p-[1em] bg-[#141414] rounded-lg flex flex-wrap max-[1024px]:flex-col ">
 
       <div class="flex flex-row gap-[1em] px-[1em] w-1/2">
         <div class="font-bold">Name</div>
@@ -65,7 +65,7 @@ export default {
 
     <h2 class="font-bold text-xl">Weitere Angaben</h2>
 
-    <div class="p-[1em] bg-[#141414] rounded-lg flex flex-wrap -lg:flex-col ">
+    <div class="p-[1em] bg-[#141414] rounded-lg flex flex-wrap max-[1024px]:flex-col ">
 
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">Art der Anmeldung</div>
@@ -111,7 +111,7 @@ export default {
     <h2 class="font-bold text-xl">Kontodaten</h2>
 
 
-    <div class="p-[1em] bg-[#141414] rounded-lg flex flex-wrap -lg:flex-col ">
+    <div class="p-[1em] bg-[#141414] rounded-lg flex flex-wrap max-[1024px]:flex-col ">
 
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">IBAN</div>

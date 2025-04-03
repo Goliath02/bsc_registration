@@ -109,7 +109,7 @@ export default {
                         @change="useRegistrationStore().updateBasicValidation()"/>
     </div>
 
-    <div class="flex gap-[1.5em] -sm:flex-col">
+    <div class="flex gap-[1.5em] max-[640px]:flex-col">
       <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.email"
                 :is-not-valid="!useRegistrationStore().isFilled.defaultData.email && useRegistrationStore().triedToValidateBasicForm"
                 header-field="Email"
@@ -123,7 +123,7 @@ export default {
 
     </div>
 
-    <div class="flex gap-[1.5em] -sm:flex-col">
+    <div class="flex gap-[1.5em] max-[640px]:flex-col">
       <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.street"
                 :is-not-valid="!useRegistrationStore().isFilled.defaultData.street && useRegistrationStore().triedToValidateBasicForm"
                 header-field="Straße"
