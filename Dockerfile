@@ -3,7 +3,7 @@ FROM node:21-alpine AS node
 WORKDIR /frontend
 
 COPY ./frontend ./
-RUN npm install &&  npm run build
+RUN npm install && npm run build
 
  FROM maven:3-amazoncorretto-21-alpine AS serverbuilder
 

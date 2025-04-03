@@ -144,7 +144,7 @@ export default {
 
   <div>
     <div class="font-bold text-[1.2em]">IBAN</div>
-    <div class="flex gap-[1em] -lg:gap-[0.5em]">
+    <div class="flex gap-[1em] max-[1024px]:gap-[0.5em]">
       <input ref="input-1" v-model="IBANSection1"
              :class="isValidGermanIBAN ? 'border-2 border-red-700' : '' "
              class="w-full flex-2 h-[3em] lg:px-[0.5em]  bg-[#585858] rounded-lg font-medium appearance-none text-center"
