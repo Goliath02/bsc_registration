@@ -137,11 +137,22 @@ export default {
 
     </div>
 
-    <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.place"
-              :is-not-valid="!useRegistrationStore().isFilled.defaultData.place && useRegistrationStore().triedToValidateBasicForm"
-              header-field="Ort"
-              input-type="text"
-              @input="useRegistrationStore().updateBasicValidation()"/>
+	  <div class="flex gap-[1.5em] max-[640px]:flex-col">
+
+		  <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.place"
+
+		            :is-not-valid="!useRegistrationStore().isFilled.defaultData.place && useRegistrationStore().triedToValidateBasicForm"
+		            header-field="Ort"
+		            input-type="text"
+		            @input="useRegistrationStore().updateBasicValidation()"/>
+
+		  <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.entryDate"
+		            :is-not-valid="false"
+		            header-field="Anmeldedatum"
+		            input-type="date"
+		            info="Wenn leer gelassen, zum nächst möglichen Zeitpunkt"
+		            @input="useRegistrationStore().updateBasicValidation()"/>
+	  </div>
 
     <ExtraPersonForm v-for="(person, index) in useRegistrationStore().registrationData.morePersons"
                      v-model.extraModelValues="useRegistrationStore().registrationData.morePersons[index]"

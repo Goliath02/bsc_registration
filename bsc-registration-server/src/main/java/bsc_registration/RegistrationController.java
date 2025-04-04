@@ -59,7 +59,7 @@ public class RegistrationController {
         try {
             registrationModule.sendEmailToRegistratedUser(formData);
             registrationModule.sendEmailToRegistration(formData, studentIdentificationFiles);
-            registrationModule.sendEmailToCourseOwner(formData);
+//            registrationModule.sendEmailToCourseOwner(formData);
         } catch (MessagingException | IOException e) {
             logger.error(format("Registration failed with Excpetion: %s", e.getMessage()));
             return ResponseEntity.status(500).build();

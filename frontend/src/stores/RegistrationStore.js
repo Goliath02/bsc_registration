@@ -16,6 +16,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
                 street: "",
                 plz: "",
                 place: "",
+                entryDate: "",
             },
 
             financial: {

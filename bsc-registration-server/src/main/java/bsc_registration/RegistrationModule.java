@@ -24,7 +24,7 @@ public class RegistrationModule {
 
     final private CsvUtil csvUtil;
 
-    public void sendEmailToRegistration(FormData formData, List<MultipartFile> files) throws MessagingException, IOException {
+    public void sendEmailToRegistration(final FormData formData, final List<MultipartFile> files) throws MessagingException, IOException {
 
         final var config = configLoader.loadConfig();
 

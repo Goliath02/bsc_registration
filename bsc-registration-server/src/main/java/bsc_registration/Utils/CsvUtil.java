@@ -39,6 +39,7 @@ public class CsvUtil {
                     mainData.phone(),
                     mainData.street(),
                     mainData.place(),
+                    formatDate(mainData.entryDate()),
                     mainData.plz(),
                     getTypeByBirthday(mainData.birthday()),
                     mainData.department(),

@@ -13,6 +13,7 @@ public record MainData(
         String phone,
         String street,
         String plz,
-        String place
+        String place,
+        LocalDate entryDate
 ) {
 }
