@@ -1,4 +1,4 @@
-FROM node:21-alpine AS node
+FROM node:23-alpine AS node
 
 WORKDIR /frontend
 
@@ -15,7 +15,7 @@ COPY --from=node ./frontend/dist/assets ./src/main/resources/static/assets
 COPY --from=node ./frontend/dist/BSCSpear.ico ./src/main/resources/static/BSCSpear.ico
 COPY --from=node ./frontend/dist/*.html ./src/main/resources/templates/index.html
 
-RUN cd /server && mvn package
+RUN mvn package
 
 FROM amazoncorretto:21-alpine
 

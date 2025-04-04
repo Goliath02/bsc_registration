@@ -46,12 +46,14 @@ public class RegistrationController {
             return ResponseEntity.status(400).body("Form-data is empty");
         }
 
+        logger.info(format("Received registration data: %s", formData));
+
         if (studentIdentificationFiles != null) {
 
             for (MultipartFile file : studentIdentificationFiles) {
                 //Is bigger than 8MB
                 if (file.getSize() > EIGHT_MB) {
-                    return ResponseEntity.status(413).body("IMAGE_TOO_LARGE");
+                    return ResponseEntity.status(413).body(Errors.IMAGE_TOO_LARGE);
                 }
             }
         }
@@ -59,14 +61,14 @@ public class RegistrationController {
         try {
             registrationModule.sendEmailToRegistratedUser(formData);
             registrationModule.sendEmailToRegistration(formData, studentIdentificationFiles);
-            registrationModule.sendEmailToCourseOwner(formData);
+//            registrationModule.sendEmailToCourseOwner(formData);
         } catch (MessagingException | IOException e) {
             logger.error(format("Registration failed with Excpetion: %s", e.getMessage()));
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(500).body(Errors.INTERNAL_ERROR);
         } catch (MailSendException e) {
             logger.error(format("Registration failed with Excpetion: %s", e.getMessage()));
 
-            return ResponseEntity.status(400).build();
+            return ResponseEntity.status(400).body(Errors.EMAIL_NOT_FOUND);
         }
 
         return ResponseEntity.ok().build();

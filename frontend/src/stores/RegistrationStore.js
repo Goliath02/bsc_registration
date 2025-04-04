@@ -16,6 +16,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
                 street: "",
                 plz: "",
                 place: "",
+                entryDate: "",
             },
 
             financial: {
@@ -25,6 +26,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
             },
 
             dataProtection: false,
+            statute: false,
             correctness: false,
             hiddenSecurityCheck: false,
 
@@ -59,6 +61,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
 
             },
             dataProtection: false,
+            statute: false,
             correctness: false,
         },
 
@@ -67,7 +70,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
 
         isLoadingRequest: false,
         requestFailed: false,
-        requestFailedWithWrongNonExistingEmail: false,
+        requestFailedWithError: ""
     }),
 
     actions: {
@@ -137,6 +140,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
             useRegistrationStore().isFilled.financialData.nameOfBankOwner = !(!useRegistrationStore().registrationData.financial.nameOfBankOwner);
             useRegistrationStore().isFilled.financialData.surenameOfBankOwner = !(!useRegistrationStore().registrationData.financial.sureNameBankOwner);
             useRegistrationStore().isFilled.dataProtection = !(!useRegistrationStore().registrationData.dataProtection);
+            useRegistrationStore().isFilled.statute = !(!useRegistrationStore().registrationData.statute);
             useRegistrationStore().isFilled.correctness = !(!useRegistrationStore().registrationData.correctness);
 
         },

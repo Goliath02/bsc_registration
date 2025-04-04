@@ -9,6 +9,11 @@ public class FormUtil {
 	public static final int FULL_AGE = 18;
 
 	public static String formatDate(final LocalDate date) {
+
+		if (date == null) {
+			return "";
+		}
+
 		final var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		return date.format(formatter);
 	}

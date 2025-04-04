@@ -3,8 +3,8 @@ package bsc_registration.dto;
 import java.time.LocalDate;
 
 public record MainData(
-        String category,
-        String department,
+        String type,
+        String reason,
         String name,
         String surename,
         LocalDate birthday,
@@ -13,6 +13,6 @@ public record MainData(
         String phone,
         String street,
         String plz,
-        String place
-) {
-}
+        String place,
+        LocalDate entryDate
+) {}
