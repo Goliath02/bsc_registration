@@ -60,14 +60,9 @@ export default {
               router.push("/erfolg");
             })
             .catch(function (error) {
-
-              if (error.status === 400) {
-                useRegistrationStore().requestFailedWithWrongNonExistingEmail = true;
-				useRegistrationStore().requestFailedWithError = error.message;
-              }
-
-              useRegistrationStore().isLoadingRequest = false;
-              useRegistrationStore().requestFailed = true;
+	            useRegistrationStore().requestFailedWithError = error.response.data;
+	            useRegistrationStore().isLoadingRequest = false;
+	            useRegistrationStore().requestFailed = true;
             });
       }
     },

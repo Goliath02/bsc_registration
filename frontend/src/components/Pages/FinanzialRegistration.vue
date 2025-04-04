@@ -67,9 +67,16 @@ export default {
                           :is-not-valid="!useRegistrationStore().isFilled.dataProtection && useRegistrationStore().triedToValidateFinancialForm"
                           @change="useRegistrationStore().updateFinancialValidation()"/>
 
-    <b-s-c-checkbox v-model="useRegistrationStore().registrationData.correctness"
-                    :is-not-valid="!useRegistrationStore().isFilled.correctness && useRegistrationStore().triedToValidateFinancialForm"
-                    label-text="Hiermit bestätige ich, dass alle angegebenen Daten der Richtigkeit ensprechen."
+
+	  <b-s-c-checkbox v-model="useRegistrationStore().registrationData.correctness"
+	                  :is-not-valid="!useRegistrationStore().isFilled.correctness && useRegistrationStore().triedToValidateFinancialForm"
+	                  label-text="Hiermit bestätige ich, dass alle angegebenen Daten der Richtigkeit ensprechen."
+	                  @change="useRegistrationStore().updateFinancialValidation()"/>
+
+
+    <b-s-c-checkbox v-model="useRegistrationStore().registrationData.statute"
+                    :is-not-valid="!useRegistrationStore().isFilled.statute && useRegistrationStore().triedToValidateFinancialForm"
+                    label-text="Ich erkenne die Satzung des Vereins an un verpflichte mich zur Zahlung des Mitgliedsbeitrags."
                     @change="useRegistrationStore().updateFinancialValidation()"/>
 
     <input v-model="useRegistrationStore().registrationData.hiddenSecurityCheck" class="invisible h-0" type="checkbox">
