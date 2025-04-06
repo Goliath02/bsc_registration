@@ -42,7 +42,7 @@ public class CsvUtil {
                     formatDate(mainData.entryDate()),
                     mainData.plz(),
                     getTypeByBirthday(mainData.birthday()),
-                    mainData.department(),
+                    mainData.reason(),
                     financial.iban(),
                     financial.nameOfBankOwner(),
                     financial.sureNameBankOwner()
@@ -57,9 +57,10 @@ public class CsvUtil {
                         mainData.phone(),
                         mainData.street(),
                         mainData.place(),
+                        formatDate(mainData.entryDate()),
                         mainData.plz(),
                         getTypeByBirthday(mainData.birthday()),
-                        mainData.department(),
+                        mainData.reason(),
                         financial.iban(),
                         financial.nameOfBankOwner(),
                         financial.sureNameBankOwner()
@@ -83,6 +84,7 @@ public class CsvUtil {
                 "E-Mail",
                 "Telefon",
                 "Straße",
+                "Eintrittsdatum",
                 "PLZ",
                 "Beitragssätze",
                 "Abteilung",

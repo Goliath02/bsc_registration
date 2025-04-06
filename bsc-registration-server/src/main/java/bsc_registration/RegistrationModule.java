@@ -38,7 +38,7 @@ public class RegistrationModule {
     public void sendEmailToCourseOwner(final FormData formData) throws MessagingException {
 
         final var config = configLoader.loadConfig();
-        final var courseOwner = config.courses().get(formData.mainData().department());
+        final var courseOwner = config.courses().get(formData.mainData().reason());
 
         emailService.sendEmailToCourseOwner(courseOwner, formData);
     }

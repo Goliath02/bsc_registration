@@ -19,7 +19,7 @@ export default {
       <div class="flex flex-col justify-center text-xl font-bold gap-[0.7em]">
         <p>Wir werden ihre Daten so schnell wie möglich bearbeiten</p>
         <p>Weitere Informationen wie Trainingszeiten und weiteres erhalten Sie in der Bestätigungs-email</p>
-        <p>Wenn Sie weitere Fragen haben kontaktieren sie <a class="text-blue-500" href="mailto: test@test.com">test@test.com</a>
+        <p>Wenn Sie weitere Fragen haben kontaktieren sie <a class="text-blue-500" href="mailto: vorstand@erster-bsc-pforzheim.de">vorstand@erster-bsc-pforzheim.de</a>
         </p>
 
 
