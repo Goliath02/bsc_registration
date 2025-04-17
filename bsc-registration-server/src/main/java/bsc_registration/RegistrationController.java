@@ -46,6 +46,8 @@ public class RegistrationController {
             return ResponseEntity.status(400).body("Form-data is empty");
         }
 
+        logger.info(format("Received registration data: %s", formData));
+
         if (studentIdentificationFiles != null) {
 
             for (MultipartFile file : studentIdentificationFiles) {
