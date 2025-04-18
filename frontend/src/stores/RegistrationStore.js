@@ -118,7 +118,8 @@ export const useRegistrationStore = defineStore('registrationStore', {
                 useRegistrationStore().isFilled.financialData.nameOfBankOwner &&
                 useRegistrationStore().isFilled.financialData.surenameOfBankOwner &&
                 useRegistrationStore().isFilled.dataProtection &&
-                useRegistrationStore().isFilled.correctness;
+                useRegistrationStore().isFilled.correctness &&
+                useRegistrationStore().isFilled.statute;
         },
 
         updateBasicValidation() {
