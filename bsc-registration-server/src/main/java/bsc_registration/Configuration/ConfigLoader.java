@@ -11,11 +11,11 @@ import java.util.List;
 @Service
 public class ConfigLoader {
 
-    public Config loadConfig() {
+    public BscCourseConfig loadConfig() {
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        final var objectMapper = new ObjectMapper();
         try (InputStream inputStream = getClass().getResourceAsStream("/emailConf.json")) {
-            return objectMapper.readValue(inputStream, Config.class);
+            return objectMapper.readValue(inputStream, BscCourseConfig.class);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load configuration file", e);
         }

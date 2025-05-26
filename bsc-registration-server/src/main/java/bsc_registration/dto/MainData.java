@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public record MainData(
         String type,
-        String reason,
+        String section,
         String name,
         String surename,
         LocalDate birthday,

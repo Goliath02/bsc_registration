@@ -5,7 +5,7 @@ import lombok.NonNull;
 import java.util.List;
 import java.util.Map;
 
-public record Config(
+public record BscCourseConfig(
         @NonNull
         List<String> registrationReceiver,
         @NonNull

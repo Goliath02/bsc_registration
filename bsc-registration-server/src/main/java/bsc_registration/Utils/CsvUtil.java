@@ -1,12 +1,16 @@
 package bsc_registration.Utils;
 
+import bsc_registration.dto.ExtraPerson;
+import bsc_registration.dto.FinancialData;
 import bsc_registration.dto.FormData;
+import bsc_registration.dto.MainData;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.List;
 
 import static bsc_registration.Utils.FormUtil.formatDate;
 import static bsc_registration.Utils.FormUtil.getTypeByBirthday;
@@ -17,10 +21,10 @@ public class CsvUtil {
 
     public String createCsvFromFormData(final FormData formData) {
 
-        final var mainData = formData.mainData();
-        final var financial = formData.financial();
+        final MainData mainData = formData.mainData();
+        final FinancialData financial = formData.financial();
 
-        final var extraPeople = formData.morePersons();
+        final List<ExtraPerson> extraPeople = formData.morePersons();
 
         final var csvFormat = CSVFormat.DEFAULT.withHeader().builder().build();
 
@@ -32,17 +36,19 @@ public class CsvUtil {
             this.printHeader(csvPrinter);
 
             csvPrinter.printRecord(
+                    mainData.section(),
                     mainData.name(),
                     mainData.surename(),
                     mainData.gender(),
                     formatDate(mainData.birthday()),
+                    mainData.email(),
                     mainData.phone(),
                     mainData.street(),
+                    mainData.plz(),
                     mainData.place(),
                     formatDate(mainData.entryDate()),
-                    mainData.plz(),
+                    mainData.type(),
                     getTypeByBirthday(mainData.birthday()),
-                    mainData.reason(),
                     financial.iban(),
                     financial.nameOfBankOwner(),
                     financial.sureNameBankOwner()
@@ -50,17 +56,19 @@ public class CsvUtil {
 
             for (var extra : extraPeople) {
                 csvPrinter.printRecord(
+                        mainData.section(),
                         extra.name(),
                         extra.surename(),
                         extra.gender(),
                         formatDate(extra.birthday()),
+                        mainData.email(),
                         mainData.phone(),
                         mainData.street(),
+                        mainData.plz(),
                         mainData.place(),
                         formatDate(mainData.entryDate()),
-                        mainData.plz(),
                         getTypeByBirthday(mainData.birthday()),
-                        mainData.reason(),
+                        mainData.section(),
                         financial.iban(),
                         financial.nameOfBankOwner(),
                         financial.sureNameBankOwner()
@@ -77,6 +85,7 @@ public class CsvUtil {
     private void printHeader(CSVPrinter csvPrinter) throws IOException {
 
         csvPrinter.printRecord(
+                "Abteilung",
                 "Vorname",
                 "Nachname",
                 "Geschlecht",
@@ -84,8 +93,9 @@ public class CsvUtil {
                 "E-Mail",
                 "Telefon",
                 "Straße",
-                "Eintrittsdatum",
                 "PLZ",
+                "Ort",
+                "Eintrittsdatum",
                 "Beitragssätze",
                 "Abteilung",
                 "IBAN",

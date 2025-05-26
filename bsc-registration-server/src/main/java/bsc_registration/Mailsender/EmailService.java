@@ -147,7 +147,7 @@ public class EmailService {
 						<br>
 						%s
 						""",
-				mainData.type(), mainData.reason(), mainData.gender(), mainData.name(),
+				mainData.type(), mainData.section(), mainData.gender(), mainData.name(),
 				mainData.surename(), mainData.birthday(), mainData.email(), mainData.phone(),
 				mainData.street(), mainData.plz(), mainData.place(),
 

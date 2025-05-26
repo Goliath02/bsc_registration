@@ -14,13 +14,13 @@ public class FormUtil {
 			return "";
 		}
 
-		final var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		return date.format(formatter);
 	}
 
 	public static String getTypeByBirthday(final LocalDate birthday) {
 
-		final var age = calculateAge(birthday);
+		final int age = calculateAge(birthday);
 		return age <= FULL_AGE ? "Erwachsener" : "Kind";
 	}
 
