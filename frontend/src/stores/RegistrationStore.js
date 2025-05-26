@@ -1,4 +1,7 @@
 import {defineStore} from 'pinia'
+import {RegistrationType} from "@/components/BasicRegistration/dto/RegistrationType.js";
+import {AgeType} from "@/components/BasicRegistration/dto/AgeType.js";
+import * as dateUtil from "@/utils/dateUtil.js";
 
 export const useRegistrationStore = defineStore('registrationStore', {
     state: () => ({
@@ -68,12 +71,38 @@ export const useRegistrationStore = defineStore('registrationStore', {
         triedToValidateBasicForm: false,
         triedToValidateFinancialForm: false,
 
+        price: 0.00,
+
         isLoadingRequest: false,
         requestFailed: false,
         requestFailedWithError: ""
     }),
 
     actions: {
+
+
+
+	    calculatePrice() {
+		    switch (useRegistrationStore().registrationData.mainData.type) {
+			    case RegistrationType.MEMBER:
+				    useRegistrationStore().price = 85.00;
+				    break;
+			    case RegistrationType.STUDENT:
+				    useRegistrationStore().price = 50.00;
+				    break;
+			    case RegistrationType.FAMILY:
+				    useRegistrationStore().price = 85.00;
+
+				    for (const person of useRegistrationStore().registrationData.morePersons) {
+						if (dateUtil.getTypeByBirthday(person.birthday) === AgeType.CHILD) {
+							useRegistrationStore().price += 15.0;
+						}
+					    useRegistrationStore().price += 25.0;
+				    }
+				    break;
+		    }
+            return useRegistrationStore().price;
+	    },
 
         removeExtraPersonForm(index) {
             useRegistrationStore().registrationData.morePersons.splice(index, 1);

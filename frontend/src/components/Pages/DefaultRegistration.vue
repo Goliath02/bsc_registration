@@ -8,6 +8,7 @@ import ReworkedBSCInput from "@/components/BasicRegistration/BSCInput.vue";
 import ExtraPersonForm from "@/components/BasicRegistration/ExtraPersonForm.vue";
 import {useRegistrationStore} from "@/stores/RegistrationStore.js";
 import NachweisFeld from "@/components/BasicRegistration/NachweisFeld.vue";
+import {RegistrationType} from "@/components/BasicRegistration/dto/RegistrationType.js";
 
 export default {
 
@@ -59,8 +60,12 @@ export default {
   computed: {
     toggleNachweisActivation() {
       useRegistrationStore().isFilled.studentIdentification = !useRegistrationStore().registrationData.mainData.type === 'Schüler/Student über 18';
-      return useRegistrationStore().registrationData.mainData.type === 'Schüler/Student über 18';
+      return useRegistrationStore().registrationData.mainData.type === RegistrationType.STUDENT;
     },
+
+	  isFamilyRegistration() {
+		return useRegistrationStore().registrationData.mainData.type === RegistrationType.FAMILY
+	  }
   }
 
 }
@@ -154,12 +159,12 @@ export default {
 		            @input="useRegistrationStore().updateBasicValidation()"/>
 	  </div>
 
-    <ExtraPersonForm v-for="(person, index) in useRegistrationStore().registrationData.morePersons"
+    <ExtraPersonForm v-if="isFamilyRegistration" v-for="(person, index) in useRegistrationStore().registrationData.morePersons"
                      v-model.extraModelValues="useRegistrationStore().registrationData.morePersons[index]"
                      :index="index"
                      :input-data="{name: person.name, surename: person.surename, birthday: person.birthday, gender: person.gender}"/>
 
-    <AddMemberButton @click="addPersonForm"/>
+    <AddMemberButton v-if="isFamilyRegistration" @click="addPersonForm"/>
 
   </div>
 

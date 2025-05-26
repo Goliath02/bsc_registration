@@ -5,13 +5,13 @@ import {useRegistrationStore} from "@/stores/RegistrationStore.js";
 import router from "@/router.js";
 import ConfirmationPage from "@/components/Pages/ConfirmationPage.vue";
 import axios from "axios";
-
+import PriceDisplay from "@/components/BasicRegistration/PriceDisplay.vue";
+import StepDots from "@/components/StepDots.vue";
 
 export default {
   name: "RegistrationNavigation",
+	components: {StepDots, PriceDisplay},
   methods: {
-    useRegistrationStore,
-
     routerToNextSite() {
 
       if (useRegistrationStore().isDefaultDataFormCorrect() && this.isFirstPage) {
@@ -99,18 +99,16 @@ export default {
 
   <div class="flex p-[1em]">
 
-    <div :class="{ 'invisible': isFirstPage}" class="basis-1/3 ">
-
+    <div :class="{ 'invisible': isFirstPage}" class="basis-1/3">
       <button @click="routerToPastSite" class="font-bold  px-[1em] py-[0.5em] rounded">
         Zurück
       </button>
-
     </div>
 
-    <div class="flex basis-1/3 justify-center items-center gap-[1em]">
-      <div v-for="page in pages" :class="{'!bg-white' : $route.name === page.name}"
-           class="w-[0.8em] h-[0.8em] bg-stone-500 rounded-full transition-colors dot"></div>
-    </div>
+	  <div class="basis-1/3 flex flex-col justify-center items-center">
+		  <StepDots :pages="pages"/>
+		  <PriceDisplay/>
+	  </div>
 
     <div class="basis-1/3 flex justify-end">
       <button v-if="!isLastPage" class="font-bold bg-red-600 px-[1em] py-[0.5em] rounded" @click="routerToNextSite">
@@ -129,18 +127,7 @@ export default {
 					</svg>
 				</span>
       </button>
-
     </div>
 
   </div>
 </template>
-
-<style scoped>
-
-.dot {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-</style>
