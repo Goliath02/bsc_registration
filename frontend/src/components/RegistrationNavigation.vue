@@ -12,6 +12,7 @@ export default {
   name: "RegistrationNavigation",
 	components: {StepDots, PriceDisplay},
   methods: {
+	  useRegistrationStore,
     routerToNextSite() {
 
       if (useRegistrationStore().isDefaultDataFormCorrect() && this.isFirstPage) {

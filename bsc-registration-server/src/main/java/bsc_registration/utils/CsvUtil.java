@@ -1,4 +1,4 @@
-package bsc_registration.Utils;
+package bsc_registration.utils;
 
 import bsc_registration.dto.ExtraPerson;
 import bsc_registration.dto.FinancialData;
@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 
-import static bsc_registration.Utils.FormUtil.formatDate;
-import static bsc_registration.Utils.FormUtil.getTypeByBirthday;
+import static bsc_registration.utils.FormUtil.formatDate;
+import static bsc_registration.utils.FormUtil.getTypeByBirthday;
 
 @Service
 public class CsvUtil {
@@ -33,7 +33,7 @@ public class CsvUtil {
         try {
             CSVPrinter csvPrinter = new CSVPrinter(stringWriter, csvFormat);
 
-            this.printHeader(csvPrinter);
+            printHeader(csvPrinter);
 
             csvPrinter.printRecord(
                     mainData.section(),

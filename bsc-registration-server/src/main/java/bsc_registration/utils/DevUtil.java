@@ -1,4 +1,4 @@
-package bsc_registration.Utils;
+package bsc_registration.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

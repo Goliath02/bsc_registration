@@ -21,8 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static bsc_registration.Utils.FormUtil.calculateAge;
-import static bsc_registration.Utils.FormUtil.formatDate;
+import static bsc_registration.utils.FormUtil.calculateAge;
+import static bsc_registration.utils.FormUtil.formatDate;
 import static java.lang.String.format;
 
 

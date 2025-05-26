@@ -80,8 +80,6 @@ export const useRegistrationStore = defineStore('registrationStore', {
 
     actions: {
 
-
-
 	    calculatePrice() {
 		    switch (useRegistrationStore().registrationData.mainData.type) {
 			    case RegistrationType.MEMBER:

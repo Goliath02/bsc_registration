@@ -1,4 +1,4 @@
-package bsc_registration.Utils;
+package bsc_registration.utils;
 
 import java.time.LocalDate;
 import java.time.Period;
