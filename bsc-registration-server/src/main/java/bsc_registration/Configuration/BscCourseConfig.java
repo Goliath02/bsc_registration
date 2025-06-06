@@ -9,6 +9,8 @@ public record BscCourseConfig(
         @NonNull
         List<String> registrationReceiver,
         @NonNull
-        Map<String, List<String>> courses
+        Map<String, List<String>> courses,
+        @NonNull
+        List<String> priceList
 ) {
 }

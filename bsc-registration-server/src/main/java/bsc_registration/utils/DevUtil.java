@@ -13,6 +13,10 @@ public class DevUtil {
 
 	public String getEmailFromConfig(final String email) {
 
+		if (devEmail == null) {
+			return email;
+		}
+
 		if (email.isBlank() || email.equals("example@mail.com")) {
 			return devEmail;
 		}
@@ -21,6 +25,10 @@ public class DevUtil {
 	}
 
 	public List<String> getEmailFromConfig(final List<String> emails) {
+
+		if (devEmail == null) {
+			return emails;
+		}
 
 		return emails.stream().map(email -> {
 

@@ -109,19 +109,22 @@ public class EmailService {
 	private String buildUserMailHtml(final FormData formData) {
 
 		StringBuilder morePersonsInfoText = new StringBuilder();
-		morePersonsInfoText.append("<p>Weitere Personen anghaben:</p><br>");
 
-		for (ExtraPerson person : formData.morePersons()) {
+		if (!formData.morePersons().isEmpty()) {
+			morePersonsInfoText.append("<p>Weitere Personen anghaben:</p><br>");
 
-			final String personInfo = format("""
-					<p>Geschlecht: %s</p>
-					<p>Vorname: %s</p>
-					<p>Nachname: %s</p>
-					<p>Geburtsdatum: %s</p>
-					<br>
-					""", person.gender(), person.name(), person.surename(), person.birthday());
+			for (ExtraPerson person : formData.morePersons()) {
 
-			morePersonsInfoText.append(personInfo).append("\n");
+				final String personInfo = format("""
+						<p>Geschlecht: %s</p>
+						<p>Vorname: %s</p>
+						<p>Nachname: %s</p>
+						<p>Geburtsdatum: %s</p>
+						<br>
+						""", person.gender(), person.name(), person.surename(), person.birthday());
+
+				morePersonsInfoText.append(personInfo).append("\n");
+			}
 		}
 
 		final MainData mainData = formData.mainData();

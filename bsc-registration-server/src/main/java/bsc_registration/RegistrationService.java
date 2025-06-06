@@ -29,6 +29,12 @@ public class RegistrationService {
 
     final private CsvUtil csvUtil;
 
+    public List<String> getPriceList() {
+
+        BscCourseConfig bscCourseConfig = configLoader.loadConfig();
+
+        return bscCourseConfig.priceList();
+    }
 
     public void sendEmailToRegistration(final FormData formData, final List<MultipartFile> files) throws MessagingException, IOException {
 

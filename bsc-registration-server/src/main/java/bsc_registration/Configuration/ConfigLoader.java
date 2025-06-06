@@ -14,7 +14,7 @@ public class ConfigLoader {
     public BscCourseConfig loadConfig() {
 
         final var objectMapper = new ObjectMapper();
-        try (InputStream inputStream = getClass().getResourceAsStream("/emailConf.json")) {
+        try (InputStream inputStream = getClass().getResourceAsStream("/bscConf.json")) {
             return objectMapper.readValue(inputStream, BscCourseConfig.class);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load configuration file", e);

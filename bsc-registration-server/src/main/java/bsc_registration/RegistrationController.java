@@ -36,6 +36,13 @@ public class RegistrationController {
         return ResponseEntity.ok(registrationModule.getCourses());
     }
 
+    @GetMapping("/priceList")
+    @ResponseBody()
+    public ResponseEntity<List<String>> getPriceList() {
+
+        return ResponseEntity.ok(registrationModule.getPriceList());
+    }
+
     @PostMapping(value = "/registrate", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity validateRegistration(@RequestPart final FormData formData,
                                                @RequestPart(required = false) final List<MultipartFile> studentIdentificationFiles) {

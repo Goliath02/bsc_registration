@@ -12,13 +12,13 @@ export default {
     <div
         class="lg:max-w-[50%] overflow-y-auto h-full bg-bsc-gray rounded-lg  flex flex-col min-h-0 text-white text-center gap-[2em] -lg:px-[1em] lg:px-[6em] pt-[3em] pb-[2em]">
 
-      <img class=" h-[20em] px-[2em]" src="@/assets/icons/Full%20BSC%20Logo.svg">
+      <img class=" h-[10em] px-[2em]" src="@/assets/icons/Full%20BSC%20Logo.svg">
 
-      <h1 class="text-4xl font-bold">Vielen Dank für ihr Interesse!</h1>
+      <h1 class="text-4xl font-bold">Vielen Dank für Ihr Interesse!</h1>
 
       <div class="flex flex-col justify-center text-xl font-bold gap-[0.7em]">
         <p>Wir werden ihre Daten so schnell wie möglich bearbeiten</p>
-        <p>Weitere Informationen wie Trainingszeiten und weiteres erhalten Sie in der Bestätigungs-email</p>
+        <p>Weitere Informationen erhalten Sie in der Bestätigungs-email</p>
         <p>Wenn Sie weitere Fragen haben kontaktieren sie <a class="text-blue-500" href="mailto: vorstand@erster-bsc-pforzheim.de">vorstand@erster-bsc-pforzheim.de</a>
         </p>
 
