@@ -146,6 +146,10 @@ public class EmailService {
 						<p>Bankkonto Besitzer Nachname: %s</p>
 						<br>
 						%s
+						
+						<p>Bitte gedulden Sie sich bitte noch etwas und warten Sie auf eine Antwort von einem unserer Spaten-Leitung.</p>
+						<p>Wir melden uns persönlich bei Ihnen und teilen Sie in eine passende Gruppe ein, dass Ihrem Niveu entspricht.</p>
+						
 						""",
 				mainData.type(), mainData.reason(), mainData.gender(), mainData.name(),
 				mainData.surename(), mainData.birthday(), mainData.email(), mainData.phone(),
