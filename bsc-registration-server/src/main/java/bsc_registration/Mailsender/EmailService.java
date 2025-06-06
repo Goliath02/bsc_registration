@@ -109,6 +109,8 @@ public class EmailService {
 	private String buildUserMailHtml(final FormData formData) {
 
 		StringBuilder morePersonsInfoText = new StringBuilder();
+		morePersonsInfoText.append("<p>Weitere Personen anghaben:</p><br>");
+
 		for (ExtraPerson person : formData.morePersons()) {
 
 			final String personInfo = format("""
@@ -133,7 +135,7 @@ public class EmailService {
 						<p>Vorname: %s</p>
 						<p>Nachname: %s</p>
 						<p>Geburtsdatum: %s</p>
-						<p>Email: %s</p> 
+						<p>Email: %s</p>
 						<p>Telefon/Mobil: %s</p>
 						<p>Straße: %s</p>
 						<p>Postleitzahl: %s</p>
@@ -143,11 +145,9 @@ public class EmailService {
 						<p>Bankkonto Besitzer Vorname: %s</p>
 						<p>Bankkonto Besitzer Nachname: %s</p>
 						<br>
-						<p>Weitere Personen anghaben:</p>
-						<br>
 						%s
 						""",
-				mainData.type(), mainData.section(), mainData.gender(), mainData.name(),
+				mainData.type(), mainData.reason(), mainData.gender(), mainData.name(),
 				mainData.surename(), mainData.birthday(), mainData.email(), mainData.phone(),
 				mainData.street(), mainData.plz(), mainData.place(),
 
@@ -161,10 +161,6 @@ public class EmailService {
 				          <head>
 				          	<meta charset="UTF-8">
 				          	<title>Info</title>
-				
-				          	<style>
-				                 %s
-				          	</style>
 				          </head>
 				
 				          <div class="headerWrapper">
@@ -174,22 +170,11 @@ public class EmailService {
 				          <div class="bodyWrapper">
 				          	<h1>Information zu Ihrer Registrierung</h1>
 				          	%s
-				          	<p>Mit dieser Email erhalten Sie auch alle nötigen Informationen für Ihr erstes Training</p>
-				          	<a href="https://erster-bsc-pforzheim.de/kursplan-schwimmen">Aktueller Trainingplan fürs Schwimmen</a>
-				          	<p>oder</p>
-				          	<a href="https://erster-bsc-pforzheim.de/wasserball">Wasserball</a>
-				
 				          	<p>Weitere Informationen finden Sie unter der <a href="https://erster-bsc-pforzheim.de/" style="color: cornflowerblue">Website</a>.</p>
 				          	<p>Wenn Sie weitere Fragen haben kontaktieren Sie gerne <a href="mailto: vorstand@erster-bsc-pforzheim.de" style="color: cornflowerblue">vorstand@erster-bsc-pforzheim.de</a>.</p>
-				""", CSS, infoText);
+				""", infoText);
 	}
 
-	private String getTrainingPlanLink() {
-
-		return "";
-	}
-
-	//Is keept for future purposes
 	private String buildCourseOwnerHtml(final FormData formData) {
 
 		final var mainData = formData.mainData();
@@ -231,57 +216,4 @@ public class EmailService {
 		);
 	}
 
-	final String CSS = """
-				td{
-					padding: 0.5em;
-			        border: solid rgb(34 34 34);
-			    }
-			
-				table{
-					width: 100%;
-				}
-			
-				tbody{
-					table-layout: auto;
-				}
-			
-				p{
-			        font-size: 1.125rem; /* 18px */
-			        line-height: 1.75rem; /* 28px */
-				}
-			
-				h1{
-			        font-size: 1.875rem; /* 30px */
-			        line-height: 2.25rem; /* 36px */
-			        padding-top: 1em;
-			        padding-bottom: 1em;
-				}
-			
-				.bodyWrapper{
-					display: flex;
-					flex-direction: column;
-					width: 100%;
-					font-weight: bold;
-			        padding-left: 1em;
-			        padding-right: 1em;
-					gap: 1em;
-				}
-			
-			
-				.headerWrapper{
-					color: white;
-					display: flex;
-					justify-content: center;
-					padding-top: 1em;
-					padding-bottom: 1em;
-					background-color: black;
-				}
-			
-					.tableWrapper {
-			         background-color: rgb(64 64 64);
-			         border-radius: 0.5rem;
-			         overflow-x: auto;
-			     }
-			
-			""";
 }

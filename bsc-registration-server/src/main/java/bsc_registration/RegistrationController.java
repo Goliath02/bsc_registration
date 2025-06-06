@@ -19,9 +19,9 @@ import java.util.List;
 public class RegistrationController {
 
     public static final long EIGHT_MB = 8000000L;
-    private final RegistrationModule registrationModule;
+    private final RegistrationService registrationModule;
 
-    public RegistrationController(final RegistrationModule registrationModule) {
+    public RegistrationController(final RegistrationService registrationModule) {
         this.registrationModule = registrationModule;
     }
 
@@ -57,7 +57,7 @@ public class RegistrationController {
         }
 
         try {
-            registrationModule.sendEmailToRegistratedUser(formData);
+            registrationModule.sendEmailToRegisteredUser(formData);
             registrationModule.sendEmailToRegistration(formData, studentIdentificationFiles);
             registrationModule.sendEmailToCourseOwner(formData);
         } catch (MessagingException | IOException e) {

@@ -36,7 +36,7 @@ public class CsvUtil {
             printHeader(csvPrinter);
 
             csvPrinter.printRecord(
-                    mainData.section(),
+                    mainData.reason(),
                     mainData.name(),
                     mainData.surename(),
                     mainData.gender(),
@@ -56,7 +56,7 @@ public class CsvUtil {
 
             for (var extra : extraPeople) {
                 csvPrinter.printRecord(
-                        mainData.section(),
+                        mainData.reason(),
                         extra.name(),
                         extra.surename(),
                         extra.gender(),
@@ -68,7 +68,7 @@ public class CsvUtil {
                         mainData.place(),
                         formatDate(mainData.entryDate()),
                         getTypeByBirthday(mainData.birthday()),
-                        mainData.section(),
+                        mainData.reason(),
                         financial.iban(),
                         financial.nameOfBankOwner(),
                         financial.sureNameBankOwner()

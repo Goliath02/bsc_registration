@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
-public class RegistrationModule {
+public class RegistrationService {
 
     final private EmailService emailService;
     final private DevUtil devUtil;
@@ -46,12 +46,12 @@ public class RegistrationModule {
     public void sendEmailToCourseOwner(final FormData formData) throws MessagingException {
 
         final BscCourseConfig config = configLoader.loadConfig();
-        final List<String> courseOwner = devUtil.getEmailFromConfig(config.courses().get(formData.mainData().section()));
+        final List<String> courseOwner = devUtil.getEmailFromConfig(config.courses().get(formData.mainData().reason()));
 
         emailService.sendEmailToCourseOwner(courseOwner, formData);
     }
 
-    public void sendEmailToRegistratedUser(final FormData formData) throws MessagingException, MailSendException {
+    public void sendEmailToRegisteredUser(final FormData formData) throws MessagingException, MailSendException {
         emailService.sendEmailToUser(formData.mainData().email(), formData);
         log.info("Email was sent successfully to: {}", formData.mainData().email());
     }
