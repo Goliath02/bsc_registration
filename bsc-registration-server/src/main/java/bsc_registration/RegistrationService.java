@@ -33,7 +33,7 @@ public class RegistrationService {
 
         BscCourseConfig bscCourseConfig = configLoader.loadConfig();
 
-        return bscCourseConfig.priceList();
+        return bscCourseConfig.getPriceList();
     }
 
     public void sendEmailToRegistration(final FormData formData, final List<MultipartFile> files) throws MessagingException, IOException {
@@ -43,7 +43,7 @@ public class RegistrationService {
         final String csvFromFormData = csvUtil.createCsvFromFormData(formData);
 	    log.info("CSV was created successfully: {}", csvFromFormData);
 
-        final List<String> registrationReceiver = devUtil.getEmailFromConfig(config.registrationReceiver());
+        final List<String> registrationReceiver = devUtil.getEmailFromConfig(config.getRegistrationReceiver());
 
         emailService.sendMailToRegistration(registrationReceiver, csvFromFormData, files);
         log.info("Email was sent successfully to: {}", registrationReceiver);
@@ -52,7 +52,7 @@ public class RegistrationService {
     public void sendEmailToCourseOwner(final FormData formData) throws MessagingException {
 
         final BscCourseConfig config = configLoader.loadConfig();
-        final List<String> courseOwner = devUtil.getEmailFromConfig(config.courses().get(formData.mainData().reason()));
+        final List<String> courseOwner = devUtil.getEmailFromConfig(config.getCourses().get(formData.mainData().reason()));
 
         emailService.sendEmailToCourseOwner(courseOwner, formData);
     }

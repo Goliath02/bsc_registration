@@ -1,6 +1,6 @@
 services:
   api:
-    image: goliath02/bsc_registration:latest
+    image: goliath02/bsc_registration:1.0.0
     container_name: bsc-registration-server
     environment:
       - SPRING_PROFILES_ACTIVE=prod
