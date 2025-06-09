@@ -4,6 +4,9 @@ services:
     container_name: bsc-registration-server
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - MAIL_PASSWORD=$MAIL_PASSWORD
+      - MAIL_USERNAME=$MAIL_USERNAME
+      - SENDER_MAIL=$SENDER_MAIL
     volumes:
       - ./logs:/app/logs
     restart: always
