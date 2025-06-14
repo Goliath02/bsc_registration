@@ -3,9 +3,12 @@ package bsc_registration;
 import bsc_registration.Configuration.BscCourseConfig;
 import bsc_registration.Configuration.ConfigLoader;
 import bsc_registration.Mailsender.EmailService;
+import bsc_registration.dto.ExtraPerson;
+import bsc_registration.dto.FormData;
+import bsc_registration.dto.MainData;
+import bsc_registration.dto.NswRegistration;
 import bsc_registration.utils.CsvUtil;
 import bsc_registration.utils.DevUtil;
-import bsc_registration.dto.FormData;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,9 +29,11 @@ import java.util.List;
 public class RegistrationService {
 
     final private EmailService emailService;
-    final private DevUtil devUtil;
     final private ConfigLoader configLoader;
 
+    final private NswRegistrationRepository nswRepository;
+
+    final private DevUtil devUtil;
     final private CsvUtil csvUtil;
 
     public List<String> getPriceList() {
@@ -41,7 +48,7 @@ public class RegistrationService {
         final BscCourseConfig config = configLoader.loadConfig();
 
         final String csvFromFormData = csvUtil.createCsvFromFormData(formData);
-	    log.info("CSV was created successfully: {}", csvFromFormData);
+        log.info("CSV was created successfully: {}", csvFromFormData);
 
         final List<String> registrationReceiver = devUtil.getEmailFromConfig(config.getRegistrationReceiver());
 
@@ -60,6 +67,38 @@ public class RegistrationService {
     public void sendEmailToRegisteredUser(final FormData formData) throws MessagingException, MailSendException {
         emailService.sendEmailToUser(formData.mainData().email(), formData);
         log.info("Email was sent successfully to: {}", formData.mainData().email());
+    }
+
+    public void setOnRegistrationNswList(final FormData formData) {
+
+        final MainData mainData = formData.mainData();
+        final List<ExtraPerson> extraPeople = formData.morePersons();
+
+        final List<NswRegistration> registrations = new ArrayList<>();
+
+        final var mainRegistration = new NswRegistration(
+                null,
+                mainData.name(),
+                mainData.surename(),
+                mainData.email(),
+                mainData.phone(),
+                LocalDate.now()
+        );
+
+        registrations.add(mainRegistration);
+
+        for (ExtraPerson extraPerson : extraPeople) {
+            final var extraRegistration = new NswRegistration(
+                    null,
+                    extraPerson.name(),
+                    extraPerson.surename(),
+                    mainData.email(),
+                    mainData.phone(),
+                    LocalDate.now()
+            );
+            registrations.add(extraRegistration);
+        }
+        nswRepository.saveAll(registrations);
     }
 
     public List<String> getCourses() {

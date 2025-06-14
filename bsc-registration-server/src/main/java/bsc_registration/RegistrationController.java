@@ -19,10 +19,10 @@ import java.util.List;
 public class RegistrationController {
 
     public static final long EIGHT_MB = 8000000L;
-    private final RegistrationService registrationModule;
+    private final RegistrationService registrationService;
 
     public RegistrationController(final RegistrationService registrationModule) {
-        this.registrationModule = registrationModule;
+        this.registrationService = registrationModule;
     }
 
     @GetMapping("/")
@@ -33,14 +33,14 @@ public class RegistrationController {
     @GetMapping("/courses")
     @ResponseBody()
     public ResponseEntity<List<String>> getConfig() {
-        return ResponseEntity.ok(registrationModule.getCourses());
+        return ResponseEntity.ok(registrationService.getCourses());
     }
 
     @GetMapping("/priceList")
     @ResponseBody()
     public ResponseEntity<List<String>> getPriceList() {
 
-        return ResponseEntity.ok(registrationModule.getPriceList());
+        return ResponseEntity.ok(registrationService.getPriceList());
     }
 
     @PostMapping(value = "/registrate", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -64,9 +64,9 @@ public class RegistrationController {
         }
 
         try {
-            registrationModule.sendEmailToRegisteredUser(formData);
-            registrationModule.sendEmailToRegistration(formData, studentIdentificationFiles);
-            registrationModule.sendEmailToCourseOwner(formData);
+            registrationService.sendEmailToRegisteredUser(formData);
+            registrationService.sendEmailToRegistration(formData, studentIdentificationFiles);
+            registrationService.sendEmailToCourseOwner(formData);
         } catch (MessagingException | IOException e) {
             log.error("Registration failed with Excpetion: {}", e.getMessage());
             return ResponseEntity.status(500).body(Errors.INTERNAL_ERROR);
@@ -78,4 +78,19 @@ public class RegistrationController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping(value = "/registrateNsw", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity validateNswRegistration(@RequestPart final FormData formData){
+
+        if (formData == null) {
+            return ResponseEntity.status(400).body("Form-data is empty");
+        }
+
+        log.info("Received new nsw registration data: {}", formData);
+
+        registrationService.setOnRegistrationNswList(formData);
+
+        return ResponseEntity.ok().build();
+    }
+
 }

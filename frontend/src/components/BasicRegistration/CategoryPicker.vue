@@ -38,7 +38,7 @@ onMounted(() => {
         </div>
 
         <div>
-          <Button variant="text" rounded size="small" severity="contrast"  @click="toggle"  icon="pi pi-question-circle"/>
+          <Button variant="text" rounded size="small" severity="contrast" @click="toggle"  icon="pi pi-question-circle"/>
           <Popover ref="op">
             <div>
               <div v-for="price of prices">
