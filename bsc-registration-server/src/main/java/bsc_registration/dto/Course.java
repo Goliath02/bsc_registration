@@ -4,24 +4,28 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
-@Entity(name = "Courses")
+@Entity
 @Data
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long courseId;
 
-    @Column(name = "COURSE_TYPE")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "courses")
+    private List<BscUser> user;
+
+    @Column
     private CourseType courseType;
 
-    @Column(name = "START_DATE")
+    @Column
     private LocalDate startDate;
 
-    @Column(name = "NUMBER_OF_PARTICIPANTS")
+    @Column
     private int numberOfParticipants;
 
-    @Column(name = "TRAINING_UNITS")
+    @Column
     private int trainingUnits;
 }
