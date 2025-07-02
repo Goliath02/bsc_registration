@@ -37,7 +37,7 @@ public class SecurityConfig {
 				.cors(cors -> cors.disable())
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests ->
-						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/auth/**")
+						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/auth/login")
 								.permitAll()
 								.requestMatchers("/auth/createKey")
 								.hasRole("admin")
