@@ -6,6 +6,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +31,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-
         try {
 
             String token = null;
@@ -54,18 +54,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
 
             if (token == null) {
-                // Kein Token gefunden → lasse den Request durch (z.B. für /public Endpoints)
-                filterChain.doFilter(request, response);
-                return;
+                throw new AuthenticationServiceException("JWT Token is empty");
             }
 
-// → Token ist da, jetzt prüfen und SecurityContext setzen
-            String userEmail = jwtService.extractUsername(token);
+            String username = jwtService.extractUsername(token);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (userEmail != null && authentication == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-
+            if (username != null && authentication == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+π
                 if (jwtService.isTokenValid(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
@@ -77,9 +74,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
 
-            filterChain.doFilter(request, response);
         } catch (Exception exception) {
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
+        filterChain.doFilter(request, response);
     }
 }

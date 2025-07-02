@@ -55,4 +55,8 @@ public class AuthService {
 
         return signUpKey;
     }
+
+    public void saveSignUpKey(SignUpKey signUpKey) {
+        keyRepository.save(signUpKey);
+    }
 }

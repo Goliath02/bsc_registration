@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,15 +30,15 @@ public class AuthController {
 
     }
 
-    @PostMapping("/createKey")
-    @PreAuthorize("hasRole('admin')")
-    public void createSignUpKey() {
-        authService.createSignUpKey();
+    @PostMapping("/key/create")
+    public ResponseEntity<String> createSignUpKey() {
+        authService.saveSignUpKey(authService.createSignUpKey());
 
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestBody final LoginDto loginDto,  HttpServletResponse response) {
+    public ResponseEntity<String> login(@RequestBody final LoginDto loginDto, HttpServletResponse response) {
 
         final BscUser authenticate = authService.authenticate(loginDto);
 
