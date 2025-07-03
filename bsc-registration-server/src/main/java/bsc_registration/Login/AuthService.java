@@ -2,6 +2,8 @@ package bsc_registration.Login;
 
 import bsc_registration.Login.dto.LoginDto;
 import bsc_registration.Login.dto.SignUpDto;
+import bsc_registration.dto.AuthorityType;
+import bsc_registration.dto.BscAuthority;
 import bsc_registration.dto.BscUser;
 import bsc_registration.dto.SignUpKey;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +22,7 @@ public class AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final KeyRepository keyRepository;
 
@@ -29,6 +33,8 @@ public class AuthService {
         user.setEmail(input.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(input.getPassword()));
 
+
+
         Optional<SignUpKey> optionalKey = keyRepository.getKeyByKey(input.getSignUpKey());
 
         final SignUpKey signUpKey = optionalKey.orElseThrow();
@@ -38,6 +44,10 @@ public class AuthService {
         }
 
         user.setSignUpKey(signUpKey);
+
+        final Optional<BscAuthority> byAuthority = authorityRepository.findByAuthority(signUpKey.getAuthority());
+
+        user.setAuthorities(List.of(byAuthority.orElseThrow()));
 
         return userRepository.save(user);
     }
@@ -55,8 +65,10 @@ public class AuthService {
         return null;
     }
 
-    public SignUpKey createSignUpKey() {
+    public SignUpKey createSignUpKey(final AuthorityType authority) {
         final var signUpKey = new SignUpKey();
+
+        signUpKey.setAuthority(authority);
 
         signUpKey.setKey(UUID.randomUUID().toString());
 

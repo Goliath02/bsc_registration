@@ -18,4 +18,8 @@ public class SignUpKey {
     @Column
     private String key;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private AuthorityType authority;
+
 }

@@ -4,6 +4,7 @@ import bsc_registration.JWT.JwtService;
 import bsc_registration.Login.dto.LoginDto;
 import bsc_registration.Login.dto.LoginResponse;
 import bsc_registration.Login.dto.SignUpDto;
+import bsc_registration.dto.AuthorityType;
 import bsc_registration.dto.BscUser;
 import bsc_registration.dto.SignUpKey;
 import jakarta.servlet.http.Cookie;
@@ -32,11 +33,11 @@ public class AuthController {
     }
 
     @PostMapping("/key/create")
-    public ResponseEntity<String> createSignUpKey() {
+    public ResponseEntity<String> createSignUpKey(@RequestParam final AuthorityType authority) {
 
-        final SignUpKey signUpKey = authService.createSignUpKey();
+        final SignUpKey signUpKey = authService.createSignUpKey(authority);
 
-        authService.saveSignUpKey(authService.createSignUpKey());
+        authService.saveSignUpKey(signUpKey);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(signUpKey.getKey());
     }

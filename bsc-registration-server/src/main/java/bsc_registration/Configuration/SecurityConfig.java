@@ -42,7 +42,7 @@ public class SecurityConfig {
 						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/auth/login", "/auth/signUp")
 								.permitAll()
 								.requestMatchers(HttpMethod.POST,"/auth/key/create")
-								.hasAuthority("admin")
+								.hasAuthority("ADMIN")
 								.anyRequest()
 								.authenticated())
 				.sessionManagement(sessionManagement ->

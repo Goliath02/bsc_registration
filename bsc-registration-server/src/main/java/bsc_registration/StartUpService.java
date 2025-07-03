@@ -3,6 +3,7 @@ package bsc_registration;
 import bsc_registration.Login.AuthService;
 import bsc_registration.Login.AuthorityRepository;
 import bsc_registration.Login.UserRepository;
+import bsc_registration.dto.AuthorityType;
 import bsc_registration.dto.BscAuthority;
 import bsc_registration.dto.BscUser;
 import bsc_registration.dto.SignUpKey;
@@ -46,12 +47,12 @@ public class StartUpService {
 			admin.setPassword(bCryptPasswordEncoder.encode(adminPassword));
 			admin.setUserName("Goliath");
 
-			final BscAuthority adminAuthority = authRepository.findByAuthority("admin")
-					.orElseGet(() -> authRepository.save(new BscAuthority(null, "admin")));
+			final BscAuthority adminAuthority = authRepository.findByAuthority(AuthorityType.ADMIN)
+					.orElseGet(() -> authRepository.save(new BscAuthority(null, AuthorityType.ADMIN)));
 
 			admin.setAuthorities(List.of(adminAuthority));
 
-			final SignUpKey signUpKey = authService.createSignUpKey();
+			final SignUpKey signUpKey = authService.createSignUpKey(AuthorityType.ADMIN);
 			admin.setSignUpKey(signUpKey);
 
 			userRepository.save(admin);
@@ -68,9 +69,9 @@ public class StartUpService {
 			final BscAuthority user = new BscAuthority();
 			final BscAuthority admin = new BscAuthority();
 
-			admin.setAuthority("admin");
-			courseOwner.setAuthority("courseOwner");
-			user.setAuthority("user");
+			admin.setAuthority(AuthorityType.ADMIN);
+			courseOwner.setAuthority(AuthorityType.COURSE_OWNER);
+			user.setAuthority(AuthorityType.USER);
 
 			authRepository.saveAllAndFlush(List.of(admin, courseOwner, user));
 		}

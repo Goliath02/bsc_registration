@@ -17,15 +17,16 @@ public class BscAuthority implements GrantedAuthority {
 	private Long authorityId;
 
 	@Column(nullable = false, unique = true)
-	private String authority;
+	@Enumerated(EnumType.STRING)
+	private AuthorityType authority;
 
 	@Override
 	public String getAuthority() {
-		return authority;
+		return authority.name();
 	}
 
 	@Override
 	public String toString() {
-		return authority;
+		return authority.name();
 	}
 }
