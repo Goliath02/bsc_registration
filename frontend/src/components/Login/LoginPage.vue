@@ -1,8 +1,20 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Button, InputText } from "primevue";
+import { useAuthStore } from '@/stores/authStore'
+import { useRouter } from 'vue-router'
 
-const checked1 = ref(false);
+const email = ref('')
+const password = ref('')
+const auth = useAuthStore()
+const router = useRouter()
+
+async function handleLogin() {
+    await auth.login(email.value, password.value).then(
+        router.push('/courseManager')
+    ).catch(console.error)
+}
+
 </script>
 
 <template>
@@ -39,6 +51,7 @@ const checked1 = ref(false);
             >Email Address</label
           >
           <InputText
+            v-model="email"
             id="email1"
             type="text"
             placeholder="Email address"
@@ -52,6 +65,7 @@ const checked1 = ref(false);
             >Password</label
           >
           <InputText
+            v-model="password"
             id="password1"
             type="password"
             placeholder="Password"
@@ -62,12 +76,6 @@ const checked1 = ref(false);
           class="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-3 sm:gap-0"
         >
           <div class="flex items-center gap-2">
-            <Checkbox id="rememberme1" v-model="checked1" :binary="true" />
-            <label
-              for="rememberme1"
-              class="text-surface-900 dark:text-surface-0 leading-normal"
-              >Remember me</label
-            >
           </div>
           <a
             class="text-primary font-medium cursor-pointer hover:text-primary-emphasis"
@@ -79,6 +87,7 @@ const checked1 = ref(false);
         label="Sign In"
         icon="pi pi-user"
         class="w-full py-2 rounded-lg flex justify-center items-center gap-2"
+        @click="handleLogin"
       >
         <template #icon>
           <i class="pi pi-user !text-base !leading-normal" />

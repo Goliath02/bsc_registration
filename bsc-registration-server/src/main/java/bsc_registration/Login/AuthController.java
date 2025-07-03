@@ -8,19 +8,23 @@ import bsc_registration.dto.AuthorityType;
 import bsc_registration.dto.BscUser;
 import bsc_registration.dto.SignUpKey;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("api/auth")
 public class AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
 
     @PostMapping("/signUp")
@@ -41,8 +45,7 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(signUpKey.getKey());
     }
-
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody final LoginDto loginDto, HttpServletResponse response) {
 
         final BscUser authenticate = authService.authenticate(loginDto);
@@ -55,9 +58,6 @@ public class AuthController {
 
         final var loginResponse = new LoginResponse();
 
-        loginResponse.setToken(token);
-        loginResponse.setExpiresIn(jwtService.getExpirationTime());
-
         Cookie cookie = new Cookie("jwt", token);
         cookie.setHttpOnly(true);
         cookie.setSecure(true); // in dev ggf. false
@@ -66,5 +66,27 @@ public class AuthController {
         response.addCookie(cookie);
 
         return ResponseEntity.ok("Login successfull");
+    }
+
+    @GetMapping("/authenticated")
+    public ResponseEntity<String> authenticated(HttpServletRequest request) {
+
+        Cookie[] cookies = request.getCookies();
+        String token = null;
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        if (token == null || !jwtService.isTokenValid(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.ok("valid");
+
     }
 }

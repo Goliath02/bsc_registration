@@ -56,7 +56,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (token == null) {
                 throw new AuthenticationServiceException("JWT Token is empty");
             }
-
+            System.out.println("Authorization Header: " + request.getHeader("Authorization"));
             String username = jwtService.extractUsername(token);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

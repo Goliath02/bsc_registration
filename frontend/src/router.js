@@ -61,6 +61,7 @@ const routes = [
     path: "/courseManager",
     component: CourseManager,
     name: "CourseManager",
+    meta: { requiresAuth: true },
   },
 ];
 
@@ -69,4 +70,21 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach(async (to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+
+  if (!requiresAuth) return next();
+
+  try {
+    // Anfrage an geschützten Endpoint – prüft Cookie
+    await axios.get('http://localhost:8080/api/auth/authenticated', {
+      withCredentials: true
+    });
+
+    next(); // Zugriff erlaubt
+  } catch (error) {
+    console.warn('Nicht eingeloggt');
+    next('/login'); // Weiterleitung zur Login-Seite
+  }
+});
 export default router;
