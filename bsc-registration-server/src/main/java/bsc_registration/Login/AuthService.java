@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,8 +29,14 @@ public class AuthService {
         user.setEmail(input.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(input.getPassword()));
 
-        SignUpKey signUpKey = new SignUpKey();
-        signUpKey.setKey(input.getSignUpKey());
+        Optional<SignUpKey> optionalKey = keyRepository.getKeyByKey(input.getSignUpKey());
+
+        final SignUpKey signUpKey = optionalKey.orElseThrow();
+
+        if (userRepository.hasUserWithKey(signUpKey)) {
+            throw new IllegalArgumentException();
+        }
+
         user.setSignUpKey(signUpKey);
 
         return userRepository.save(user);

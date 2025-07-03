@@ -39,7 +39,7 @@ public class SecurityConfig {
 				.cors(cors -> cors.disable())
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests ->
-						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/auth/login")
+						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/auth/login", "/auth/signUp")
 								.permitAll()
 								.requestMatchers(HttpMethod.POST,"/auth/key/create")
 								.hasAuthority("admin")

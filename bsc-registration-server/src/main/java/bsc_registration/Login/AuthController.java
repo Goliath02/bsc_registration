@@ -5,6 +5,7 @@ import bsc_registration.Login.dto.LoginDto;
 import bsc_registration.Login.dto.LoginResponse;
 import bsc_registration.Login.dto.SignUpDto;
 import bsc_registration.dto.BscUser;
+import bsc_registration.dto.SignUpKey;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,12 @@ public class AuthController {
 
     @PostMapping("/key/create")
     public ResponseEntity<String> createSignUpKey() {
+
+        final SignUpKey signUpKey = authService.createSignUpKey();
+
         authService.saveSignUpKey(authService.createSignUpKey());
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(signUpKey.getKey());
     }
 
     @GetMapping("/login")
