@@ -12,6 +12,7 @@ import NswFinanzialRegistration from "@/components/Pages/NswFinanzialRegistratio
 import NswConfirmationPage from "@/components/Pages/NswConfirmationPage.vue";
 import LoginPage from "@/components/Login/LoginPage.vue";
 import CourseManager from "@/components/CourseManager/CourseManager.vue";
+import axios from "axios";
 
 const routes = [
   {

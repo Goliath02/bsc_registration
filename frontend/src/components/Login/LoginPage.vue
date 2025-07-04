@@ -2,17 +2,13 @@
 import { ref } from "vue";
 import { Button, InputText } from "primevue";
 import { useAuthStore } from '@/stores/authStore'
-import { useRouter } from 'vue-router'
 
 const email = ref('')
 const password = ref('')
 const auth = useAuthStore()
-const router = useRouter()
 
 async function handleLogin() {
-    await auth.login(email.value, password.value).then(
-        router.push('/courseManager')
-    ).catch(console.error)
+    await auth.login(email.value, password.value)
 }
 
 </script>

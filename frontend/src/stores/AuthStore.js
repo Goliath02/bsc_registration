@@ -7,7 +7,6 @@ import router from "@/router.js";
 
 export const useAuthStore = defineStore('authStore', {
     state: () => ({
-
         loading: null,
         error: null,
         username: null
