@@ -1,13 +1,17 @@
 <script>
 
+import Header from "@/components/BSC_Header.vue";
+
+
 export default {
   name: "RequestSuccessPage",
-  components: {}
+  components: {Header}
 }
 </script>
 
 <template>
-  <main
+	<Header/>
+	<main
       class="flex flex-1 justify-center items-center lg:px-[7%] lg:py-[2%] min-h-0 bg-[url('@/assets//Water.jpg')] bg-cover overflow-y-auto ">
     <div
         class="lg:max-w-[50%] overflow-y-auto h-full bg-bsc-gray rounded-lg  flex flex-col min-h-0 text-white text-center gap-[2em] -lg:px-[1em] lg:px-[6em] pt-[3em] pb-[2em]">

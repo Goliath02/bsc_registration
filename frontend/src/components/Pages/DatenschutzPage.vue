@@ -1,11 +1,13 @@
 <script setup>
 
 import FormHeader from "@/components/FormHeader.vue";
+import Header from "@/components/BSC_Header.vue";
 </script>
 
 <template>
+	<Header/>
   <main class="flex flex-1 justify-center items-center  lg:px-[7%] lg:py-[2%] min-h-0 ">
-    <div class="w-full h-full bg-bsc-gray rounded-lg overflow-hidden flex flex-col min-h-0 text-white">
+	  <div class="w-full h-full bg-bsc-gray rounded-lg overflow-hidden flex flex-col min-h-0 text-white">
 
       <FormHeader class="max-[640px]:text-lg" header-text="Datenschutzerklärung für die digitale Beitrittserklärung zum Schwimmverein"/>
 

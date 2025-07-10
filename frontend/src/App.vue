@@ -9,7 +9,6 @@ const store = useRegistrationStore();
 
 <template>
   <div class="bg-black h-screen flex flex-col ">
-    <Header></Header>
 
     <router-view :key="$route.fullPath" v-slot="{ Component  } ">
       <transition name="fade" mode="out-in">

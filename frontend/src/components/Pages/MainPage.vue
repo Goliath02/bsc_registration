@@ -8,10 +8,12 @@ import Bsc_header from "@/components/BSC_Header.vue";
 import DefaultRegistration from "@/components/Pages/DefaultRegistration.vue";
 import RegistrationNavigation from "@/components/RegistrationNavigation.vue";
 import FinanzialRegistration from "@/components/Pages/FinanzialRegistration.vue";
+import Header from "@/components/BSC_Header.vue";
 
 export default {
   name: "MainPage",
   components: {
+	  Header,
     FinanzialRegistration,
     RegistrationNavigation,
     DefaultRegistration, Bsc_header, GenderSelection, FormHeader, BSCBanner, GrundAuwahl: DepartmentPicker, PeronenAuswahl: CategoryPicker
@@ -21,6 +23,7 @@ export default {
 </script>
 
 <template>
+	<Header/>
   <main class="flex flex-1 justify-center items-center  lg:px-[7%] lg:py-[2%] min-h-0 ">
     <div class="w-full h-full bg-bsc-gray rounded-lg overflow-hidden flex min-h-0">
 
