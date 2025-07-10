@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { Button, InputText } from "primevue";
 import { useAuthStore } from '@/stores/authStore'
+import Bsc_header from "@/components/BSC_Header.vue";
 
 const email = ref('')
 const password = ref('')
@@ -14,6 +15,7 @@ async function handleLogin() {
 </script>
 
 <template>
+	<Bsc_header/>
   <div class="bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-12 lg:px-20">
     <div
       class="bg-surface-0 dark:bg-surface-900 p-8 md:p-12 shadow-sm rounded-2xl w-full max-w-xl mx-auto flex flex-col gap-8"
@@ -52,6 +54,7 @@ async function handleLogin() {
             type="text"
             placeholder="Email address"
             class="w-full px-3 py-2 shadow-sm rounded-lg"
+            @keyup.enter="handleLogin"
           />
         </div>
         <div class="flex flex-col gap-2 w-full">
@@ -66,6 +69,7 @@ async function handleLogin() {
             type="password"
             placeholder="Password"
             class="w-full px-3 py-2 shadow-sm rounded-lg"
+            @keyup.enter="handleLogin"
           />
         </div>
         <div

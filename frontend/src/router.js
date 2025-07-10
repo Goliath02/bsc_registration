@@ -13,6 +13,11 @@ import NswConfirmationPage from "@/components/Pages/NswConfirmationPage.vue";
 import LoginPage from "@/components/Login/LoginPage.vue";
 import CourseManager from "@/components/CourseManager/CourseManager.vue";
 import axios from "axios";
+import Dashboardpage from "@/AdminPannel/Pages/Dashboardpage.vue";
+import ProfilePage from "@/AdminPannel/Pages/ProfilePage.vue";
+import CourePage from "@/AdminPannel/Pages/CourePage.vue";
+import GroupsPage from "@/AdminPannel/Pages/GroupsPage.vue";
+import SettingsPage from "@/AdminPannel/Pages/SettingsPage.vue";
 
 const routes = [
   {
@@ -63,6 +68,13 @@ const routes = [
     component: CourseManager,
     name: "CourseManager",
     meta: { requiresAuth: true },
+    children: [
+      { path: "/dashboard", component: Dashboardpage, name: "Dashboard" },
+      { path: "/profile", component: ProfilePage, name: "Profile" },
+      { path: "/courses", component: CourePage, name: "Courses" },
+      { path: "/groups", component: GroupsPage, name: "Groups" },
+      { path: "/settings", component: SettingsPage, name: "Settings" },
+    ]
   },
 ];
 
