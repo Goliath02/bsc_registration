@@ -1,6 +1,7 @@
 package bsc_registration.Login;
 
 import bsc_registration.JWT.JwtService;
+import bsc_registration.Login.Service.AuthService;
 import bsc_registration.Login.dto.LoginDto;
 import bsc_registration.Login.dto.LoginResponse;
 import bsc_registration.Login.dto.SignUpDto;
@@ -13,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 

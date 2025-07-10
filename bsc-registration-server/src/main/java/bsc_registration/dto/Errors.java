@@ -1,4 +1,4 @@
-package bsc_registration;
+package bsc_registration.dto;
 
 public enum Errors {
 	EMAIL_NOT_FOUND,

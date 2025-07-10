@@ -1,5 +1,6 @@
-package bsc_registration;
+package bsc_registration.Scheduler;
 
+import bsc_registration.Service.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 

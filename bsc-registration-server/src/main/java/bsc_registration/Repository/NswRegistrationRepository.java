@@ -1,4 +1,4 @@
-package bsc_registration;
+package bsc_registration.Repository;
 
 import bsc_registration.dto.NswRegistration;
 import org.springframework.data.jpa.repository.JpaRepository;

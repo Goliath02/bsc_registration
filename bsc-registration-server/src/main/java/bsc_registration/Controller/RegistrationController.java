@@ -1,5 +1,7 @@
-package bsc_registration;
+package bsc_registration.Controller;
 
+import bsc_registration.dto.Errors;
+import bsc_registration.Service.RegistrationService;
 import bsc_registration.dto.FormData;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;

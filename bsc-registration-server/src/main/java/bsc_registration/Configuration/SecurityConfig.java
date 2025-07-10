@@ -1,7 +1,7 @@
 package bsc_registration.Configuration;
 
 import bsc_registration.JWT.JwtAuthFilter;
-import bsc_registration.Login.UserRepository;
+import bsc_registration.Login.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.DispatcherServlet;
 
 import java.util.List;
 

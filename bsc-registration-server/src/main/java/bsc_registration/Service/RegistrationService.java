@@ -1,8 +1,9 @@
-package bsc_registration;
+package bsc_registration.Service;
 
 import bsc_registration.Configuration.BscCourseConfig;
 import bsc_registration.Configuration.ConfigLoader;
 import bsc_registration.Mailsender.EmailService;
+import bsc_registration.Repository.NswRegistrationRepository;
 import bsc_registration.dto.ExtraPerson;
 import bsc_registration.dto.FormData;
 import bsc_registration.dto.MainData;

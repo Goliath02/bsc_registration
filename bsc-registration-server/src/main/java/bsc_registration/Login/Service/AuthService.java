@@ -1,5 +1,8 @@
-package bsc_registration.Login;
+package bsc_registration.Login.Service;
 
+import bsc_registration.Login.Repository.AuthorityRepository;
+import bsc_registration.Login.Repository.KeyRepository;
+import bsc_registration.Login.Repository.UserRepository;
 import bsc_registration.Login.dto.LoginDto;
 import bsc_registration.Login.dto.SignUpDto;
 import bsc_registration.dto.AuthorityType;

@@ -1,4 +1,4 @@
-package bsc_registration.Login;
+package bsc_registration.Login.Repository;
 
 import bsc_registration.dto.AuthorityType;
 import bsc_registration.dto.BscAuthority;
