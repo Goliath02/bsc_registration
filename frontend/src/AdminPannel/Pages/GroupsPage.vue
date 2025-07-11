@@ -3,7 +3,7 @@
 </script>
 
 <template>
-Grousp
+Groups
 </template>
 
 <style scoped>

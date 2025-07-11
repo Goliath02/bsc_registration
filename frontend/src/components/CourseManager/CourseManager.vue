@@ -6,9 +6,8 @@ import BscToolbar from "@/AdminPannel/components/BscToolbar.vue";
 <template>
   <main class="flex h-screen">
     <BscToolbar/>
-	  <div class="flex-1 flex justify-center items-center" >
+	  <div class="flex-1" >
 		  <router-view></router-view>
-
 	  </div>
   </main>
 </template>

@@ -26,7 +26,7 @@ export const useAuthStore = defineStore('authStore', {
                 });
 
                 // Nach erfolgreichem Login – redirect
-                router.push('/courseManager');
+                router.push('/dashboard');
             } catch (error) {
                 console.error('Login fehlgeschlagen', error);
                 alert('Login fehlgeschlagen!');

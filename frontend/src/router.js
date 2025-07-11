@@ -18,6 +18,7 @@ import ProfilePage from "@/AdminPannel/Pages/ProfilePage.vue";
 import CourePage from "@/AdminPannel/Pages/CourePage.vue";
 import GroupsPage from "@/AdminPannel/Pages/GroupsPage.vue";
 import SettingsPage from "@/AdminPannel/Pages/SettingsPage.vue";
+import MembersPage from "@/AdminPannel/Pages/MembersPage.vue";
 
 const routes = [
   {
@@ -72,6 +73,7 @@ const routes = [
       { path: "/dashboard", component: Dashboardpage, name: "Dashboard" },
       { path: "/profile", component: ProfilePage, name: "Profile" },
       { path: "/courses", component: CourePage, name: "Courses" },
+      { path: "/members", component: MembersPage, name: "Members" },
       { path: "/groups", component: GroupsPage, name: "Groups" },
       { path: "/settings", component: SettingsPage, name: "Settings" },
     ]

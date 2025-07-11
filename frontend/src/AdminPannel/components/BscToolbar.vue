@@ -11,6 +11,9 @@ const toggleSidebar = () => {
 // Beispiel-Navigation-Items
 const navigationItems = [
     { icon: 'pi pi-home', label: 'Dashboard', route: '/dashboard' },
+    { icon: 'pi pi-calendar', label: 'Courses', route: '/courses' },
+    { icon: 'pi pi-users', label: 'Groups', route: '/groups' },
+    { icon: 'pi pi-users', label: 'Members', route: '/members' },
     { icon: 'pi pi-user', label: 'Profil', route: '/profile' },
     { icon: 'pi pi-cog', label: 'Einstellungen', route: '/settings' },
     // Weitere Menüpunkte hier hinzufügen
@@ -25,13 +28,17 @@ const navigationItems = [
             :class="{ 'w-64': isExpanded, 'w-16': !isExpanded }"
         >
             <!-- Header der Seitenleiste -->
-            <div class="p-4 flex items-center justify-between border-b border-surface-700">
+            <div class="p-4 flex items-center justify-between border-b border-surface-700 select-none">
+
+              <div v-if="isExpanded" class="flex flex-1 gap-1 justify-center">
                 <img
-                    v-if="isExpanded"
-                    class="h-8"
+                    class="h-8 "
                     src="@/assets/logo.svg"
                     alt="Logo"
                 />
+                <h2 class="flex-1 text-center font-bold italic text-2xl">1.BSC</h2>
+              </div>
+
                 <Button
                     icon-only
                     :icon="isExpanded ? 'pi pi-angle-left' : 'pi pi-angle-right'"
