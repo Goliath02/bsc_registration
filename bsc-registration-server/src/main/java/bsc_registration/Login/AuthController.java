@@ -1,6 +1,6 @@
 package bsc_registration.Login;
 
-import bsc_registration.JWT.JwtService;
+import bsc_registration.Filter.JWT.JwtService;
 import bsc_registration.Login.Service.AuthService;
 import bsc_registration.Login.dto.LoginDto;
 import bsc_registration.Login.dto.LoginResponse;

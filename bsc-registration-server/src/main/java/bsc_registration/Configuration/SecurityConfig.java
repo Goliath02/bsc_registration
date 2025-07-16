@@ -1,6 +1,7 @@
 package bsc_registration.Configuration;
 
-import bsc_registration.JWT.JwtAuthFilter;
+import bsc_registration.Filter.JWT.JwtAuthFilter;
+import bsc_registration.Filter.LoginRate.LoginRateFilter;
 import bsc_registration.Login.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +33,7 @@ public class SecurityConfig {
 	private final UserRepository userRepository;
 
 	@Bean
-	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
+	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter, LoginRateFilter loginRateFilter) throws Exception {
 
 		return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // <-- Aktivieren statt deaktivieren
@@ -49,7 +50,8 @@ public class SecurityConfig {
 						sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				)
 				.authenticationProvider(authenticationProvider())
-				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(loginRateFilter, UsernamePasswordAuthenticationFilter.class)
+				.addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}
 

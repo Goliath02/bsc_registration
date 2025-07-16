@@ -1,4 +1,4 @@
-package bsc_registration.JWT;
+package bsc_registration.Filter.JWT;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
