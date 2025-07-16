@@ -28,7 +28,7 @@ public class LoginRateFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		if (request.getRequestURI().equals("/login")) {
+		if (request.getRequestURI().equals("/api/auth/login")) {
 			String ip = request.getRemoteAddr();
 			Bucket bucket = buckets.computeIfAbsent(ip, this::newBucket);
 
