@@ -15,7 +15,7 @@ import CourseManager from "@/components/CourseManager/CourseManager.vue";
 import axios from "axios";
 import Dashboardpage from "@/AdminPannel/Pages/Dashboardpage.vue";
 import ProfilePage from "@/AdminPannel/Pages/ProfilePage.vue";
-import CourePage from "@/AdminPannel/Pages/CourePage.vue";
+import CoursePage from "@/AdminPannel/Pages/CoursePage.vue";
 import GroupsPage from "@/AdminPannel/Pages/GroupsPage.vue";
 import SettingsPage from "@/AdminPannel/Pages/SettingsPage.vue";
 import MembersPage from "@/AdminPannel/Pages/MembersPage.vue";
@@ -72,7 +72,7 @@ const routes = [
     children: [
       { path: "/dashboard", component: Dashboardpage, name: "Dashboard" },
       { path: "/profile", component: ProfilePage, name: "Profile" },
-      { path: "/courses", component: CourePage, name: "Courses" },
+      { path: "/courses", component: CoursePage, name: "Courses" },
       { path: "/members", component: MembersPage, name: "Members" },
       { path: "/groups", component: GroupsPage, name: "Groups" },
       { path: "/settings", component: SettingsPage, name: "Settings" },

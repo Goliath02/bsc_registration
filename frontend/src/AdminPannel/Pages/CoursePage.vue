@@ -2,6 +2,7 @@
 import {Button} from 'primevue'
 import CourseCard from "@/AdminPannel/components/CourseCard.vue";
 import {ref} from "vue";
+import AddCourseDialog from "@/AdminPannel/Pages/AddCourseDialog.vue";
 
 const courses = ref([
     {
@@ -74,7 +75,8 @@ const courses = ref([
 </script>
 
 <template>
-	<div class="flex flex-col h-full">
+  <AddCourseDialog :open=true />
+	<main class="flex flex-col h-full">
 		<div class="flex justify-between mx-8 mt-4">
 			<h2 class="text-2xl font-bold">Courses</h2>
 			<Button label="Add Course" icon="pi pi-plus"/>
@@ -98,7 +100,7 @@ const courses = ref([
 				/>
 			</div>
 		</div>
-	</div>
+	</main>
 </template>
 
 <style scoped>
