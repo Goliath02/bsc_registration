@@ -81,33 +81,35 @@ const openDialog = () => {
 </script>
 
 <template>
-  <AddCourseDialog v-model=isOpen />
-	<main class="flex flex-col min-h-0 overflow-y-auto max-h-screen">
+	<AddCourseDialog v-model="isOpen" />
+	<main class="flex flex-col max-h-screen h-[92vh] md:h-[98vh]">
 		<div class="flex justify-between mx-8 mt-4">
 			<h2 class="text-2xl font-bold">Courses</h2>
-			<Button @click="openDialog" label="Add Course" icon="pi pi-plus"/>
+			<Button @click="openDialog" label="Add Course" icon="pi pi-plus" />
 		</div>
 
-		<div class="flex-1 m-4 overflow-auto">
-			<div class="bg-bsc-gray overflow-scroll rounded-lg h-full p-4 flex flex-wrap gap-x-4 gap-y-4 justify-center items-center">
-
-				<CourseCard v-for="course of courses"
-				            :title="course.title"
-				            :imagePath="course.imagePath"
-				            :trainer="course.trainer"
-				            :status="course.status"
-				            :fromDate="course.fromDate"
-				            :toDate="course.toDate"
-				            :totalUnits="course.totalUnits"
-				            :unitsDone="course.unitsDone"
-				            :place="course.place"
-				            :participants="course.participants"
-				            :maxParticipants="course.maxParticipants"
-				/>
-			</div>
-		</div>
+      <div class=" bg-bsc-gray overflow-y-auto rounded-lg p-4 flex flex-wrap gap-4 m-4 flex-1 items-start">
+        <CourseCard
+            v-for="course of courses"
+            :key="course.title + course.fromDate"
+            :title="course.title"
+            :imagePath="course.imagePath"
+            :trainer="course.trainer"
+            :status="course.status"
+            :fromDate="course.fromDate"
+            :toDate="course.toDate"
+            :totalUnits="course.totalUnits"
+            :unitsDone="course.unitsDone"
+            :place="course.place"
+            :participants="course.participants"
+            :maxParticipants="course.maxParticipants"
+            class="w-72"
+        />
+      </div>
 	</main>
 </template>
+
+
 
 <style scoped>
 
