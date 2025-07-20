@@ -2,7 +2,9 @@
 import {Button} from 'primevue'
 import CourseCard from "@/AdminPannel/components/CourseCard.vue";
 import {ref} from "vue";
-import AddCourseDialog from "@/AdminPannel/Pages/AddCourseDialog.vue";
+import AddCourseDialog from "@/AdminPannel/components/AddCourseDialog.vue";
+
+const isOpen = ref(false);
 
 const courses = ref([
     {
@@ -72,14 +74,18 @@ const courses = ref([
     },
 ]);
 
+const openDialog = () => {
+    isOpen.value = true;
+}
+
 </script>
 
 <template>
-  <AddCourseDialog :open=true />
-	<main class="flex flex-col h-full">
+  <AddCourseDialog v-model=isOpen />
+	<main class="flex flex-col min-h-0 overflow-y-auto max-h-screen">
 		<div class="flex justify-between mx-8 mt-4">
 			<h2 class="text-2xl font-bold">Courses</h2>
-			<Button label="Add Course" icon="pi pi-plus"/>
+			<Button @click="openDialog" label="Add Course" icon="pi pi-plus"/>
 		</div>
 
 		<div class="flex-1 m-4 overflow-auto">

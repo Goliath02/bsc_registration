@@ -28,7 +28,7 @@ async function handleLogin() {
 
 <template>
 	<Bsc_header/>
-	<div class="bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-12 lg:px-20">
+	<main class="bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-12 lg:px-20 min-h-0">
 		<div
 				class="bg-surface-0 dark:bg-surface-900 p-8 md:p-12 shadow-sm rounded-2xl w-full max-w-xl mx-auto flex flex-col gap-8"
 		>
@@ -114,7 +114,7 @@ async function handleLogin() {
 				</div>
 			</Button>
 		</div>
-	</div>
+	</main>
 </template>
 
 <style scoped></style>
