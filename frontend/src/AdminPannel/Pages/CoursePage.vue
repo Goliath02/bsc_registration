@@ -88,7 +88,7 @@ const openDialog = () => {
 			<Button @click="openDialog" label="Add Course" icon="pi pi-plus" />
 		</div>
 
-      <div class=" bg-bsc-gray overflow-y-auto rounded-lg p-4 flex flex-wrap gap-4 m-4 flex-1 items-start">
+      <div class=" bg-bsc-gray overflow-y-auto rounded-lg p-4 flex flex-wrap gap-4 m-4 flex-1 items-center-safe justify-center-safe">
         <CourseCard
             v-for="course of courses"
             :key="course.title + course.fromDate"

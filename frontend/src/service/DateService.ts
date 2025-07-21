@@ -1,7 +1,11 @@
 import axios from "axios";
 
-export function getDate(startDate: Date, trainingUnits:number) {
+export function getHolidayInfo(startDate: Date, trainingUnits:number) {
 
 
-    const api = axios.get("/api/dateInfo", {params: {startDate: startDate, trainingUnits: trainingUnits}});
+    const api = axios.get("/api/course/holidayDateInfo", {params: {startDate: startDate, trainingUnits: trainingUnits}});
+
+    console.log("dates", api)
+
+    return api;
 }
