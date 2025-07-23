@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,5 +24,9 @@ public class CourseService {
 
 	public boolean isDateBetweenHoliday(final LocalDate date) {
 		return courseRepository.isDateInHoliday(date);
+	}
+
+	public Optional<HolidayDateInfo> getDateInHoliday(final LocalDate date) {
+		return courseRepository.getDateInHoliday(date);
 	}
 }

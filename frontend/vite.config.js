@@ -18,12 +18,11 @@ export default defineConfig({
     server:{
         proxy: {
             '/api': {
-                target: 'http://localhost:8080',
-                changeOrigin: true,
-                // optional:
-                rewrite: path => path.replace(/^\/api/, '/api'), // falls nötig
+                target: 'http://localhost:8080/',
+                changeOrigin: true, // Ensure the request appears to come from the frontend server
+                rewrite: (path) => path.replace(/^\/api/, ''), // Optional: Remove '/api' prefix
             },
-        },
+        }
     },
     resolve: {
         alias: {

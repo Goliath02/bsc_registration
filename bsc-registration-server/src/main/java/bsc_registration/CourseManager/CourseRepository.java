@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
@@ -31,4 +32,7 @@ List<HolidayDateInfo> getHolidayDateInfoBetweenDates(
 
 	@Query("SELECT CASE WHEN :date BETWEEN h.fromDate AND h.toDate THEN TRUE ELSE FALSE END FROM HolidayDateInfo h")
 	boolean isDateInHoliday(final LocalDate date);
+
+	@Query("SELECT h FROM HolidayDateInfo h WHERE :date BETWEEN h.fromDate AND h.toDate")
+	Optional<HolidayDateInfo> getDateInHoliday(final LocalDate date);
 }
