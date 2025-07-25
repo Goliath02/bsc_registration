@@ -1,9 +1,6 @@
 import {defineStore} from 'pinia'
-import {RegistrationType} from "@/components/BasicRegistration/dto/RegistrationType.js";
-import {AgeType} from "@/components/BasicRegistration/dto/AgeType.js";
-import * as dateUtil from "@/utils/dateUtil.js";
-import axios from "axios";
 import router from "@/router.js";
+import {apiClient} from "@/apiClient.js";
 
 export const useAuthStore = defineStore('authStore', {
     state: () => ({
@@ -18,7 +15,7 @@ export const useAuthStore = defineStore('authStore', {
             this.loading = true;
             this.error = null
             try {
-                await axios.post('/api/auth/login', {
+                await apiClient.post('/api/auth/login', {
                     "email": email,
                     "password": password
                 }, {

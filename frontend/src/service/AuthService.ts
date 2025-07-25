@@ -1,13 +1,17 @@
 import axios from "axios";
+import {apiClient} from "@/apiClient";
 
-const api = axios.create({
-  withCredentials: true, // falls Session-Cookie
-})
 
-//TODO configure proxy
+
+// does not work for some reason?
+
 
 export async function loginWithCredentials(email: string, password: string) {
-  const res = await api.post('/auth/login', {"email": email,
-    "password": password })
+  const res = await axios.post('/api/auth/login', {
+    "email": email,
+    "password": password
+  }, {
+    withCredentials: true
+  })
   return res.data // z. B. { token: "JWT-xyz" }
 }

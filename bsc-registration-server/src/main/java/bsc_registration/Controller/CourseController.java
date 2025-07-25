@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @RestController
 @RequestMapping("/api/course")
@@ -19,11 +19,8 @@ public class CourseController {
 	private final CourseService courseService;
 	private final DateUtil dateUtil;
 	@GetMapping("/holidayDateInfo")
-	public TrainingUnitsDto getHolidayDateInfo(@RequestParam final LocalDate startDate, @RequestParam final int trainingUnits) {
+	public TrainingUnitsDto getHolidayDateInfo(@RequestParam OffsetDateTime startDate, @RequestParam final int trainingUnits) {
 
-		final TrainingUnitsDto trainingUnitsDto = dateUtil.calculateTrainingDates(startDate, trainingUnits);
-
-		return trainingUnitsDto;
+		return dateUtil.calculateTrainingDates(startDate.toLocalDate(), trainingUnits);
 	}
-
 }
