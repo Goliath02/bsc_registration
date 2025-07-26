@@ -42,15 +42,6 @@ async function handleLogin() {
 					>
 						Login
 					</div>
-					<!--          <div class="text-center w-full">-->
-					<!--            <span class="text-surface-700 dark:text-surface-200 leading-normal"-->
-					<!--              >Don't have an account?</span-->
-					<!--            >-->
-					<!--            <a-->
-					<!--              class="text-primary font-medium ml-1 cursor-pointer hover:text-primary-emphasis"-->
-					<!--              >Create today!</a-->
-					<!--            >-->
-					<!--          </div>-->
 				</div>
 			</div>
 			<div class="flex flex-col gap-6 w-full">

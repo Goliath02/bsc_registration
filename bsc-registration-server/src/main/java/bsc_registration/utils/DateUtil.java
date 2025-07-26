@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +16,7 @@ public class DateUtil {
 
 	private final CourseService courseService;
 
-	public TrainingUnitsDto calculateTrainingDates(final LocalDate startDate, final int trainingUnits) {
+	public TrainingUnitsDto calculateTrainingDates(LocalDate startDate, final int trainingUnits) {
 
 		final List<LocalDate> trainingDates = new ArrayList<>();
 
@@ -25,19 +24,25 @@ public class DateUtil {
 
 		trainingDates.add(startDate);
 
+		List<HolidayDateInfo> allHolidays = courseService.getAllHolidays();
+
 		for (int i = 0; i < trainingUnits; i++) {
 
-			final LocalDate nextTrainingUnit = startDate.plusWeeks(1);
+			final HolidayDateInfo holidayDateInfo = getDateBetweenHoliday(startDate, allHolidays);
 
-			final Optional<HolidayDateInfo> dateInHoliday = courseService.getDateInHoliday(nextTrainingUnit);
-
-			if (dateInHoliday.isPresent()) {
-				final HolidayDateInfo holidayDateInfo = dateInHoliday.get();
+			if (getDateBetweenHoliday(startDate, allHolidays) != null) {
 				holidayDates.add(new HolidayDateInfo(null, holidayDateInfo.getHolidayName(), holidayDateInfo.getFromDate(), holidayDateInfo.getToDate()));
 			} else {
-				trainingDates.add(nextTrainingUnit);
+				trainingDates.add(startDate);
 			}
+
+			startDate = startDate.plusWeeks(1);
 		}
-		return new TrainingUnitsDto(trainingDates, trainingUnits, holidayDates);
+		return new TrainingUnitsDto(trainingDates, trainingUnits, holidayDates.stream().distinct().toList());
+	}
+
+	private HolidayDateInfo getDateBetweenHoliday(final LocalDate date, final List<HolidayDateInfo> holidayDates) {
+
+		return holidayDates.stream().filter(h -> h.getFromDate().isBefore(date) && h.getToDate().isAfter(date)).findFirst().orElse(null);
 	}
 }

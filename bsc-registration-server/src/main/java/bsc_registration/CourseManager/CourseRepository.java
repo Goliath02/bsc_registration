@@ -4,6 +4,7 @@ import bsc_registration.CourseManager.dto.HolidayDateInfo;
 import bsc_registration.dto.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
 	@Query("""
     SELECT h FROM HolidayDateInfo h
-    WHERE h.fromDate <= :endDate 
+    WHERE h.fromDate <= :endDate
     AND h.toDate >= :startDate
 """)
 List<HolidayDateInfo> getHolidayDateInfoBetweenDates(
@@ -33,6 +34,6 @@ List<HolidayDateInfo> getHolidayDateInfoBetweenDates(
 	@Query("SELECT CASE WHEN :date BETWEEN h.fromDate AND h.toDate THEN TRUE ELSE FALSE END FROM HolidayDateInfo h")
 	boolean isDateInHoliday(final LocalDate date);
 
-	@Query("SELECT h FROM HolidayDateInfo h WHERE :date BETWEEN h.fromDate AND h.toDate")
-	Optional<HolidayDateInfo> getDateInHoliday(final LocalDate date);
+	@Query("SELECT h FROM HolidayDateInfo h WHERE :trainingDate BETWEEN h.fromDate AND h.toDate")
+	Optional<HolidayDateInfo> getDateInHoliday(@Param("trainingDate") LocalDate trainingDate);
 }
