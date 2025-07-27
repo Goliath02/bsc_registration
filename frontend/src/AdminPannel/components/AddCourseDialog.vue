@@ -1,8 +1,9 @@
 <script setup lang="ts">
 
-import {ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import CourseTimeFrameInfo from "@/AdminPannel/components/CourseTimeFrameInfo.vue";
 import {getHolidayInfo} from "@/service/DateService";
+import {getTrainers, getTrainingPlaces} from "@/service/InfoService";
 
 const open = defineModel<boolean>({required: true})
 
@@ -13,8 +14,9 @@ const trainingUnits = ref();
 const trainer = ref();
 const place = ref();
 
-const days = ref([]);
-const times = ref([]);
+const availableTrainers = ref([]);
+const availablePlaces = ref([]);
+
 
 const dateInfos = ref();
 
@@ -27,6 +29,14 @@ const fetchDates = async () => {
 watch([startDate, trainingUnits], () => {
     fetchDates();
 });
+
+onMounted(async () => {
+    availableTrainers.value = await getTrainers();
+    availablePlaces.value = await getTrainingPlaces();
+
+    console.log("availableTrainers.value", availableTrainers.value)
+    console.log("availablePlaces.value", availablePlaces.value)
+})
 
 
 </script>
