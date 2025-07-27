@@ -16,9 +16,10 @@ import axios from "axios";
 import Dashboardpage from "@/AdminPannel/Pages/Dashboardpage.vue";
 import ProfilePage from "@/AdminPannel/Pages/ProfilePage.vue";
 import CoursePage from "@/AdminPannel/Pages/CoursePage.vue";
-import GroupsPage from "@/AdminPannel/Pages/GroupsPage.vue";
+import TrainerPage from "@/AdminPannel/Pages/TrainerPage.vue";
 import SettingsPage from "@/AdminPannel/Pages/SettingsPage.vue";
 import MembersPage from "@/AdminPannel/Pages/MembersPage.vue";
+import TrainingPlacesPage from "@/AdminPannel/Pages/TrainingPlacesPage.vue";
 
 const routes = [
   {
@@ -74,7 +75,8 @@ const routes = [
       { path: "/profile", component: ProfilePage, name: "Profile" },
       { path: "/courses", component: CoursePage, name: "Courses" },
       { path: "/members", component: MembersPage, name: "Members" },
-      { path: "/groups", component: GroupsPage, name: "Groups" },
+      { path: "/places", component: TrainingPlacesPage, name: "TrainingPlaces" },
+      { path: "/trainer", component: TrainerPage, name: "Trainer" },
       { path: "/settings", component: SettingsPage, name: "Settings" },
     ]
   },

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-Groups
+Training Places
 </template>
 
 <style scoped>
