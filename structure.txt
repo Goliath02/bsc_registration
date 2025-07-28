@@ -1,0 +1,18 @@
+src
+└── main
+    └── java
+        └── com.yourapp
+            ├── coursemanagement
+            │   ├── domain
+            │   │   ├── model           ← Entities / ValueObjects
+            │   │   └── repository      ← Interfaces (Ports)
+            │   ├── application
+            │   │   ├── service         ← Use Cases
+            │   │   └── dto             ← Datenobjekte für Kommunikation
+            │   ├── infrastructure
+            │   │   ├── repository      ← JPA-Implementierungen (Adapters)
+            │   │   └── security        ← AuthFilter, Config, TokenProvider
+            │   ├── web
+            │   │   └── controller      ← REST Controller
+            │   └── config              ← Spring Config, Beans, Mapper etc.
+            └── MainApplication.java

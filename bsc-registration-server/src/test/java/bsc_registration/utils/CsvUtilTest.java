@@ -1,14 +1,14 @@
 package bsc_registration.utils;
 
-import bsc_registration.dto.ExtraPerson;
-import bsc_registration.dto.FinancialData;
-import bsc_registration.dto.FormData;
-import bsc_registration.dto.MainData;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
+import bsc_registration.domain.utils.CsvUtil;
+import bsc_registration.webInterface.dto.ExtraPerson;
+import bsc_registration.webInterface.dto.FinancialData;
+import bsc_registration.webInterface.dto.FormData;
+import bsc_registration.webInterface.dto.MainData;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
