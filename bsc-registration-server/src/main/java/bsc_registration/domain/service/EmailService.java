@@ -14,11 +14,13 @@ import jakarta.mail.util.ByteArrayDataSource;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.CharEncoding;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -105,6 +107,35 @@ public class EmailService {
 		messageHelper.setText(buildUserMailHtml(formData), true);
 
 		mailSender.send(message);
+	}
+
+	public String loadHtmlTemplate(String filename) throws IOException {
+		ClassPathResource resource = new ClassPathResource("templates/email/" + filename);
+		byte[] data = resource.getInputStream().readAllBytes();
+		return new String(data, StandardCharsets.UTF_8);
+	}
+
+	public void sendInfoEmailToUser(final String email) throws MessagingException,
+			MailSendException, IOException {
+
+		final String template = loadHtmlTemplate("MailTemplate.html");
+
+		final var mailSender = mailSenderConfig.getJavaMailSender();
+
+		final var message = mailSender.createMimeMessage();
+
+		message.setFrom(new InternetAddress(sendFrom));
+		message.setRecipients(MimeMessage.RecipientType.TO, email);
+
+		final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
+		messageHelper.setFrom(sendFrom);
+		messageHelper.setTo(InternetAddress.parse(email));
+		messageHelper.setSubject("1.BSC Pforzheim Info");
+
+		messageHelper.setText(template, true);
+
+		mailSender.send(message);
+
 	}
 
 	private String buildUserMailHtml(final FormData formData) {
