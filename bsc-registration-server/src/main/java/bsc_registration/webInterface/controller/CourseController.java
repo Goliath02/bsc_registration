@@ -23,7 +23,6 @@ public class CourseController {
 
     private final CourseService courseService;
     private final DateUtil dateUtil;
-    private final CourseRepository courseRepository;
     private final UserRepository userRepository;
     private final TrainingPlaceRepository placeRepository;
 

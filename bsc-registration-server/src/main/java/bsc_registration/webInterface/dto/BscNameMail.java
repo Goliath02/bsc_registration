@@ -10,4 +10,3 @@ public class BscNameMail {
 	private String name;
 	private String email;
 }
-

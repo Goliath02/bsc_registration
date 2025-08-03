@@ -162,7 +162,7 @@ public class EmailService {
 		}
 		final var mailSender = mailSenderConfig.getJavaMailSender();
 
-		receiversMails.parallelStream().forEach(member -> {
+		receiversMails.forEach(member -> {
 
 			try {
 				final var message = mailSender.createMimeMessage();
@@ -183,10 +183,8 @@ public class EmailService {
 				log.error("Error sending email to user: {}", member, e);
 			} catch (MessagingException e) {
 				log.error("Could nor authenticate with mail server: {}", e.getMessage());
-				throw new RuntimeException(e);
 			} catch (MailAuthenticationException e) {
 				log.error("Error occurred: {}", e.getMessage());
-				throw new RuntimeException(e);
 			}
 		});
 

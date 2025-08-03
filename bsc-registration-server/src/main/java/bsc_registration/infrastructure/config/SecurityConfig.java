@@ -40,9 +40,9 @@ public class SecurityConfig {
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests ->
 						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/api/auth/login",
-										"/api/auth/signUp", "/api/mail/send", "/api/mail/sendAll")
+										"/api/auth/signUp")
 								.permitAll()
-								.requestMatchers(HttpMethod.POST,"/api/auth/key/create")
+								.requestMatchers(HttpMethod.POST,"/api/auth/key/create", "/api/mail/send", "/api/mail/sendAll")
 								.hasAuthority("ADMIN")
 								.requestMatchers("api/course/", "api/info/**")
 								.authenticated()
