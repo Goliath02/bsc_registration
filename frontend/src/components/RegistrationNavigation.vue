@@ -1,30 +1,15 @@
 <script>
-import FinanzialRegistration from "@/components/Pages/FinanzialRegistration.vue";
-import DefaultRegistration from "@/components/Pages/DefaultRegistration.vue";
 import {useRegistrationStore} from "@/stores/RegistrationStore.js";
 import router from "@/router.js";
-import ConfirmationPage from "@/components/Pages/ConfirmationPage.vue";
 import axios from "axios";
 import PriceDisplay from "@/components/BasicRegistration/PriceDisplay.vue";
 import StepDots from "@/components/StepDots.vue";
 
 export default {
   name: "RegistrationNavigation",
-	components: {StepDots, PriceDisplay},
+  components: {StepDots, PriceDisplay},
   methods: {
-	  useRegistrationStore,
-    routerToNextSite() {
-
-      if (useRegistrationStore().isDefaultDataFormCorrect() && this.isFirstPage) {
-        useRegistrationStore().triedToValidateBasicForm = false;
-        useRegistrationStore().triedToValidateFinancialForm = false;
-        router.push("/kontodaten");
-      } else if (useRegistrationStore().isFinancialFormCorrect() && this.isSecondPage) {
-        useRegistrationStore().triedToValidateBasicForm = false;
-        useRegistrationStore().triedToValidateFinancialForm = false;
-        router.push("/zusammenfassung")
-      }
-    },
+    useRegistrationStore,
 
     routerToPastSite() {
       if (this.isSecondPage) {
@@ -34,10 +19,28 @@ export default {
       }
     },
 
-    postFormData() {
-      if (useRegistrationStore().isFinancialFormCorrect()) {
-        this.postData();
+    routeWithValidation() {
+      let formId = null;
+
+      if (this.isFirstPage) {
+        formId = "defaultRegistrationForm";
+      } else if (this.isSecondPage) {
+        formId = "financialRegistrationForm";
+      } else if (this.isLastPage) {
+        formId = "successRegistrationForm";
       }
+
+      if (formId) {
+        const form = document.getElementById(formId);
+        if (form) {
+          form.requestSubmit(); // löst den @submit-Handler der Form aus
+        }
+      }
+    },
+
+    postFormData() {
+        this.postData();
+
     },
 
     postData() {
@@ -61,9 +64,9 @@ export default {
               router.push("/erfolg");
             })
             .catch(function (error) {
-	            useRegistrationStore().requestFailedWithError = error.response.data;
-	            useRegistrationStore().isLoadingRequest = false;
-	            useRegistrationStore().requestFailed = true;
+              useRegistrationStore().requestFailedWithError = error.response.data;
+              useRegistrationStore().isLoadingRequest = false;
+              useRegistrationStore().requestFailed = true;
             });
       }
     },
@@ -71,26 +74,26 @@ export default {
 
   data() {
     return {
-      pages: [DefaultRegistration, FinanzialRegistration, ConfirmationPage],
+      pages: ["DefaultRegistration", "FinanzialRegistration", "ConfirmationPage"],
       isLoading: true
     }
   },
   computed: {
 
     isFirstPage() {
-      return this.$route.name === this.pages[0].name;
+      return this.$route.name === this.pages[0];
     },
 
     isSecondPage() {
-      return this.$route.name === this.pages[1].name;
+      return this.$route.name === this.pages[1];
     },
 
     isLastPage() {
-      return this.$route.name === this.pages[this.pages.length - 1].name;
+      return this.$route.name === this.pages[this.pages.length - 1];
     },
 
     getLastPageButtonText() {
-      return this.$route.name === this.pages[this.pages.length - 1].name ? "Senden" : "Weiter";
+      return this.$route.name === this.pages[this.pages.length - 1] ? "Senden" : "Weiter";
     }
   }
 }
@@ -106,16 +109,17 @@ export default {
       </button>
     </div>
 
-	  <div class="basis-1/3 flex flex-col justify-center items-center">
-		  <StepDots :pages="pages"/>
-		  <PriceDisplay/>
-	  </div>
+    <div class="basis-1/3 flex flex-col justify-center items-center">
+      <StepDots :pages="pages"/>
+      <PriceDisplay/>
+    </div>
 
     <div class="basis-1/3 flex justify-end">
-      <button v-if="!isLastPage" class="font-bold bg-red-600 px-[1em] py-[0.5em] rounded" @click="routerToNextSite">
-        {{ getLastPageButtonText }}
-      </button>
-      <button v-else class="font-bold bg-red-600 px-[1em] py-[0.5em] rounded" @click="postFormData">
+      <Button v-if="!isLastPage" :label="getLastPageButtonText"
+              class="!font-bold !bg-red-600 px-[1em] !border-red-600 !text-white !py-[0.5em] !rounded !cursor-pointer"
+              @click="this.routeWithValidation">
+      </Button>
+      <button v-else class="font-bold bg-red-600 px-[1em] py-[0.5em] rounded !cursor-pointer" @click="postFormData">
         <span v-if="!useRegistrationStore().isLoadingRequest">{{ getLastPageButtonText }}</span>
         <span v-else>
 					<svg class="animate-spin bi bi-arrow-repeat" fill="currentColor" height="16" viewBox="0 0 16 16" width="16"

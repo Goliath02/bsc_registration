@@ -199,10 +199,10 @@ public class EmailService {
 
 		StringBuilder morePersonsInfoText = new StringBuilder();
 
-		if (!formData.morePersons().isEmpty()) {
+		if (!formData.mainData().morePersons().isEmpty()) {
 			morePersonsInfoText.append("<p>Weitere Personen anghaben:</p><br>");
 
-			for (ExtraPerson person : formData.morePersons()) {
+			for (ExtraPerson person : formData.mainData().morePersons()) {
 
 				final String personInfo = format("""
 						<p>Geschlecht: %s</p>

@@ -1,6 +1,7 @@
 package bsc_registration.webInterface.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record MainData(
         String type,
@@ -14,5 +15,6 @@ public record MainData(
         String street,
         String plz,
         String place,
-        LocalDate entryDate
+        LocalDate entryDate,
+        List<ExtraPerson> morePersons
 ) {}

@@ -72,7 +72,7 @@ public class RegistrationService {
     public void setOnRegistrationNswList(final FormData formData) {
 
         final MainData mainData = formData.mainData();
-        final List<ExtraPerson> extraPeople = formData.morePersons();
+        final List<ExtraPerson> extraPeople = formData.mainData().morePersons();
 
         final List<NswRegistration> registrations = new ArrayList<>();
 

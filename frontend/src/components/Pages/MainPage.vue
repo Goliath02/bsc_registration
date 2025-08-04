@@ -30,9 +30,7 @@ export default {
       <b-s-c-banner class="max-[1024px]:hidden"/>
 
       <div class=" text-white flex-1 overflow-y-hidden flex flex-col">
-
-        <router-view></router-view>
-
+		      <router-view/>
         <registration-navigation class="sticky bottom-0 bg-bsc-gray"/>
 
       </div>

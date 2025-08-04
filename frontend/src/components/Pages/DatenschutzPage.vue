@@ -31,7 +31,7 @@ import Header from "@/components/BSC_Header.vue";
 				&#x2022; Die Verwaltung der Mitgliederdaten<br>
 				&#x2022; Die Kommunikation mit Mitgliedern<br>
 				&#x2022; Die Erstellung und Pflege von Mitgliederlisten<br>
-				&#x2022; DDer Bankeinzug des jeweilig fälligen Mitgliedsbeitrages<br>
+				&#x2022; Der Bankeinzug des jeweilig fälligen Mitgliedsbeitrages<br>
 	          Es werden keine weiteren Daten über den Beitrittsprozess hinaus verarbeitet.<br>
           </p>
           <br>
@@ -57,7 +57,7 @@ import Header from "@/components/BSC_Header.vue";
 		        <span class="font-bold">4. Rechtsgrundlage der Verarbeitung</span>
 
 		        <br>
-		        DDie Verarbeitung Ihrer personenbezogenen Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) im Rahmen Ihrer Mitgliedschaft.
+		        Die Verarbeitung Ihrer personenbezogenen Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) im Rahmen Ihrer Mitgliedschaft.
 	        </p>
 	        <br>
 	        <p>

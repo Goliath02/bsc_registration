@@ -25,6 +25,9 @@ public class CsvUtilTest {
 				testSection,Name,Surename,Male,01/01/2025,"testemail@mail,com",123 123,testStreet,123,Place,01/01/2025,testType,Erwachsener,DE75512108001245126199,bank Owner,surename bankOwner
 				testSection,extra1,sureanme,Female,01/01/2025,"testemail@mail,com",123 123,testStreet,123,Place,01/01/2025,Erwachsener,testSection,DE75512108001245126199,bank Owner,surename bankOwner""".replace("\n", "\r\n");
 
+		final ExtraPerson extraPerson = new ExtraPerson("extra1", "sureanme", LocalDate.of(2025, 1, 1), "Female");
+
+
 		MainData mainData = new MainData(
 				"testType",
 				"testSection",
@@ -37,7 +40,8 @@ public class CsvUtilTest {
 				"testStreet",
 				"123",
 				"Place",
-				LocalDate.of(2025, 1, 1)
+				LocalDate.of(2025, 1, 1),
+				List.of(extraPerson)
 		);
 
 		FinancialData financialData = new FinancialData(
@@ -46,9 +50,8 @@ public class CsvUtilTest {
 				"surename bankOwner"
 		);
 
-		final ExtraPerson extraPerson = new ExtraPerson("extra1", "sureanme", LocalDate.of(2025, 1, 1), "Female");
 
-		final FormData formData = new FormData(mainData, financialData, true, true, true, List.of(extraPerson));
+		final FormData formData = new FormData(mainData, financialData, true, true, true );
 
 		final String actual = csvUtil.createCsvFromFormData(formData);
 

@@ -1,40 +1,16 @@
 <script setup>
 
-import ReworkedBSCInput from "@/components/BasicRegistration/BSCInput.vue";
-import GenderSelection from "@/components/BasicRegistration/GenderSelection.vue";
 import {useRegistrationStore} from "@/stores/RegistrationStore.js";
-import {computed, reactive} from "vue";
 
 const extraModelValues = defineModel();
+
 const props = defineProps({
-  index: Number,
-  inputData: Object
+  index: Number
 })
 
-const isValid = reactive({
-      name: false,
-      surename: false,
-      birthday: false,
-      gender: false
-    }
-)
-// a computed ref
-const isValidName = computed(() => {
-  return !(!props.inputData.name);
-})
-
-const isValidSurename = computed(() => {
-  return !(!props.inputData.surename);
-})
-
-const isValidBirthday = computed(() => {
-
-  return !(!props.inputData.birthday);
-})
-
-const isValidGender = computed(() => {
-  return !(!props.inputData.gender);
-})
+const genders = ["Männlich",
+	"Weiblich",
+	"Divers"]
 
 </script>
 
@@ -53,26 +29,56 @@ const isValidGender = computed(() => {
       </button>
     </div>
 
-    <div class="flex gap-[1.5em]">
-      <ReworkedBSCInput v-model.modelValue="extraModelValues.name"
-                        :is-not-valid="!isValidName && useRegistrationStore().triedToValidateBasicForm"
-                        header-field="Vorname" input-type="text"
-                        @input="useRegistrationStore().updateBasicValidation()"/>
-      <ReworkedBSCInput v-model.modelValue="extraModelValues.surename"
-                        :is-not-valid="!isValidSurename && useRegistrationStore().triedToValidateBasicForm"
-                        header-field="Nachname" input-type="text"
-                        @input="useRegistrationStore().updateBasicValidation()"/>
-    </div>
+    <div class="flex flex-col gap-2">
+      <div class="flex gap-2">
+        <FormField class="flex-1" :name="`morePersons[${index}].extraName`" label="extraName" v-slot="{ error }">
+          <FloatLabel variant="in" class="w-full">
+            <InputText class="w-full" :inputId="`extraName-${index}`" :name="`morePersons[${index}].extraName`" v-model="extraModelValues.extraName"/>
+            <Message v-if="error?.message" severity="error" size="small" variant="simple">
+              {{ error.message }}
+            </Message>
+            <label :for="`extraName-${index}`">Name</label>
+          </FloatLabel>
+        </FormField>
 
-    <div class="flex gap-[1.5em]">
-      <ReworkedBSCInput v-model.modelValue="extraModelValues.birthday"
-                        :is-not-valid="!isValidBirthday && useRegistrationStore().triedToValidateBasicForm"
-                        header-field="Geburtsdatum" input-type="date"
-                        @input="useRegistrationStore().updateBasicValidation()"/>
-      <gender-selection v-model.modelValue="extraModelValues.gender"
-                        :is-not-valid="!isValidGender && useRegistrationStore().triedToValidateBasicForm"
-                        class="flex-1 w-1/2" @input="useRegistrationStore().updateBasicValidation()"/>
 
+        <FormField class="flex-1" :name="`morePersons[${index}].extraSureName`" label="extraSureName" v-slot="{ error }">
+          <FloatLabel variant="in" class="w-full">
+            <InputText class="w-full" :inputId="`extraSureName-${index}`" :name="`morePersons[${index}].extraSureName`"
+                       v-model="extraModelValues.extraSureName"/>
+            <Message v-if="error?.message" severity="error" size="small" variant="simple">
+              {{ error.message }}
+            </Message>
+            <label :for="`extraSureName-${index}`">Nachname</label>
+          </FloatLabel>
+        </FormField>
+      </div>
+
+      <div class="flex gap-2">
+        <FormField class="flex-1" :name="`morePersons[${index}].extraBirthday`" label="Geburtstag" v-slot="{ error }">
+          <FloatLabel variant="in" class="w-full">
+            <DatePicker class="w-full" :inputId="`extraBirthday-${index}`" :name="`morePersons[${index}].extraBirthday`"
+                        v-model="extraModelValues.extraBirthday" showIcon
+                        iconDisplay="input"/>
+            <label :for="`extraBirthday-${index}`">Geburtsdatum</label>
+            <Message v-if="error?.message" severity="error" size="small" variant="simple">
+              {{ error.message }}
+            </Message>
+          </FloatLabel>
+        </FormField>
+
+        <FormField class="flex-1" :name="`morePersons[${index}].extraGender`" label="Gender" v-slot="{ error }">
+          <FloatLabel variant="in" class="w-full">
+            <Select :inputId="`extraGender-${index}`" :name="`morePersons[${index}].extraGender`" v-model="extraModelValues.extraGender"
+                    :options="genders"
+                    class="w-full"/>
+            <label :for="`extraGender-${index}`">Geschlecht</label>
+            <Message v-if="error?.message" severity="error" size="small" variant="simple">
+              {{ error.message }}
+            </Message>
+          </FloatLabel>
+        </FormField>
+      </div>
     </div>
   </div>
 </template>

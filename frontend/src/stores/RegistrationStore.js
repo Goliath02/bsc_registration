@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import {RegistrationType} from "@/components/BasicRegistration/dto/RegistrationType.js";
 import {AgeType} from "@/components/BasicRegistration/dto/AgeType.js";
 import * as dateUtil from "@/utils/dateUtil.js";
+import * as yup from "yup";
 
 export const useRegistrationStore = defineStore('registrationStore', {
     state: () => ({
@@ -12,14 +13,16 @@ export const useRegistrationStore = defineStore('registrationStore', {
                 reason: "",
                 name: "",
                 surename: "",
-                birthday: "",
+                birthday: null,
                 gender: "",
                 email: "",
                 phone: "",
                 street: "",
                 plz: "",
                 place: "",
-                entryDate: "",
+                entryDate: null,
+
+	            morePersons: [],
             },
 
             financial: {
@@ -32,8 +35,6 @@ export const useRegistrationStore = defineStore('registrationStore', {
             statute: false,
             correctness: false,
             hiddenSecurityCheck: false,
-
-            morePersons: [],
 
         },
 
@@ -91,7 +92,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
 			    case RegistrationType.FAMILY:
 				    useRegistrationStore().price = 85.00;
 
-				    for (const person of useRegistrationStore().registrationData.morePersons) {
+				    for (const person of useRegistrationStore().registrationData.mainData.morePersons) {
 						if (dateUtil.getTypeByBirthday(person.birthday) === AgeType.CHILD) {
 							useRegistrationStore().price += 15.0;
 						}
@@ -103,7 +104,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
 	    },
 
         removeExtraPersonForm(index) {
-            useRegistrationStore().registrationData.morePersons.splice(index, 1);
+            useRegistrationStore().registrationData.mainData.morePersons.splice(index, 1);
         },
 
         isDefaultDataFormCorrect() {
@@ -175,7 +176,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
 
         checkMorePersonsData() {
 
-            const morePersons = useRegistrationStore().registrationData.morePersons;
+            const morePersons = useRegistrationStore().registrationData.mainData.morePersons;
 
             for (let i = 0; i < morePersons.length; i++) {
 

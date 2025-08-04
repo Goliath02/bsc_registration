@@ -24,7 +24,7 @@ public class CsvUtil {
         final MainData mainData = formData.mainData();
         final FinancialData financial = formData.financial();
 
-        final List<ExtraPerson> extraPeople = formData.morePersons();
+        final List<ExtraPerson> extraPeople = formData.mainData().morePersons();
 
         final var csvFormat = CSVFormat.DEFAULT.withHeader().builder().build();
 

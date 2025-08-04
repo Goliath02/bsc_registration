@@ -2,6 +2,11 @@ import {AgeType} from "@/components/BasicRegistration/dto/AgeType";
 
 const FULL_AGE = 18;
 
+export class DateUtil {
+
+}
+
+
 export function getTypeByBirthday(birthday): AgeType.ADULT | AgeType.CHILD {
     const age = this.calculateAge(birthday);
     return age <= FULL_AGE ? AgeType.ADULT : AgeType.CHILD;

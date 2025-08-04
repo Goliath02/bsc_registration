@@ -7,7 +7,7 @@ public record FormData(
         FinancialData financial,
         boolean dataProtection,
         boolean correctness,
-        boolean hiddenSecurityCheck,
-        List<ExtraPerson> morePersons
+        boolean hiddenSecurityCheck
+
 ) {
 }

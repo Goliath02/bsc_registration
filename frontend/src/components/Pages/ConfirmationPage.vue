@@ -1,12 +1,7 @@
-<script>
+<script setup lang="ts">
 import FormHeader from "@/components/FormHeader.vue";
 import {useRegistrationStore} from "../../stores/RegistrationStore.js";
-
-export default {
-  name: "ConfirmationPage",
-  methods: {useRegistrationStore},
-  components: {FormHeader}
-}
+import {formatDate} from "@/utils/dateUtil";
 </script>
 
 <template>
@@ -35,7 +30,7 @@ export default {
 
       <div class="flex flex-row gap-[1em] px-[1em] py-[0.5em] w-1/2">
         <div class="font-bold">Geburtstag</div>
-        <div>{{ useRegistrationStore().registrationData.mainData.birthday }}</div>
+        <div>{{ formatDate(useRegistrationStore().registrationData.mainData.birthday) }}</div>
       </div>
     </div>
 
@@ -59,7 +54,7 @@ export default {
 
       <div class="flex flex-row gap-[1em]  px-[1em] w-1/2">
         <div class="font-bold">Geburtstag</div>
-        <div>{{ person.birthday }}</div>
+        <div>{{ formatDate(person.birthday) }}</div>
       </div>
     </div>
 
@@ -104,7 +99,7 @@ export default {
 
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">Geburtstag</div>
-        <div>{{ useRegistrationStore().registrationData.mainData.birthday }}</div>
+        <div>{{ formatDate(useRegistrationStore().registrationData.mainData.birthday) }}</div>
       </div>
     </div>
 
