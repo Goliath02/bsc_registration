@@ -1,172 +1,231 @@
-<script>
-import CategoryPicker from "@/components/BasicRegistration/CategoryPicker.vue";
-import DepartmentPicker from "@/components/BasicRegistration/DepartmentPicker.vue";
+<script setup>
 import FormHeader from "@/components/FormHeader.vue";
-import GenderSelection from "@/components/BasicRegistration/GenderSelection.vue";
 import AddMemberButton from "@/components/BasicRegistration/AddMemberButton.vue";
-import ReworkedBSCInput from "@/components/BasicRegistration/BSCInput.vue";
 import ExtraPersonForm from "@/components/BasicRegistration/ExtraPersonForm.vue";
 import {useRegistrationStore} from "@/stores/RegistrationStore.js";
 import NachweisFeld from "@/components/BasicRegistration/NachweisFeld.vue";
 import {RegistrationType} from "@/components/BasicRegistration/dto/RegistrationType.js";
+import {Form} from '@primevue/forms';
+import {computed, onMounted, ref, watch} from "vue";
+import axios from "axios";
+import Button from "primevue/button";
+import Popover from "primevue/popover";
+import * as yup from 'yup';
+import { yupResolver } from '@primevue/forms/resolvers/yup';
+import router from "@/router.js";
 
-export default {
+const resolver = yupResolver(yup.object().shape({
+	"type": yup.string().required("Kategorie wählen."),
+	"reason": yup.string().required("Abteilung wählen."),
+	"name": yup.string().required("Name wird benötigt."),
+	"surename": yup.string().required("Nachname wird benötigt."),
+	"birthday": yup.date().required("Geburtsdatum angeben."),
+	"gender": yup.string().required("Geschlecht angeben."),
+	"email": yup.string().required("Email wird benötigt."),
+	"phone": yup.string().required("Telefonnummer wird benötigt."),
+	"street": yup.string().required("Straße wird benötigt."),
+	"plz": yup.string().required("Postleitzahl wird benötigt."),
+	"place": yup.string().required("Ort wird benötigt."),
+	"file": yup.object().when('type', {
+		is: 'Schüler/Student über 18',
+		then: (schema) => schema.required('Bitte Nachweis hochladen.'),
+		otherwise: (schema) => schema.notRequired()
+	})
+}));
 
-  name: "DefaultRegistration",
-  components: {
-    NachweisFeld,
-    BSCInput: ReworkedBSCInput,
-    ExtraPersonForm,
-    AddMemberButton,
-    GenderSelection,
-    FormHeader,
-    GrundAuwahl: DepartmentPicker,
-    PeronenAuswahl: CategoryPicker
-  },
-
-  data() {
-    return {
-      mainPerson: {
-        type: "",
-        reason: "",
-        name: "",
-        surename: "",
-        birthday: "",
-        gender: "",
-        email: "",
-        phone: "",
-        street: "",
-        plz: "",
-        place: "",
-      },
-      morePerson: [],
-    }
-  },
-
-  methods: {
-    useRegistrationStore,
-    addPersonForm() {
-      let newPerson = {
-        name: "",
-        surename: "",
-        birthday: "",
-        gender: "",
-      }
-
-      useRegistrationStore().registrationData.morePersons.push(newPerson);
-    },
-  },
-
-  computed: {
-    toggleNachweisActivation() {
-      useRegistrationStore().isFilled.studentIdentification = !useRegistrationStore().registrationData.mainData.type === 'Schüler/Student über 18';
-      return useRegistrationStore().registrationData.mainData.type === RegistrationType.STUDENT;
-    },
-
-	  isFamilyRegistration() {
-		return useRegistrationStore().registrationData.mainData.type === RegistrationType.FAMILY
-	  }
-  }
-
+const onFormSubmit = (values) => {
+	if (values.valid ) {
+		router.push("/kontodaten");
+	}
 }
+
+const op = ref();
+const prices = ref();
+
+const toggle = (event) => {
+	op.value.toggle(event);
+}
+
+onMounted(() => {
+
+	axios.get(useRegistrationStore().getTargetURL() + "/priceList").then((res) => {
+		prices.value = res.data;
+	}).catch((err) => {
+	})
+})
+
+const addPersonForm = () => {
+	let newPerson = {
+		name: "",
+		surename: "",
+		birthday: "",
+		gender: "",
+	}
+
+	useRegistrationStore().registrationData.morePersons.push(newPerson);
+};
+
+const toggleNachweisActivation = computed(() => {
+	useRegistrationStore().isFilled.studentIdentification = !useRegistrationStore().registrationData.mainData.type === 'Schüler/Student über 18';
+	return useRegistrationStore().registrationData.mainData.type === RegistrationType.STUDENT;
+})
+
+const isFamilyRegistration = computed(() => {
+	return useRegistrationStore().registrationData.mainData.type === RegistrationType.FAMILY
+})
+
+let courses = ref([]);
+const genders = ["Männlich",
+	"Weiblich",
+	"Divers"]
+
+const modelValue = defineModel();
+const props = defineProps({
+	isNotValid: Boolean
+})
+
+onMounted(() => {
+
+	axios.get(useRegistrationStore().getTargetURL() + "/courses").then((res) => {
+		courses.value = res.data;
+	}).catch((err) => {
+	})
+})
+
 </script>
 
 <template>
 
-  <FormHeader header-text="Mitgliederregistrierung"/>
+	<FormHeader header-text="Mitgliederregistrierung"/>
+		<Form v-slot="$form" :initialValues="useRegistrationStore().registrationData.mainData" id="defaultRegistrationForm" :resolver="resolver" @submit="onFormSubmit" class="flex flex-1 flex-col gap-[1em] max-h-[65vh] overflow-y-auto px-[2em] py-[1em]">
+			<Button variant="text" rounded size="small" severity="contrast" @click="toggle" icon="pi pi-question-circle"/>
+			<Popover ref="op">
+				<div>
+					<div v-for="price of prices">
+						{{ price }}
+					</div>
+				</div>
+			</Popover>
+			<FloatLabel variant="in">
+				<Select inputId="dd-categorie" name="type" v-model="useRegistrationStore().registrationData.mainData.type"
+				        :options="Object.values(RegistrationType)"
+				         class="w-full"/>
+				<Message v-if="$form.type?.invalid" severity="error" size="small" variant="simple">{{ $form.type.error.message }}</Message>
+				<label for="dd-categorie">
+					Kategorie
+				</label>
+			</FloatLabel>
+			<FormField v-if="toggleNachweisActivation" name="file">
+				<NachweisFeld :is-active="toggleNachweisActivation"
+				              :is-not-valid="$form.file?.invalid"
+				/>
+			</FormField>
+			<Message v-if="$form.file?.invalid" severity="error" size="small" variant="simple">{{ $form.file.error.message }}</Message>
 
-  <div class="flex flex-1 flex-col gap-[1em] max-h-[65vh] overflow-y-auto px-[2em] py-[1em] ">
-    <PeronenAuswahl v-model.modelValue="useRegistrationStore().registrationData.mainData.type"
-                    :is-not-valid="!useRegistrationStore().isFilled.defaultData.type && useRegistrationStore().triedToValidateBasicForm"
-                    @change="useRegistrationStore().updateBasicValidation()"/>
+			<FloatLabel variant="in">
+				<Select inputId="dd-department" name="reason" v-model="useRegistrationStore().registrationData.mainData.reason" :options="courses"
+				         class="w-full"/>
+				<Message v-if="$form.reason?.invalid" severity="error" size="small" variant="simple">{{ $form.reason.error.message }}</Message>
+				<label for="dd-department">
+					Abteilung
+				</label>
+			</FloatLabel>
 
-    <NachweisFeld :is-active="toggleNachweisActivation"
-                  :is-not-valid="!useRegistrationStore().isFilled.studentIdentification && useRegistrationStore().triedToValidateBasicForm"
-                  @change="useRegistrationStore().updateBasicValidation()"
-    />
 
-    <GrundAuwahl v-model.modelValue="useRegistrationStore().registrationData.mainData.reason"
-                 :is-not-valid="!useRegistrationStore().isFilled.defaultData.reason && useRegistrationStore().triedToValidateBasicForm"
-                 @change="useRegistrationStore().updateBasicValidation()"/>
+			<div class="flex gap-[1.5em]">
+				<FloatLabel variant="in" class="w-full">
+					<InputText class="w-full" inputId="dd-name" name="name" v-model="useRegistrationStore().registrationData.mainData.name"/>
+					<Message v-if="$form.name?.invalid" severity="error" size="small" variant="simple">{{ $form.name.error.message }}</Message>
+					<label for="dd-name">Name</label>
+				</FloatLabel>
 
-    <div class="flex gap-[1.5em]">
-      <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.name"
-                :is-not-valid="!useRegistrationStore().isFilled.defaultData.name && useRegistrationStore().triedToValidateBasicForm"
-                header-field="Vorname"
-                input-type="text"
-                @input="useRegistrationStore().updateBasicValidation()"/>
-      <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.surename"
-                :is-not-valid="!useRegistrationStore().isFilled.defaultData.surename && useRegistrationStore().triedToValidateBasicForm"
-                header-field="Nachname"
-                input-type="text"
-                @input="useRegistrationStore().updateBasicValidation()"/>
-    </div>
+				<FloatLabel variant="in" class="w-full">
+					<InputText class="w-full" inputId="dd-secondName" name="surename" v-model="useRegistrationStore().registrationData.mainData.surename"/>
+					<label for="dd-secondName">
+						Nachname
+					</label>
+				</FloatLabel>
+			</div>
 
-    <div class="flex gap-[1.5em]">
-      <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.birthday"
-                :is-not-valid="!useRegistrationStore().isFilled.defaultData.birthday && useRegistrationStore().triedToValidateBasicForm"
-                header-field="Geburtsdatum"
-                input-type="date"
-                @input="useRegistrationStore().updateBasicValidation()"/>
-      <gender-selection v-model.modelValue="useRegistrationStore().registrationData.mainData.gender"
-                        :is-not-valid="!useRegistrationStore().isFilled.defaultData.gender && useRegistrationStore().triedToValidateBasicForm"
-                        class="flex-1 w-1/2"
-                        @change="useRegistrationStore().updateBasicValidation()"/>
-    </div>
+			<div class="flex gap-[1.5em]">
+				<FloatLabel variant="in" class="w-full">
+					<DatePicker class="w-full" name="birthday" v-model="useRegistrationStore().registrationData.mainData.birthday" inputId="dd-date" showIcon iconDisplay="input" />
+					<label for="dd-date">Geburtsdatum</label>
+					<Message v-if="$form.birthday?.invalid" severity="error" size="small" variant="simple">{{ $form.birthday.error.message }}</Message>
+				</FloatLabel>
 
-    <div class="flex gap-[1.5em] max-[640px]:flex-col">
-      <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.email"
-                :is-not-valid="!useRegistrationStore().isFilled.defaultData.email && useRegistrationStore().triedToValidateBasicForm"
-                header-field="Email"
-                input-type="email"
-                @input="useRegistrationStore().updateBasicValidation()"/>
-      <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.phone"
-                :is-not-valid="!useRegistrationStore().isFilled.defaultData.phone && useRegistrationStore().triedToValidateBasicForm"
-                header-field="Telefon/Mobil"
-                input-type="text"
-                @input="useRegistrationStore().updateBasicValidation()"/>
+				<FloatLabel variant="in" class="w-full">
+					<Select inputId="dd-gender" name="gender" v-model="useRegistrationStore().registrationData.mainData.gender"
+					        :options="genders"
+					         class="w-full"/>
+					<Message v-if="$form.gender?.invalid" severity="error" size="small" variant="simple">{{ $form.gender.error.message }}</Message>
+					<label for="dd-gender">Geschlecht</label>
+				</FloatLabel>
+			</div>
 
-    </div>
+			<div class="flex gap-[1.5em]">
+				<FloatLabel variant="in" class="w-full">
+					<InputText class="w-full" inputId="dd-email" name="email" v-model="useRegistrationStore().registrationData.mainData.email"/>
+					<label for="dd-email">Email</label>
+					<Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{ $form.email.error.message }}</Message>
+				</FloatLabel>
 
-    <div class="flex gap-[1.5em] max-[640px]:flex-col">
-      <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.street"
-                :is-not-valid="!useRegistrationStore().isFilled.defaultData.street && useRegistrationStore().triedToValidateBasicForm"
-                header-field="Straße"
-                input-type="text"
-                @input="useRegistrationStore().updateBasicValidation()"/>
-      <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.plz"
-                :is-not-valid="!useRegistrationStore().isFilled.defaultData.plz && useRegistrationStore().triedToValidateBasicForm"
-                header-field="PLZ"
-                input-type="text"
-                @input="useRegistrationStore().updateBasicValidation()"/>
+				<FloatLabel variant="in" class="w-full">
+					<InputText class="w-full" inputId="dd-phone" name="phone" v-model="useRegistrationStore().registrationData.mainData.phone"/>
+					<Message v-if="$form.phone?.invalid" severity="error" size="small" variant="simple">{{ $form.phone.error.message }}</Message>
+					<label for="dd-phone">
+						Telefon/Mobil
+					</label>
+				</FloatLabel>
+			</div>
 
-    </div>
+			<div class="flex gap-[1.5em]">
+				<FloatLabel variant="in" class="w-full">
+					<InputText class="w-full" inputId="dd-street" name="street" v-model="useRegistrationStore().registrationData.mainData.street"/>
+					<Message v-if="$form.street?.invalid" severity="error" size="small" variant="simple">{{ $form.street.error.message }}</Message>
+					<label for="dd-street">Straße</label>
+				</FloatLabel>
 
-	  <div class="flex gap-[1.5em] max-[640px]:flex-col">
+				<FloatLabel variant="in" class="w-full">
+					<InputText class="w-full" inputId="dd-plz" name="plz" v-model="useRegistrationStore().registrationData.mainData.plz"/>
+					<Message v-if="$form.plz?.invalid" severity="error" size="small" variant="simple">{{ $form.plz.error.message }}</Message>
+					<label for="dd-plz">
+						PLZ
+					</label>
+				</FloatLabel>
+			</div>
 
-		  <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.place"
+			<div class="flex gap-[1.5em]">
 
-		            :is-not-valid="!useRegistrationStore().isFilled.defaultData.place && useRegistrationStore().triedToValidateBasicForm"
-		            header-field="Ort"
-		            input-type="text"
-		            @input="useRegistrationStore().updateBasicValidation()"/>
+				<div class="w-full">
+					<FloatLabel variant="in" class="w-full">
+						<InputText class="w-full" inputId="dd-Place" name="place" v-model="useRegistrationStore().registrationData.mainData.place"/>
+						<Message v-if="$form.place?.invalid" severity="error" size="small" variant="simple">{{ $form.place.error.message }}</Message>
+						<label for="dd-Place">
+							Ort
+						</label>
+					</FloatLabel>
+				</div>
 
-		  <BSCInput v-model.modelValue="useRegistrationStore().registrationData.mainData.entryDate"
-		            :is-not-valid="false"
-		            header-field="Anmeldedatum"
-		            input-type="date"
-		            info="Wenn leer gelassen, zum nächst möglichen Zeitpunkt"
-		            @input="useRegistrationStore().updateBasicValidation()"/>
-	  </div>
+				<div class="w-full">
+					<FloatLabel variant="in" class="w-full">
+						<DatePicker class="w-full" name="entryDate" v-model="useRegistrationStore().registrationData.mainData.entryDate" inputId="dd-entry" showIcon iconDisplay="input" />
+						<label for="dd-entry">Anmeldedatum</label>
+					</FloatLabel>
+					<Message severity="contrast" size="small" variant="simple">Wenn leer gelassen, zum nächst möglichen Zeitpunkt</Message>
+				</div>
 
-    <ExtraPersonForm v-if="isFamilyRegistration" v-for="(person, index) in useRegistrationStore().registrationData.morePersons"
-                     v-model.extraModelValues="useRegistrationStore().registrationData.morePersons[index]"
-                     :index="index"
-                     :input-data="{name: person.name, surename: person.surename, birthday: person.birthday, gender: person.gender}"/>
 
-    <AddMemberButton v-if="isFamilyRegistration" @click="addPersonForm"/>
+			</div>
 
-  </div>
+			<ExtraPersonForm v-if="isFamilyRegistration" v-for="(person, index) in useRegistrationStore().registrationData.morePersons"
+			                 v-model.extraModelValues="useRegistrationStore().registrationData.morePersons[index]"
+			                 :index="index"
+			                 :input-data="{name: person.name, surename: person.surename, birthday: person.birthday, gender: person.gender}"/>
+
+
+		<AddMemberButton v-if="isFamilyRegistration" @click="addPersonForm"/>
+		</Form>
 
 </template>
 

@@ -17,7 +17,7 @@ export default {
 
   methods: {
     onChange() {
-      if (this.$refs.file.files.length <= 5 && this.files.length <= 4 && !this.isInputFilesTooBig()) {
+      if (this.$refs.file.files.length <= 2 && this.files.length <= 2 && !this.isInputFilesTooBig()) {
         this.files.push(...this.$refs.file.files);
       }
     },
@@ -83,6 +83,9 @@ export default {
         @dragover="dragover"
         @drop="drop"
     >
+	    <Field>
+
+	    </Field>
       <input
           id="fileInput"
           ref="file"
@@ -96,7 +99,7 @@ export default {
 
       <label class="file-label" for="fileInput">
         <div v-if="isDragging">Dateien hier loslassen.</div>
-        <div v-else>Dateien hier ablegen oder <u>hier klicken</u> zum hochladen.</div>
+        <div v-else>Schüler-nachweise hier ablegen oder <u>hier klicken</u> zum hochladen.</div>
       </label>
 
       <div v-if="files.length" class="preview-container !border-[#585858]">

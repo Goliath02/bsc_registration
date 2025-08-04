@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import {RegistrationType} from "@/components/BasicRegistration/dto/RegistrationType.js";
 import {AgeType} from "@/components/BasicRegistration/dto/AgeType.js";
 import * as dateUtil from "@/utils/dateUtil.js";
+import * as yup from "yup";
 
 export const useRegistrationStore = defineStore('registrationStore', {
     state: () => ({
@@ -12,14 +13,14 @@ export const useRegistrationStore = defineStore('registrationStore', {
                 reason: "",
                 name: "",
                 surename: "",
-                birthday: "",
+                birthday: null,
                 gender: "",
                 email: "",
                 phone: "",
                 street: "",
                 plz: "",
                 place: "",
-                entryDate: "",
+                entryDate: null,
             },
 
             financial: {

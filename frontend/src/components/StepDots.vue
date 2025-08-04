@@ -1,6 +1,6 @@
 <template>
 	<div class="flex basis-1/3 justify-center items-center gap-[1em]">
-		<div v-for="page in pages" :class="{'!bg-white' : $route.name === page.name}"
+		<div v-for="page in pages" :class="{'!bg-white' : $route.name === page}"
 		     class="w-[0.8em] h-[0.8em] bg-stone-500 rounded-full transition-colors dot">
 		</div>
 	</div>
