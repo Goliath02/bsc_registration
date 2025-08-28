@@ -104,9 +104,7 @@ export default {
   <div class="flex p-[1em]">
 
     <div :class="{ 'invisible': isFirstPage}" class="basis-1/3">
-      <button @click="routerToPastSite" class="font-bold  px-[1em] py-[0.5em] rounded">
-        Zurück
-      </button>
+	    <Button @click="routerToPastSite" label="Zurück" severity="contrast"/>
     </div>
 
     <div class="basis-1/3 flex flex-col justify-center items-center">

@@ -105,7 +105,8 @@ import Header from "@/components/BSC_Header.vue";
 
       <div class="p-[1em]">
         <router-link to="/kontodaten">
-          <button class="font-bold  px-[1em] py-[0.5em] rounded">Zurück</button>
+          <Button severity="contrast" label="Zurück" class="font-bold  px-[1em] py-[0.5em] rounded"/>
+
         </router-link>
       </div>
 
