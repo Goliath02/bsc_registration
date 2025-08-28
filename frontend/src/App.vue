@@ -1,26 +1,20 @@
 <script setup>
-
-import Header from "@/components/BSC_Header.vue";
-import {useRegistrationStore} from "@/stores/RegistrationStore.js";
+import { useRegistrationStore } from "@/stores/RegistrationStore.js";
 import ResponseModal from "@/components/ResponseModal.vue";
 
 const store = useRegistrationStore();
 </script>
 
 <template>
-  <div class="bg-black h-screen flex flex-col ">
-    <Header></Header>
-
-    <router-view :key="$route.fullPath" v-slot="{ Component  } ">
+  <div class="bg-black h-screen flex flex-col">
+    <router-view :key="$route.fullPath" v-slot="{ Component }">
       <transition name="fade" mode="out-in">
-        <component :is="Component"/>
+        <component :is="Component" />
       </transition>
     </router-view>
-
   </div>
 
-  <ResponseModal v-if="useRegistrationStore().requestFailed"/>
-
+  <ResponseModal v-if="useRegistrationStore().requestFailed" />
 </template>
 
 <style scoped>

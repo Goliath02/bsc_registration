@@ -1,23 +1,27 @@
 <script>
-
-import {useRegistrationStore} from "@/stores/RegistrationStore.js";
+import { useRegistrationStore } from "@/stores/RegistrationStore.js";
 
 export default {
   data() {
     return {
       isDragging: false,
-      files: useRegistrationStore().studentIdentification
+      files: useRegistrationStore().studentIdentification,
     };
   },
 
   props: {
     isActive: false,
-    isNotValid: Boolean
+    isNotValid: Boolean,
   },
 
   methods: {
+    useRegistrationStore,
     onChange() {
-      if (this.$refs.file.files.length <= 5 && this.files.length <= 4 && !this.isInputFilesTooBig()) {
+      if (
+        this.$refs.file.files.length <= 2 &&
+        this.files.length <= 2 &&
+        !this.isInputFilesTooBig()
+      ) {
         this.files.push(...this.$refs.file.files);
       }
     },
@@ -40,7 +44,7 @@ export default {
 
     checkFileSize(file) {
       //File is over 8MB big
-      return file.size < ((1024 + 1024) * 8)
+      return file.size <= 8 * 1024 * 1024; // 8 MB
     },
 
     dragover(e) {
@@ -74,16 +78,21 @@ export default {
 </script>
 
 <template>
-
   <div v-if="isActive" class="flex justify-center items-center text-center">
     <div
-        :class="isNotValid ? 'border-2 border-red-700' : '' "
-        class="flex flex-col justify-center items-center w-full h-[10em] border-2 border-[#585858] border-dashed rounded-lg overflow-hidden"
-        @dragleave="dragleave"
-        @dragover="dragover"
-        @drop="drop"
+      :class="isNotValid ? 'border-2 border-red-700' : ''"
+      class="flex flex-col justify-center items-center w-full h-[10em] border-2 border-[#585858] border-dashed rounded-lg overflow-hidden"
+      @dragleave="dragleave"
+      @dragover="dragover"
+      @drop="drop"
     >
-      <input
+      <FormField
+        name="file"
+        label="File"
+        v-slot="{ field, errorMessage }"
+        class="w-full"
+      >
+        <input
           id="fileInput"
           ref="file"
           accept=".pdf,.jpg,.jpeg,.png"
@@ -92,42 +101,46 @@ export default {
           name="file"
           type="file"
           @change="onChange"
-      />
+        />
+        <p v-if="errorMessage" class="text-red-600">{{ errorMessage }}</p>
+      </FormField>
 
       <label class="file-label" for="fileInput">
         <div v-if="isDragging">Dateien hier loslassen.</div>
-        <div v-else>Dateien hier ablegen oder <u>hier klicken</u> zum hochladen.</div>
+        <div v-else>
+          Schüler-nachweise hier ablegen oder <u>hier klicken</u> zum hochladen.
+        </div>
       </label>
 
       <div v-if="files.length" class="preview-container !border-[#585858]">
-        <div v-for="file in files" :key="file.name" class="preview-card rounded-lg">
+        <div
+          v-for="file in files"
+          :key="file.name"
+          class="preview-card rounded-lg"
+        >
           <div>
-
-            <img :src="generateURL(file)" class="preview-img"/>
+            <img :src="generateURL(file)" class="preview-img" />
             <p>
               {{ file.name }}
             </p>
           </div>
           <div>
             <button
-                class="p-4 h-full bg-[#585858] rounded-lg"
-                title="Remove file"
-                type="button"
-                @click="remove(files.indexOf(file))"
+              class="p-4 h-full bg-[#585858] rounded-lg"
+              title="Remove file"
+              type="button"
+              @click="remove(files.indexOf(file))"
             >
               <b>×</b>
             </button>
           </div>
         </div>
       </div>
-
     </div>
   </div>
-
 </template>
 
 <style scoped>
-
 .hidden-input {
   opacity: 0;
   overflow: hidden;
@@ -144,7 +157,6 @@ export default {
 
 .preview-container {
   display: flex;
-
 }
 
 .preview-card {

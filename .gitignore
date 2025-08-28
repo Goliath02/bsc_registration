@@ -1,3 +1,5 @@
+dev.env
+prod.env
 /node_modules/.bin/nanoid
 /node_modules/.bin/nanoid.cmd
 /node_modules/.bin/nanoid.ps1
@@ -2509,3 +2511,4 @@
 /node_modules/.package-lock.json
 /package-lock.json
 /frontend/package-lock.json
+/.idea/
