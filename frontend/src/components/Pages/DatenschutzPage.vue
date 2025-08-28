@@ -45,6 +45,7 @@ import Header from "@/components/BSC_Header.vue";
            &#x2022;Geburtsdatum<br>
            &#x2022;E-Mail-Adresse<br>
            &#x2022;Telefonnummer<br>
+           &#x2022;Bankdaten<br>
            &#x2022;Notfallkontakt<br>
           </p>
           <br>
