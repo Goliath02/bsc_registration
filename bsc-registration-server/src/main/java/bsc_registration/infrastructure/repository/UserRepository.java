@@ -22,6 +22,6 @@ public interface UserRepository extends JpaRepository<BscUser, Long> {
 	@Query("SELECT count(u) > 0 from BscUser u WHERE u.signUpKey = :signUpKey")
 	boolean hasUserWithKey(SignUpKey signUpKey);
 
-	@Query("SELECT u FROM BscUser u JOIN u.authorities a WHERE a.authority = :authority")
-	List<BscUser> findUserByAuthority(final AuthorityType authority);
+	@Query("SELECT u FROM BscUser u WHERE u.signUpKey.authority.authority = :authority")
+	List<BscUser> findUserByAuthorityId(final AuthorityType authority);
 }

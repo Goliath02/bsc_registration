@@ -14,35 +14,41 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DateUtil {
 
-	private final CourseService courseService;
 
-	public TrainingUnitsDto calculateTrainingDates(LocalDate startDate, final int trainingUnits) {
+	public TrainingUnitsDto calculateTrainingDates(LocalDate startDate, final int trainingUnits, final List<HolidayDateInfo> allHolidays) {
 
 		final List<LocalDate> trainingDates = new ArrayList<>();
 
 		final List<HolidayDateInfo> holidayDates = new ArrayList<>();
 
-		trainingDates.add(startDate);
 
-		List<HolidayDateInfo> allHolidays = courseService.getAllHolidays();
+    int trainingUnitsPlanned = 0;
+    LocalDate nextDate = startDate;
 
-		for (int i = 0; i < trainingUnits; i++) {
+    do {
+      final HolidayDateInfo holidayDateInfo = isDateBetweenHoliday(nextDate, allHolidays);
 
-			final HolidayDateInfo holidayDateInfo = getDateBetweenHoliday(startDate, allHolidays);
+      if (holidayDateInfo != null) {
+        holidayDates.add(new HolidayDateInfo(holidayDateInfo.getId(), holidayDateInfo.getHolidayName(), holidayDateInfo.getFromDate(),
+          holidayDateInfo.getToDate()));
+      } else {
+        trainingDates.add(nextDate);
+        trainingUnitsPlanned++;
+      }
 
-			if (getDateBetweenHoliday(startDate, allHolidays) != null) {
-				holidayDates.add(new HolidayDateInfo(null, holidayDateInfo.getHolidayName(), holidayDateInfo.getFromDate(), holidayDateInfo.getToDate()));
-			} else {
-				trainingDates.add(startDate);
-			}
+      nextDate = nextDate.plusWeeks(1);
 
-			startDate = startDate.plusWeeks(1);
-		}
-		return new TrainingUnitsDto(trainingDates, trainingUnits, holidayDates.stream().distinct().toList());
+    } while (trainingUnits != trainingUnitsPlanned);
+
+    return new TrainingUnitsDto(trainingDates, trainingUnits, holidayDates.stream().distinct().toList());
+
 	}
 
-	private HolidayDateInfo getDateBetweenHoliday(final LocalDate date, final List<HolidayDateInfo> holidayDates) {
+  private HolidayDateInfo isDateBetweenHoliday(final LocalDate date, final List<HolidayDateInfo> holidayDates) {
 
-		return holidayDates.stream().filter(h -> h.getFromDate().isBefore(date) && h.getToDate().isAfter(date)).findFirst().orElse(null);
+		return holidayDates.stream()
+      .filter(h -> !date.isBefore(h.getFromDate()) && !date.isAfter(h.getToDate()))
+      .findFirst()
+      .orElse(null);
 	}
 }

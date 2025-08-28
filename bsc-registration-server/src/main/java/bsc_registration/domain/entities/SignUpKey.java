@@ -19,8 +19,8 @@ public class SignUpKey {
 	@Column
 	private String key;
 
-	@Column
-	@Enumerated(EnumType.STRING)
-	private AuthorityType authority;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "authority_id")
+	private BscAuthority authority;
 
 }

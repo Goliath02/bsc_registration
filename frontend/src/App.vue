@@ -1,6 +1,7 @@
 <script setup>
 import { useRegistrationStore } from "@/stores/RegistrationStore.js";
 import ResponseModal from "@/components/ResponseModal.vue";
+import { VueQueryDevtools } from "@tanstack/vue-query-devtools";
 
 const store = useRegistrationStore();
 </script>
@@ -15,6 +16,7 @@ const store = useRegistrationStore();
   </div>
 
   <ResponseModal v-if="useRegistrationStore().requestFailed" />
+  <VueQueryDevtools />
 </template>
 
 <style scoped>

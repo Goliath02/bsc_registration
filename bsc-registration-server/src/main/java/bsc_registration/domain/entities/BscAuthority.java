@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "bsc_authority")
 public class BscAuthority implements GrantedAuthority {
 
 	@Id

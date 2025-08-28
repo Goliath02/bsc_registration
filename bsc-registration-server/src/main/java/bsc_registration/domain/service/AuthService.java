@@ -46,7 +46,8 @@ public class AuthService {
 
 		user.setSignUpKey(signUpKey);
 
-		final Optional<BscAuthority> byAuthority = authorityRepository.findByAuthority(signUpKey.getAuthority());
+		final Optional<BscAuthority> byAuthority =
+      authorityRepository.findByAuthority(AuthorityType.valueOf(signUpKey.getAuthority().getAuthority()));
 
 		user.setAuthorities(List.of(byAuthority.orElseThrow()));
 
@@ -66,10 +67,12 @@ public class AuthService {
 		return null;
 	}
 
-	public SignUpKey createSignUpKey(final AuthorityType authority) {
+	public SignUpKey createSignUpKey(final AuthorityType authorityEnum) {
 		final var signUpKey = new SignUpKey();
 
-		signUpKey.setAuthority(authority);
+    final BscAuthority bscAuthority = authorityRepository.findByAuthority(authorityEnum).orElseThrow();
+
+    signUpKey.setAuthority(bscAuthority);
 
 		signUpKey.setKey(UUID.randomUUID().toString());
 
