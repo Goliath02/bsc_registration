@@ -57,10 +57,10 @@ public class CsvUtil {
             for (var extra : extraPeople) {
                 csvPrinter.printRecord(
                         mainData.reason(),
-                        extra.name(),
-                        extra.surename(),
-                        extra.gender(),
-                        formatDate(extra.birthday()),
+                        extra.extraName(),
+                        extra.extraSureName(),
+                        extra.extraGender(),
+                        formatDate(extra.extraBirthday()),
                         mainData.email(),
                         mainData.phone(),
                         mainData.street(),

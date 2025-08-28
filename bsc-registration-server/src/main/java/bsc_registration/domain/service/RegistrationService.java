@@ -90,8 +90,8 @@ public class RegistrationService {
         for (ExtraPerson extraPerson : extraPeople) {
             final var extraRegistration = new NswRegistration(
                     null,
-                    extraPerson.name(),
-                    extraPerson.surename(),
+                    extraPerson.extraName(),
+                    extraPerson.extraSureName(),
                     mainData.email(),
                     mainData.phone(),
                     LocalDate.now()

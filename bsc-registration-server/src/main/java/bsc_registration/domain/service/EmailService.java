@@ -210,7 +210,7 @@ public class EmailService {
 						<p>Nachname: %s</p>
 						<p>Geburtsdatum: %s</p>
 						<br>
-						""", person.gender(), person.name(), person.surename(), person.birthday());
+						""", person.extraGender(), person.extraName(), person.extraSureName(), person.extraBirthday());
 
 				morePersonsInfoText.append(personInfo).append("\n");
 			}
