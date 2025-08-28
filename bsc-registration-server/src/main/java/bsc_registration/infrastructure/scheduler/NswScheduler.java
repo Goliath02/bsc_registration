@@ -9,15 +9,12 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class NswScheduler {
 
-    private final RegistrationService registrationService;
+	private final RegistrationService registrationService;
 
 
-    @Scheduled(fixedRate = 7, timeUnit = TimeUnit.DAYS)
-    public void sendNswRegistrationListToCourseOwner() {
+	@Scheduled(fixedRate = 7, timeUnit = TimeUnit.DAYS)
+	public void sendNswRegistrationListToCourseOwner() {
 
-
-
-
-    }
+	}
 
 }

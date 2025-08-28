@@ -16,36 +16,42 @@ export default {
     NswRegistrationNavigation,
     FinanzialRegistration,
     RegistrationNavigation,
-    DefaultRegistration, Bsc_header, GenderSelection, FormHeader, BSCBanner, GrundAuwahl: DepartmentPicker, PeronenAuswahl: CategoryPicker
+    DefaultRegistration,
+    Bsc_header,
+    GenderSelection,
+    FormHeader,
+    BSCBanner,
+    GrundAuwahl: DepartmentPicker,
+    PeronenAuswahl: CategoryPicker,
   },
-}
-
+};
 </script>
 
 <template>
-  <main class="flex flex-1 justify-center items-center  lg:px-[7%] lg:py-[2%] min-h-0 ">
-    <div class="w-full h-full bg-bsc-gray rounded-lg overflow-hidden flex min-h-0">
+  <main
+    class="flex flex-1 justify-center items-center lg:px-[7%] lg:py-[2%] min-h-0"
+  >
+    <div
+      class="w-full h-full bg-bsc-gray rounded-lg overflow-hidden flex min-h-0"
+    >
+      <b-s-c-banner class="max-[1024px]:hidden" />
 
-      <b-s-c-banner class="max-[1024px]:hidden"/>
-
-      <div class=" text-white flex-1 overflow-y-hidden flex flex-col">
-
+      <div class="text-white flex-1 overflow-y-hidden flex flex-col">
         <router-view></router-view>
 
-        <NswRegistrationNavigation class="sticky bottom-0 bg-bsc-gray"/>
-
+        <NswRegistrationNavigation class="sticky bottom-0 bg-bsc-gray" />
       </div>
     </div>
   </main>
 </template>
 
 <style>
-.slide-enter-active, .slide-leave-active {
+.slide-enter-active,
+.slide-leave-active {
   transition: all 0.5s ease;
 }
 
-.slide-enter, .slide-leave-to /* .slide-leave-active in <2.1.8 */
-{
+.slide-enter, .slide-leave-to /* .slide-leave-active in <2.1.8 */ {
   transform: translateX(100%);
   opacity: 0;
 }
@@ -58,5 +64,4 @@ export default {
     opacity: 1;
   }
 }
-
 </style>

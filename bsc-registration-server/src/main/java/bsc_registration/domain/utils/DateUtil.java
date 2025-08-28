@@ -1,7 +1,7 @@
 package bsc_registration.domain.utils;
 
-import bsc_registration.domain.service.CourseService;
 import bsc_registration.domain.entities.HolidayDateInfo;
+import bsc_registration.domain.service.CourseService;
 import bsc_registration.webInterface.dto.TrainingUnitsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

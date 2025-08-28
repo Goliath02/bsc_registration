@@ -1,7 +1,6 @@
 package bsc_registration.domain.service;
 
 
-import bsc_registration.domain.entities.BscMember;
 import bsc_registration.infrastructure.config.MailSenderConfig;
 import bsc_registration.infrastructure.repository.BscMemberRepository;
 import bsc_registration.webInterface.dto.*;
@@ -155,10 +154,14 @@ public class EmailService {
 
 		if (emails.isEmpty()) {
 			receiversMails =
-					bscMemberRepository.findAll().stream().filter(bscMember -> bscMember.getEmail() != null).map(member -> new BscNameMail(member.getName(),
-							member.getEmail())).toList();
+					bscMemberRepository.findAll()
+							.stream()
+							.filter(bscMember -> bscMember.getEmail() != null)
+							.map(member -> new BscNameMail(member.getName(),
+									member.getEmail()))
+							.toList();
 		} else {
-			receiversMails = emails.stream().map(e -> new BscNameMail("anonymous", e )).toList();
+			receiversMails = emails.stream().map(e -> new BscNameMail("anonymous", e)).toList();
 		}
 		final var mailSender = mailSenderConfig.getJavaMailSender();
 
@@ -179,7 +182,7 @@ public class EmailService {
 
 				mailSender.send(message);
 			} catch (MailSendException e) {
-				invalidMails.add(new BscNameMail(member.getName(), member.getEmail() ));
+				invalidMails.add(new BscNameMail(member.getName(), member.getEmail()));
 				log.error("Error sending email to user: {}", member, e);
 			} catch (MessagingException e) {
 				log.error("Could nor authenticate with mail server: {}", e.getMessage());

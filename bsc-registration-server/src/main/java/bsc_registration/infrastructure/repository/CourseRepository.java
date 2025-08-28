@@ -1,7 +1,7 @@
 package bsc_registration.infrastructure.repository;
 
-import bsc_registration.domain.entities.HolidayDateInfo;
 import bsc_registration.domain.entities.Course;
+import bsc_registration.domain.entities.HolidayDateInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,14 +19,14 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 	List<Course> getAllCourses();
 
 	@Query("""
-    SELECT h FROM HolidayDateInfo h
-    WHERE h.fromDate <= :endDate
-    AND h.toDate >= :startDate
-""")
-List<HolidayDateInfo> getHolidayDateInfoBetweenDates(
-    final LocalDate startDate,
-    final LocalDate endDate
-);
+			    SELECT h FROM HolidayDateInfo h
+			    WHERE h.fromDate <= :endDate
+			    AND h.toDate >= :startDate
+			""")
+	List<HolidayDateInfo> getHolidayDateInfoBetweenDates(
+			final LocalDate startDate,
+			final LocalDate endDate
+	);
 
 	@Query("SELECT h FROM HolidayDateInfo h")
 	List<HolidayDateInfo> getAllHolidays();

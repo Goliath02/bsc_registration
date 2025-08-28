@@ -1,11 +1,11 @@
 package bsc_registration.domain.service;
 
-import bsc_registration.webInterface.dto.AuthorityType;
-import bsc_registration.infrastructure.repository.AuthorityRepository;
-import bsc_registration.infrastructure.repository.UserRepository;
 import bsc_registration.domain.entities.BscAuthority;
 import bsc_registration.domain.entities.BscUser;
 import bsc_registration.domain.entities.SignUpKey;
+import bsc_registration.infrastructure.repository.AuthorityRepository;
+import bsc_registration.infrastructure.repository.UserRepository;
+import bsc_registration.webInterface.dto.AuthorityType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

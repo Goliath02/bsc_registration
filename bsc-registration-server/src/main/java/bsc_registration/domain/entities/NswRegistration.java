@@ -13,22 +13,22 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class NswRegistration {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "FIRST_NAME")
-    private String firstName;
+	@Column(name = "FIRST_NAME")
+	private String firstName;
 
-    @Column(name = "SURE_NAME")
-    private String sureName;
+	@Column(name = "SURE_NAME")
+	private String sureName;
 
-    @Column(name = "EMAIL")
-    private String email;
+	@Column(name = "EMAIL")
+	private String email;
 
-    @Column(name = "PHONE")
-    private String phone;
+	@Column(name = "PHONE")
+	private String phone;
 
-    @Column(name = "REGISTRATED_ON")
-    private LocalDate registrationDate;
+	@Column(name = "REGISTRATED_ON")
+	private LocalDate registrationDate;
 }

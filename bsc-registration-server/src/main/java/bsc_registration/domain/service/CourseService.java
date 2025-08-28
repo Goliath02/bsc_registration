@@ -1,9 +1,9 @@
 package bsc_registration.domain.service;
 
+import bsc_registration.domain.entities.Course;
+import bsc_registration.domain.entities.HolidayDateInfo;
 import bsc_registration.infrastructure.repository.CourseRepository;
 import bsc_registration.webInterface.dto.CourseDto;
-import bsc_registration.domain.entities.HolidayDateInfo;
-import bsc_registration.domain.entities.Course;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +46,6 @@ public class CourseService {
 
 		if (byId.isPresent()) {
 			final Course course = byId.get();
-
 
 			//TODO finish (should fetch courseOwner by id +  set type + placeById
 			course.setCourseName(course.getCourseName());

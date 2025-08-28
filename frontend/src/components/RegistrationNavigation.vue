@@ -1,5 +1,5 @@
 <script>
-import {useRegistrationStore} from "@/stores/RegistrationStore.js";
+import { useRegistrationStore } from "@/stores/RegistrationStore.js";
 import router from "@/router.js";
 import axios from "axios";
 import PriceDisplay from "@/components/BasicRegistration/PriceDisplay.vue";
@@ -7,7 +7,7 @@ import StepDots from "@/components/StepDots.vue";
 
 export default {
   name: "RegistrationNavigation",
-  components: {StepDots, PriceDisplay},
+  components: { StepDots, PriceDisplay },
   methods: {
     useRegistrationStore,
 
@@ -15,7 +15,7 @@ export default {
       if (this.isSecondPage) {
         router.push("/");
       } else if (this.isLastPage) {
-        router.push("/kontodaten")
+        router.push("/kontodaten");
       }
     },
 
@@ -39,47 +39,57 @@ export default {
     },
 
     postFormData() {
-        this.postData();
-
+      this.postData();
     },
 
     postData() {
-
       useRegistrationStore().updateFinancialValidation();
       if (!useRegistrationStore().registrationData.hiddenSecurityCheck) {
-
         useRegistrationStore().isLoadingRequest = true;
 
         let formData = new FormData();
 
-        formData.append('formData', new Blob([JSON.stringify(useRegistrationStore().registrationData)], {type: 'application/json'}))
+        formData.append(
+          "formData",
+          new Blob([JSON.stringify(useRegistrationStore().registrationData)], {
+            type: "application/json",
+          }),
+        );
 
         useRegistrationStore().studentIdentification.forEach((file, index) => {
           formData.append(`studentIdentificationFiles`, file);
         });
 
-        axios.post(useRegistrationStore().getTargetURL() + "/registrate", formData, {headers: {'Content-Type': 'multipart/form-data'}})
-            .then(function (response) {
-              useRegistrationStore().isLoadingRequest = false;
-              router.push("/erfolg");
-            })
-            .catch(function (error) {
-              useRegistrationStore().requestFailedWithError = error.response.data;
-              useRegistrationStore().isLoadingRequest = false;
-              useRegistrationStore().requestFailed = true;
-            });
+        axios
+          .post(
+            useRegistrationStore().getTargetURL() + "/registrate",
+            formData,
+            { headers: { "Content-Type": "multipart/form-data" } },
+          )
+          .then(function (response) {
+            useRegistrationStore().isLoadingRequest = false;
+            router.push("/erfolg");
+          })
+          .catch(function (error) {
+            useRegistrationStore().requestFailedWithError = error.response.data;
+            useRegistrationStore().isLoadingRequest = false;
+            useRegistrationStore().requestFailed = true;
+          });
       }
     },
   },
 
   data() {
     return {
-      pages: ["DefaultRegistration", "FinanzialRegistration", "ConfirmationPage"],
-      isLoading: true
-    }
+      pages: [
+        "DefaultRegistration",
+        "FinanzialRegistration",
+        "ConfirmationPage",
+      ],
+      isLoading: true,
+    };
   },
   computed: {
-
     isFirstPage() {
       return this.$route.name === this.pages[0];
     },
@@ -93,44 +103,60 @@ export default {
     },
 
     getLastPageButtonText() {
-      return this.$route.name === this.pages[this.pages.length - 1] ? "Senden" : "Weiter";
-    }
-  }
-}
+      return this.$route.name === this.pages[this.pages.length - 1]
+        ? "Senden"
+        : "Weiter";
+    },
+  },
+};
 </script>
 
 <template>
-
   <div class="flex p-[1em]">
-
-    <div :class="{ 'invisible': isFirstPage}" class="basis-1/3">
-	    <Button @click="routerToPastSite" label="Zurück" severity="contrast"/>
+    <div :class="{ invisible: isFirstPage }" class="basis-1/3">
+      <Button @click="routerToPastSite" label="Zurück" severity="contrast" />
     </div>
 
     <div class="basis-1/3 flex flex-col justify-center items-center">
-      <StepDots :pages="pages"/>
-      <PriceDisplay/>
+      <StepDots :pages="pages" />
+      <PriceDisplay />
     </div>
 
     <div class="basis-1/3 flex justify-end">
-      <Button v-if="!isLastPage" :label="getLastPageButtonText"
-              class="!font-bold !bg-red-600 px-[1em] !border-red-600 !text-white !py-[0.5em] !rounded !cursor-pointer"
-              @click="this.routeWithValidation">
+      <Button
+        v-if="!isLastPage"
+        :label="getLastPageButtonText"
+        class="!font-bold !bg-red-600 px-[1em] !border-red-600 !text-white !py-[0.5em] !rounded !cursor-pointer"
+        @click="this.routeWithValidation"
+      >
       </Button>
-      <button v-else class="font-bold bg-red-600 px-[1em] py-[0.5em] rounded !cursor-pointer" @click="postFormData">
-        <span v-if="!useRegistrationStore().isLoadingRequest">{{ getLastPageButtonText }}</span>
+      <button
+        v-else
+        class="font-bold bg-red-600 px-[1em] py-[0.5em] rounded !cursor-pointer"
+        @click="postFormData"
+      >
+        <span v-if="!useRegistrationStore().isLoadingRequest">{{
+          getLastPageButtonText
+        }}</span>
         <span v-else>
-					<svg class="animate-spin bi bi-arrow-repeat" fill="currentColor" height="16" viewBox="0 0 16 16" width="16"
-               xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
-                        <path
-                            d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"
-                            fill-rule="evenodd"/>
-					</svg>
-				</span>
+          <svg
+            class="animate-spin bi bi-arrow-repeat"
+            fill="currentColor"
+            height="16"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"
+            />
+            <path
+              d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </span>
       </button>
     </div>
-
   </div>
 </template>

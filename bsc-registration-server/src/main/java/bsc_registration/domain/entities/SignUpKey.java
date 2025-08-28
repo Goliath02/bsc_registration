@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignUpKey {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long signUpKeyId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long signUpKeyId;
 
-    @Column
-    private String key;
+	@Column
+	private String key;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private AuthorityType authority;
+	@Column
+	@Enumerated(EnumType.STRING)
+	private AuthorityType authority;
 
 }

@@ -1,3 +1,5 @@
 export enum AgeType {
-    ADULT, CHILD, SENIOR
+  ADULT,
+  CHILD,
+  SENIOR,
 }

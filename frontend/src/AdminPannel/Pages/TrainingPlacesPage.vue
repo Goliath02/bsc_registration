@@ -1,11 +1,5 @@
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
+<template>Training Places</template>
 
-<template>
-Training Places
-</template>
-
-<style scoped>
-
-</style>
+<style scoped></style>

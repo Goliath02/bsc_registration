@@ -1,7 +1,7 @@
 package bsc_registration.infrastructure.repository;
 
-import bsc_registration.webInterface.dto.AuthorityType;
 import bsc_registration.domain.entities.BscAuthority;
+import bsc_registration.webInterface.dto.AuthorityType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

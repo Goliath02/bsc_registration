@@ -3,6 +3,6 @@
 @import "primeicons/primeicons.css";
 
 @theme {
---color-bsc-gray: #222222;
---color-bsc-lightgray: #404040;
+    --color-bsc-gray: #222222;
+    --color-bsc-lightgray: #404040;
 }

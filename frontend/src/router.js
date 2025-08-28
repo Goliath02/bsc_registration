@@ -75,10 +75,14 @@ const routes = [
       { path: "/profile", component: ProfilePage, name: "Profile" },
       { path: "/courses", component: CoursePage, name: "Courses" },
       { path: "/members", component: MembersPage, name: "Members" },
-      { path: "/places", component: TrainingPlacesPage, name: "TrainingPlaces" },
+      {
+        path: "/places",
+        component: TrainingPlacesPage,
+        name: "TrainingPlaces",
+      },
       { path: "/trainer", component: TrainerPage, name: "Trainer" },
       { path: "/settings", component: SettingsPage, name: "Settings" },
-    ]
+    ],
   },
 ];
 
@@ -88,20 +92,22 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
-  if (!requiresAuth) return next();
+  if (!requiresAuth) {
+    return next();
+  }
 
   try {
     // Anfrage an geschützten Endpoint – prüft Cookie
-    await axios.get('http://localhost:8080/api/auth/authenticated', {
-      withCredentials: true
+    await axios.get("http://localhost:8080/api/auth/authenticated", {
+      withCredentials: true,
     });
 
     next(); // Zugriff erlaubt
   } catch (error) {
-    console.warn('Nicht eingeloggt');
-    next('/login'); // Weiterleitung zur Login-Seite
+    console.warn("Nicht eingeloggt");
+    next("/login"); // Weiterleitung zur Login-Seite
   }
 });
 export default router;

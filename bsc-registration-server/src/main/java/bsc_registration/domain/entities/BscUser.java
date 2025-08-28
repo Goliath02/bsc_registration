@@ -13,49 +13,49 @@ import java.util.List;
 @Data
 public class BscUser implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long userId;
 
-    @Column
-    private String userName;
+	@Column
+	private String userName;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+	@Column(nullable = false, unique = true)
+	private String email;
 
-    @Column
-    private String password;
+	@Column
+	private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_authorities",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns =  @JoinColumn(name = "authority_id")
-    )
-    private List<BscAuthority> authorities;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "user_authorities",
+			joinColumns = @JoinColumn(name = "userId"),
+			inverseJoinColumns = @JoinColumn(name = "authority_id")
+	)
+	private List<BscAuthority> authorities;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "courseOwnerId"),
-            inverseJoinColumns = @JoinColumn(name = "courseId"))
-    private List<Course> courses;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			joinColumns = @JoinColumn(name = "courseOwnerId"),
+			inverseJoinColumns = @JoinColumn(name = "courseId"))
+	private List<Course> courses;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch =  FetchType.LAZY)
-    @JoinColumn(name = "sign_up_key_id", referencedColumnName = "signUpKeyId")
-    private SignUpKey signUpKey;
+	@OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "sign_up_key_id", referencedColumnName = "signUpKeyId")
+	private SignUpKey signUpKey;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return authorities;
+	}
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+	@Override
+	public String getPassword() {
+		return password;
+	}
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
+	@Override
+	public String getUsername() {
+		return email;
+	}
 }

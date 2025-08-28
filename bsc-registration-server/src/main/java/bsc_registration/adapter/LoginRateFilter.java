@@ -24,7 +24,6 @@ public class LoginRateFilter extends OncePerRequestFilter {
 	private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
 
-
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 

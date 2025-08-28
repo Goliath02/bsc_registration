@@ -1,14 +1,14 @@
 package bsc_registration.domain.service;
 
-import bsc_registration.webInterface.dto.AuthorityType;
-import bsc_registration.infrastructure.repository.AuthorityRepository;
-import bsc_registration.infrastructure.repository.KeyRepository;
-import bsc_registration.infrastructure.repository.UserRepository;
-import bsc_registration.webInterface.dto.LoginDto;
-import bsc_registration.webInterface.dto.SignUpDto;
 import bsc_registration.domain.entities.BscAuthority;
 import bsc_registration.domain.entities.BscUser;
 import bsc_registration.domain.entities.SignUpKey;
+import bsc_registration.infrastructure.repository.AuthorityRepository;
+import bsc_registration.infrastructure.repository.KeyRepository;
+import bsc_registration.infrastructure.repository.UserRepository;
+import bsc_registration.webInterface.dto.AuthorityType;
+import bsc_registration.webInterface.dto.LoginDto;
+import bsc_registration.webInterface.dto.SignUpDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,62 +23,60 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
-    private final AuthorityRepository authorityRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final KeyRepository keyRepository;
+	private final AuthenticationManager authenticationManager;
+	private final UserRepository userRepository;
+	private final AuthorityRepository authorityRepository;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	private final KeyRepository keyRepository;
 
-    public BscUser signup(SignUpDto input) {
-        final BscUser user = new BscUser();
+	public BscUser signup(SignUpDto input) {
+		final BscUser user = new BscUser();
 
-        user.setUserName(input.getUsername());
-        user.setEmail(input.getEmail());
-        user.setPassword(bCryptPasswordEncoder.encode(input.getPassword()));
+		user.setUserName(input.getUsername());
+		user.setEmail(input.getEmail());
+		user.setPassword(bCryptPasswordEncoder.encode(input.getPassword()));
 
+		Optional<SignUpKey> optionalKey = keyRepository.getKeyByKey(input.getSignUpKey());
 
+		final SignUpKey signUpKey = optionalKey.orElseThrow();
 
-        Optional<SignUpKey> optionalKey = keyRepository.getKeyByKey(input.getSignUpKey());
+		if (userRepository.hasUserWithKey(signUpKey)) {
+			throw new IllegalArgumentException();
+		}
 
-        final SignUpKey signUpKey = optionalKey.orElseThrow();
+		user.setSignUpKey(signUpKey);
 
-        if (userRepository.hasUserWithKey(signUpKey)) {
-            throw new IllegalArgumentException();
-        }
+		final Optional<BscAuthority> byAuthority = authorityRepository.findByAuthority(signUpKey.getAuthority());
 
-        user.setSignUpKey(signUpKey);
+		user.setAuthorities(List.of(byAuthority.orElseThrow()));
 
-        final Optional<BscAuthority> byAuthority = authorityRepository.findByAuthority(signUpKey.getAuthority());
+		return userRepository.save(user);
+	}
 
-        user.setAuthorities(List.of(byAuthority.orElseThrow()));
+	public BscUser authenticate(final LoginDto loginDto) {
 
-        return userRepository.save(user);
-    }
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
 
-    public BscUser authenticate(final LoginDto loginDto) {
+		final BscUser bscUser = userRepository.findByEmail(loginDto.getEmail()).orElseThrow();
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+		if (bCryptPasswordEncoder.matches(loginDto.getPassword(), bscUser.getPassword())) {
+			return bscUser;
+		}
 
-        final BscUser bscUser = userRepository.findByEmail(loginDto.getEmail()).orElseThrow();
+		return null;
+	}
 
-        if (bCryptPasswordEncoder.matches(loginDto.getPassword(), bscUser.getPassword())) {
-            return bscUser;
-        }
+	public SignUpKey createSignUpKey(final AuthorityType authority) {
+		final var signUpKey = new SignUpKey();
 
-        return null;
-    }
+		signUpKey.setAuthority(authority);
 
-    public SignUpKey createSignUpKey(final AuthorityType authority) {
-        final var signUpKey = new SignUpKey();
+		signUpKey.setKey(UUID.randomUUID().toString());
 
-        signUpKey.setAuthority(authority);
+		return signUpKey;
+	}
 
-        signUpKey.setKey(UUID.randomUUID().toString());
-
-        return signUpKey;
-    }
-
-    public void saveSignUpKey(SignUpKey signUpKey) {
-        keyRepository.save(signUpKey);
-    }
+	public void saveSignUpKey(SignUpKey signUpKey) {
+		keyRepository.save(signUpKey);
+	}
 }
