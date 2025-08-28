@@ -3,8 +3,20 @@ import { Button } from "primevue";
 import CourseCard from "@/AdminPannel/components/CourseCard.vue";
 import { ref } from "vue";
 import AddCourseDialog from "@/AdminPannel/components/AddCourseDialog.vue";
+import axios from "axios";
+import { useQuery } from "@tanstack/vue-query";
 
 const isOpen = ref(false);
+
+const getCourses = async () => {
+  const {data} = await axios.get("/api/courses"));
+  return data;
+};
+
+const {data, isLoading, error} = useQuery({
+  queryKey: ["courses"],
+  queryFn: getCourses,
+});
 
 const courses = ref([
   {

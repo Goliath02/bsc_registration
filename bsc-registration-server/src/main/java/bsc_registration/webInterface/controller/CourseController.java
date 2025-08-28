@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/course")
@@ -29,6 +30,12 @@ public class CourseController {
 
 		return dateUtil.calculateTrainingDates(startDate.toLocalDate(), trainingUnits);
 	}
+
+
+  @GetMapping("/all")
+  public List<CourseDto> getCourses(){
+    return courseService.getALlCourses();
+}
 
 	@PostMapping("/create")
 	public void createCourse(final CourseDto courseDto) {

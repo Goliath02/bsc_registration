@@ -44,7 +44,7 @@ public class SecurityConfig {
 								.permitAll()
 								.requestMatchers(HttpMethod.POST, "/api/auth/key/create", "/api/mail/send", "/api/mail/sendAll")
 								.hasAuthority("ADMIN")
-								.requestMatchers("api/course/", "api/info/**")
+								.requestMatchers("api/course/**", "api/info/**")
 								.authenticated()
 								.anyRequest()
 								.authenticated())
