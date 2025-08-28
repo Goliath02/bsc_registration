@@ -1,65 +1,66 @@
 package bsc_registration.webInterface.controller;
 
-import bsc_registration.domain.entities.BscUser;
-import bsc_registration.domain.entities.Course;
-import bsc_registration.domain.entities.TrainingPlace;
 import bsc_registration.domain.service.CourseService;
 import bsc_registration.domain.utils.DateUtil;
-import bsc_registration.infrastructure.repository.TrainingPlaceRepository;
-import bsc_registration.infrastructure.repository.UserRepository;
+import bsc_registration.webInterface.dto.CourseDetails;
 import bsc_registration.webInterface.dto.CourseDto;
+import bsc_registration.webInterface.dto.CreateCourseRequestDto;
 import bsc_registration.webInterface.dto.TrainingUnitsDto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/course")
 @RequiredArgsConstructor
 public class CourseController {
 
-	private final CourseService courseService;
-	private final DateUtil dateUtil;
-	private final UserRepository userRepository;
-	private final TrainingPlaceRepository placeRepository;
+  private final CourseService courseService;
+  private final DateUtil dateUtil;
 
-	@GetMapping("/holidayDateInfo")
-	public TrainingUnitsDto getHolidayDateInfo(@RequestParam OffsetDateTime startDate, @RequestParam final int trainingUnits) {
+  @GetMapping("/holidayDateInfo")
+  public TrainingUnitsDto getHolidayDateInfo(@RequestParam OffsetDateTime startDate, @RequestParam final int trainingUnits) {
 
-		return dateUtil.calculateTrainingDates(startDate.toLocalDate(), trainingUnits);
-	}
+    return dateUtil.calculateTrainingDates(startDate.toLocalDate(), trainingUnits, courseService.getAllHolidays());
+  }
 
-	@PostMapping("/create")
-	public void createCourse(final CourseDto courseDto) {
 
-		final var courseBuilder = Course.builder();
+  @GetMapping("/all")
+  public List<CourseDto> getCourses() {
+    return courseService.getALlCourses();
+  }
 
-		courseBuilder.courseName(courseDto.getCourseName());
-		courseBuilder.courseType(courseDto.getCourseType());
-		courseBuilder.startDate(courseDto.getStartDate());
-		courseBuilder.endDate(courseDto.getEndDate());
-		courseBuilder.numberOfParticipants(courseDto.getNumberOfParticipants());
-		courseBuilder.trainingUnits(courseDto.getTrainingUnits());
+  @GetMapping("/{courseId}")
+  public CourseDetails getCourseDetails(@PathVariable(name = "courseId") final long courseId) {
+    return courseService.getCourseDetails(courseId);
+  }
 
-		final BscUser courseOwner = userRepository.findById(courseDto.getCourseOwnerId()).orElseThrow();
+  @PostMapping("/create")
+  @Transactional(rollbackOn = Exception.class)
+  public ResponseEntity createCourse(@RequestBody final CreateCourseRequestDto courseDto) {
 
-		courseBuilder.courseOwner(courseOwner);
+    courseService.createCourse(courseDto);
 
-		final TrainingPlace place = placeRepository.findById(courseDto.getPlaceId()).orElseThrow();
+    return ResponseEntity.ok().build();
+  }
 
-		courseBuilder.place(place);
+  @PutMapping("/update")
+  @Transactional(rollbackOn = Exception.class)
+  public ResponseEntity updateCourse(final CourseDto courseDto) {
+    courseService.updateCourse(courseDto);
 
-		courseService.createCourse();
-	}
+    return ResponseEntity.ok().build();
+  }
 
-	@PutMapping("/update")
-	public void updateCourse(final CourseDto courseDto) {
-		courseService.updateCourse(courseDto);
-	}
+  @DeleteMapping("/delete/{courseId}")
+  @Transactional(rollbackOn = Exception.class)
+  public ResponseEntity deleteCourse(@PathVariable final Long courseId) {
+    courseService.deleteCourse(courseId);
 
-	@DeleteMapping("/delete/{courseId}")
-	public void deleteCourse(@RequestParam final Long courseId) {
-		courseService.deleteCourse(courseId);
-	}
+    return ResponseEntity.ok().build();
+  }
 }

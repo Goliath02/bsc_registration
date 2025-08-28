@@ -1,8 +1,9 @@
 package bsc_registration.webInterface.controller;
 
-import bsc_registration.domain.entities.BscUser;
+import bsc_registration.domain.entities.CourseType;
 import bsc_registration.domain.entities.TrainingPlace;
 import bsc_registration.domain.service.InfoService;
+import bsc_registration.webInterface.dto.TrainerInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ public class InfoController {
 	private final InfoService infoService;
 
 	@GetMapping("/trainers")
-	public List<BscUser> getAllTrainer() {
+	public List<TrainerInfoDto> getAllTrainer() {
 		return infoService.getAllTrainers();
 	}
 
@@ -27,4 +28,8 @@ public class InfoController {
 		return infoService.getAllTrainingPlaces();
 	}
 
+  @GetMapping("/courseTypes")
+  public List<CourseType> getAllCourseTypes() {
+    return infoService.getAllCourseTypes();
+  }
 }

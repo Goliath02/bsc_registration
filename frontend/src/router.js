@@ -20,6 +20,7 @@ import TrainerPage from "@/AdminPannel/Pages/TrainerPage.vue";
 import SettingsPage from "@/AdminPannel/Pages/SettingsPage.vue";
 import MembersPage from "@/AdminPannel/Pages/MembersPage.vue";
 import TrainingPlacesPage from "@/AdminPannel/Pages/TrainingPlacesPage.vue";
+import CourseDetailsPage from "@/AdminPannel/Pages/CourseDetailsPage.vue";
 
 const routes = [
   {
@@ -60,30 +61,31 @@ const routes = [
     ],
   },
 
-  // {
-  //   path: "/login",
-  //   component: LoginPage,
-  //   name: "Login",
-  // },
-  // {
-  //   path: "/courseManager",
-  //   component: CourseManager,
-  //   name: "CourseManager",
-  //   meta: { requiresAuth: true },
-  //   children: [
-  //     { path: "/dashboard", component: Dashboardpage, name: "Dashboard" },
-  //     { path: "/profile", component: ProfilePage, name: "Profile" },
-  //     { path: "/courses", component: CoursePage, name: "Courses" },
-  //     { path: "/members", component: MembersPage, name: "Members" },
-  //     {
-  //       path: "/places",
-  //       component: TrainingPlacesPage,
-  //       name: "TrainingPlaces",
-  //     },
-  //     { path: "/trainer", component: TrainerPage, name: "Trainer" },
-  //     { path: "/settings", component: SettingsPage, name: "Settings" },
-  //   ],
-  // },
+  {
+    path: "/login",
+    component: LoginPage,
+    name: "Login",
+  },
+  {
+    path: "/courseManager",
+    component: CourseManager,
+    name: "CourseManager",
+    meta: { requiresAuth: true },
+    children: [
+      { path: "/dashboard", component: Dashboardpage, name: "Dashboard" },
+      { path: "/profile", component: ProfilePage, name: "Profile" },
+      { path: "/courses", component: CoursePage, name: "Courses" },
+      { path: "/course/:id", component: CourseDetailsPage, name: "course", props: true },
+      { path: "/members", component: MembersPage, name: "Members" },
+      {
+        path: "/places",
+        component: TrainingPlacesPage,
+        name: "TrainingPlaces",
+      },
+      { path: "/trainer", component: TrainerPage, name: "Trainer" },
+      { path: "/settings", component: SettingsPage, name: "Settings" },
+    ],
+  },
 ];
 
 const router = createRouter({

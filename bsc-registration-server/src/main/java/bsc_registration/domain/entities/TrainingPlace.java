@@ -1,9 +1,11 @@
 package bsc_registration.domain.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "training_place")
+@Data
 public class TrainingPlace {
 
 	@Id

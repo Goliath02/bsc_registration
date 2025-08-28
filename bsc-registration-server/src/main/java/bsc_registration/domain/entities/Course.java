@@ -1,6 +1,6 @@
 package bsc_registration.domain.entities;
 
-import bsc_registration.webInterface.dto.CourseType;
+import bsc_registration.enums.CourseStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,13 +22,22 @@ public class Course {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long courseId;
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "courses")
-	private List<BscUser> user;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+    name = "course_members",
+    joinColumns = @JoinColumn(name = "course_id"),
+    inverseJoinColumns = @JoinColumn(name = "member_id")
+  )
+  private List<BscMember> members;
+
+  @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CourseTraining> courseTrainings;
 
 	@Column
 	private String courseName;
 
-	@Column
+	@ManyToOne()
+  @JoinColumn(name = "course_type_id")
 	private CourseType courseType;
 
 	@Column
@@ -40,10 +49,17 @@ public class Course {
 	@Column
 	private int numberOfParticipants;
 
+  @Column
+  private int numberOfMaxParticipants;
+
 	@Column
 	private int trainingUnits;
 
-	@OneToOne(fetch = FetchType.LAZY)
+  @Column(length = 25)
+  @Enumerated(EnumType.STRING)
+  private CourseStatus courseStatus;
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private BscUser courseOwner;
 

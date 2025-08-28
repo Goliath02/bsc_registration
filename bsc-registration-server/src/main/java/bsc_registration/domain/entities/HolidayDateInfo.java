@@ -3,6 +3,7 @@ package bsc_registration.domain.entities;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @Entity
 @AllArgsConstructor
 @Table(name = "holiday_dates")
+@EqualsAndHashCode(of = {"holidayName", "fromDate", "toDate"})
 @NoArgsConstructor
 public class HolidayDateInfo {
 
