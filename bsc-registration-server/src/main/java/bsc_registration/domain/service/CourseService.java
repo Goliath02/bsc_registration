@@ -20,10 +20,17 @@ public class CourseService {
   public List<CourseDto> getALlCourses() {
     List<Course> all = courseRepository.findAll();
 
-    return all.stream().map(course -> {
-
-      return new CourseDto();
-    }).toList();
+    return all.stream().map(course -> new CourseDto(
+      course.getCourseId(),
+      course.getCourseName(),
+      course.getCourseType(),
+      course.getStartDate(),
+      course.getEndDate(),
+      course.getNumberOfParticipants(),
+      course.getTrainingUnits(),
+      course.getCourseOwner().getUserId(),
+      course.getPlace().getId()
+      )).toList();
   }
 
 	public List<HolidayDateInfo> getHolidayInfoForCourse(final LocalDate startDate, final LocalDate endDate) {

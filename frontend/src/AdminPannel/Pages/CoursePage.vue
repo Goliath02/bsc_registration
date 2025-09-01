@@ -3,13 +3,18 @@ import { Button } from "primevue";
 import CourseCard from "@/AdminPannel/components/CourseCard.vue";
 import { ref } from "vue";
 import AddCourseDialog from "@/AdminPannel/components/AddCourseDialog.vue";
-import axios from "axios";
 import { useQuery } from "@tanstack/vue-query";
+import { apiClient } from "@/apiClient";
 
 const isOpen = ref(false);
 
 const getCourses = async () => {
-  const {data} = await axios.get("/api/courses"));
+  const {data} = await apiClient.get("/api/course/all", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
   return data;
 };
 
@@ -18,73 +23,7 @@ const {data, isLoading, error} = useQuery({
   queryFn: getCourses,
 });
 
-const courses = ref([
-  {
-    title: "Nichtschimmer Kurs",
-    imagePath: "/images/NonSwimPic.jpg",
-    trainer: "Kevin Krüger",
-    status: "Aktiv",
-    fromDate: "01.01.2022",
-    toDate: "02.01.2022",
-    totalUnits: 15,
-    unitsDone: 0,
-    place: "Firtz-Erler Bad",
-    participants: 0,
-    maxParticipants: 15,
-  },
-  {
-    title: "Nichtschimmer Kurs",
-    imagePath: "/images/TeenSwimPic.jpg",
-    trainer: "Kevin Krüger",
-    status: "Aktiv",
-    fromDate: "01.01.2022",
-    toDate: "02.01.2022",
-    totalUnits: 15,
-    unitsDone: 0,
-    place: "Firtz-Erler Bad",
-    participants: 0,
-    maxParticipants: 15,
-  },
-  {
-    title: "Nichtschimmer Kurs",
-    imagePath: "/images/MasterSwim.jpg",
-    trainer: "Kevin Krüger",
-    status: "Aktiv",
-    fromDate: "01.01.2022",
-    toDate: "02.01.2022",
-    totalUnits: 15,
-    unitsDone: 0,
-    place: "Firtz-Erler Bad",
-    participants: 0,
-    maxParticipants: 15,
-  },
-  {
-    title: "Nichtschimmer Kurs",
-    imagePath: "/images/TeenSwimPic.jpg",
-    trainer: "Kevin Krüger",
-    status: "Aktiv",
-    fromDate: "01.01.2022",
-    toDate: "02.01.2022",
-    totalUnits: 15,
-    unitsDone: 0,
-    place: "Firtz-Erler Bad",
-    participants: 0,
-    maxParticipants: 15,
-  },
-  {
-    title: "Nichtschimmer Kurs",
-    imagePath: "/images/TeenSwimPic.jpg",
-    trainer: "Kevin Krüger",
-    status: "Aktiv",
-    fromDate: "01.01.2022",
-    toDate: "02.01.2022",
-    totalUnits: 15,
-    unitsDone: 0,
-    place: "Firtz-Erler Bad",
-    participants: 0,
-    maxParticipants: 15,
-  },
-]);
+const courses = ref(data);
 
 const openDialog = () => {
   isOpen.value = true;
