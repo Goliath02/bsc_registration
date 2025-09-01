@@ -1,9 +1,5 @@
 import { apiClient } from "@/apiClient";
 
-export async function getCourses() {
-  return apiClient.get("/api/course/all");
-}
-
 export async function getTrainers() {
   return apiClient.get("/api/info/trainers");
 }

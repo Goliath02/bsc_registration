@@ -20,6 +20,10 @@ public class CourseService {
   public List<CourseDto> getALlCourses() {
     List<Course> all = courseRepository.findAll();
 
+    if (all.isEmpty()) {
+      return List.of();
+    }
+
     return all.stream().map(course -> new CourseDto(
       course.getCourseId(),
       course.getCourseName(),
@@ -58,7 +62,7 @@ public class CourseService {
 
 	public void updateCourse(final CourseDto courseDto) {
 
-		Optional<Course> byId = courseRepository.findById(courseDto.getCourseId());
+		final Optional<Course> byId = courseRepository.findById(courseDto.getCourseId());
 
 		if (byId.isPresent()) {
 			final Course course = byId.get();
@@ -78,7 +82,7 @@ public class CourseService {
 	}
 
 	public void deleteCourse(final Long courseId) {
-		Optional<Course> byId = courseRepository.findById(courseId);
+		final Optional<Course> byId = courseRepository.findById(courseId);
 
 		if (byId.isPresent()) {
 			courseRepository.delete(byId.get());

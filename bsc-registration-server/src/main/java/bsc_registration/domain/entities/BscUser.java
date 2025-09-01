@@ -58,4 +58,8 @@ public class BscUser implements UserDetails {
 	public String getUsername() {
 		return email;
 	}
+
+  public String getFullName() {
+    return userName;
+  }
 }

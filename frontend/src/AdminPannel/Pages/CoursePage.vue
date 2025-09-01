@@ -41,7 +41,25 @@ const openDialog = () => {
     <div
       class="bg-bsc-gray overflow-y-auto rounded-lg p-4 flex flex-wrap gap-4 m-4 flex-1 items-center-safe justify-center-safe"
     >
-      <CourseCard
+
+      <div v-if="isLoading" class="w-full h-48 flex justify-center items-center" >
+        <ProgressSpinner
+          style="
+            width: 3em;
+            height: 3em;
+            --p-progressspinner-color-one: #fff;
+            --p-progressspinner-color-two: #fff;
+            --p-progressspinner-color-three: #fff;
+            --p-progressspinner-color-four: #fff;
+          "
+          strokeWidth="8"
+          animationDuration="1.5s"
+        />
+      </div>
+      <div v-else-if="courses.length === 0" class="w-full h-48 flex justify-center items-center" >
+        <h2 class="text-2xl font-bold text-[#888888]">Es gibt noch keine Kurse</h2>
+      </div>
+      <CourseCard v-else
         v-for="course of courses"
         :key="course.title + course.fromDate"
         :title="course.title"
