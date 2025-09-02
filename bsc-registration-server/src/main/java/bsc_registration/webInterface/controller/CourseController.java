@@ -41,7 +41,7 @@ public class CourseController {
 
   @PostMapping("/create")
   @Transactional(rollbackOn = Exception.class)
-  public ResponseEntity createCourse(final CourseDto courseDto) {
+  public ResponseEntity createCourse(@RequestBody final CourseDto courseDto) {
 
     final var courseBuilder = Course.builder();
 

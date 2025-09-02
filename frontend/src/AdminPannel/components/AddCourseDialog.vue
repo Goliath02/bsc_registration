@@ -12,6 +12,8 @@ const courseTitle = ref("");
 const courseType = ref("");
 const startDate = ref();
 const trainingUnits = ref();
+const maxParticipants = ref();
+const courseStatus = ref();
 const trainer = ref();
 const place = ref();
 
@@ -31,12 +33,12 @@ const { data: availablePlaces, isLoading: placesLoading } = useQuery({
 const { data: dateInfos, isLoading, isError: isHolidayError } = useQuery({
   queryKey: ['holidayInfo', startDate, trainingUnits],
   queryFn: () => getHolidayInfo(startDate.value, trainingUnits.value),
-  enabled: computed(() => !!startDate.value && !!trainingUnits.value) // nur wenn beide gesetzt
+  enabled: computed(() => !!startDate.value && !!trainingUnits.value)
 })
 
 const { mutate: saveCourse, isPending, isSuccess, isError:isSaveCourseError } = useMutation({
   mutationFn: () =>
-    apiClient.post("/api/course/add", {
+    apiClient.post("/api/course/create", {
       title: courseTitle.value,
       type: courseType.value,
       fromDate: startDate.value,
@@ -52,6 +54,14 @@ const { mutate: saveCourse, isPending, isSuccess, isError:isSaveCourseError } = 
     queryClient.invalidateQueries({ queryKey: ['courses'] })
   }
 })
+
+const trainingStatus = ref([
+  { name: 'In Planning', code: 'PLANNING' },
+  { name: 'Open', code: 'OPEN' },
+  { name: 'Active', code: 'ACTIVE' },
+  { name: 'Completed', code: 'COMPLETED' },
+]);
+
 </script>
 
 <template>
@@ -65,17 +75,17 @@ const { mutate: saveCourse, isPending, isSuccess, isError:isSaveCourseError } = 
     class="p-4"
   >
     <div class="flex flex-col gap-4 justify-center items-center w-full">
-      <h1 class="text-4xl font-bold">Add course</h1>
+      <h1 class="text-4xl font-bold">Kurs hinzufügen</h1>
 
       <InputText
         v-model="courseTitle"
-        placeholder="Course title"
+        placeholder="Kurs-Titel"
         class="w-full"
       />
       <Select
         class="w-full"
         v-model="courseType"
-        placeholder="Course type"
+        placeholder="Kurs Typ"
         :options="['Not Swimmer', 'Swimmer', 'Aqua-Gymnastics']"
       />
 
@@ -87,30 +97,57 @@ const { mutate: saveCourse, isPending, isSuccess, isError:isSaveCourseError } = 
           :showOnFocus="false"
           showTime
           hourFormat="24"
-          placeholder="Start date"
+          placeholder="Start-datum"
           dateFormat="dd.mm.yy"
         />
-        <InputNumber v-model="trainingUnits" placeholder="Training units" />
+        <InputNumber v-model="trainingUnits" placeholder="Trainingseinheiten" />
       </div>
 
       <CourseTimeFrameInfo v-model="dateInfos" :chosen-date="startDate" />
 
+      <div class="flex gap-4 md:flex-row flex-col w-full">
+        <InputNumber v-model="maxParticipants" placeholder="Max Teilehmer (Bsp. 5-15)" class="w-full" />
+
+        <Select
+          v-model="courseStatus"
+          placeholder="Course status"
+          :options="trainingStatus"
+          optionLabel="name"
+          class="w-full"
+        />
+      </div>
+
       <Select
-        class="w-full"
-        v-model="trainer"
+        v-model="availableTrainers"
+        optionLabel="trainerName"
         placeholder="Trainer"
         :options="['Kevin', 'Julia', 'Jeremy']"
+        class="w-full"
       />
       <Select
         class="w-full"
         v-model="place"
-        placeholder="Place"
+        placeholder="Ort"
         :options="['Konrad-Adenauer', 'Fritz-Erler', 'Eutingen']"
       />
 
       <div class="flex gap-4 w-full justify-center items-center">
-        <Button @click="open = false" class="px-4 py-2">Zurück</Button>
-        <Button @click="saveCourse()" class="px-4 py-2">Speichern</Button>
+        <Button @click="open = false" class="w-24 h-10 px-4 py-2">Zurück</Button>
+        <Button @click="saveCourse()" class="w-24 h-10 px-4 py-2">
+          <ProgressSpinner
+            v-if="isPending"
+            style="
+            width: 1em;
+            height: 1em;
+            --p-progressspinner-color-one: #fff;
+            --p-progressspinner-color-two: #fff;
+            --p-progressspinner-color-three: #fff;
+            --p-progressspinner-color-four: #fff;
+          "
+            strokeWidth="8"
+            animationDuration="1.5s"/>
+          <p v-else >Speichern</p>
+        </Button>
       </div>
     </div>
   </Dialog>
