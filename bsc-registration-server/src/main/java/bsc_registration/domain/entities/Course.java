@@ -1,5 +1,6 @@
 package bsc_registration.domain.entities;
 
+import bsc_registration.enums.CourseStatus;
 import bsc_registration.webInterface.dto.CourseType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -40,8 +41,15 @@ public class Course {
 	@Column
 	private int numberOfParticipants;
 
+  @Column
+  private int numberOfMaxParticipants;
+
 	@Column
 	private int trainingUnits;
+
+  @Column(length = 25)
+  @Enumerated(EnumType.STRING)
+  private CourseStatus courseStatus;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")

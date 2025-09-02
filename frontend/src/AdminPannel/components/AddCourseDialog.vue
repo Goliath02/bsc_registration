@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import CourseTimeFrameInfo from "@/AdminPannel/components/CourseTimeFrameInfo.vue";
 import { getHolidayInfo } from "@/service/DateService";
 import { getTrainers, getTrainingPlaces } from "@/service/InfoService";
+import { apiClient } from "@/apiClient";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 
 const open = defineModel<boolean>({ required: true });
 
@@ -13,31 +15,43 @@ const trainingUnits = ref();
 const trainer = ref();
 const place = ref();
 
-const availableTrainers = ref([]);
-const availablePlaces = ref([]);
+const queryClient = useQueryClient();
 
-const dateInfos = ref();
+const { data: availableTrainers, isLoading: trainersLoading } = useQuery({
+  queryKey: ['trainers'],
+  queryFn: getTrainers
+})
 
-const fetchDates = async () => {
-  if (startDate.value && trainingUnits.value) {
-    dateInfos.value = await getHolidayInfo(
-      startDate.value,
-      trainingUnits.value,
-    );
+const { data: availablePlaces, isLoading: placesLoading } = useQuery({
+  queryKey: ['trainingPlaces'],
+  queryFn: getTrainingPlaces
+})
+
+
+const { data: dateInfos, isLoading, isError: isHolidayError } = useQuery({
+  queryKey: ['holidayInfo', startDate, trainingUnits],
+  queryFn: () => getHolidayInfo(startDate.value, trainingUnits.value),
+  enabled: computed(() => !!startDate.value && !!trainingUnits.value) // nur wenn beide gesetzt
+})
+
+const { mutate: saveCourse, isPending, isSuccess, isError:isSaveCourseError } = useMutation({
+  mutationFn: () =>
+    apiClient.post("/api/course/add", {
+      title: courseTitle.value,
+      type: courseType.value,
+      fromDate: startDate.value,
+      toDate: startDate.value,
+      totalUnits: trainingUnits.value,
+      trainer: trainer.value,
+      place: place.value,
+      participants: 0,
+      maxParticipants: 0,
+      status: "PLANING",
+    }),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['courses'] })
   }
-};
-
-watch([startDate, trainingUnits], () => {
-  fetchDates();
-});
-
-onMounted(async () => {
-  availableTrainers.value = await getTrainers();
-  availablePlaces.value = await getTrainingPlaces();
-
-  console.log("availableTrainers.value", availableTrainers.value);
-  console.log("availablePlaces.value", availablePlaces.value);
-});
+})
 </script>
 
 <template>
@@ -79,7 +93,7 @@ onMounted(async () => {
         <InputNumber v-model="trainingUnits" placeholder="Training units" />
       </div>
 
-      <CourseTimeFrameInfo v-model="dateInfos" />
+      <CourseTimeFrameInfo v-model="dateInfos" :chosen-date="startDate" />
 
       <Select
         class="w-full"
@@ -95,8 +109,8 @@ onMounted(async () => {
       />
 
       <div class="flex gap-4 w-full justify-center items-center">
-        <Button @click="open = false" class="px-4 py-2">Back</Button>
-        <Button @click="open = false" class="px-4 py-2">Save</Button>
+        <Button @click="open = false" class="px-4 py-2">Zurück</Button>
+        <Button @click="saveCourse()" class="px-4 py-2">Speichern</Button>
       </div>
     </div>
   </Dialog>

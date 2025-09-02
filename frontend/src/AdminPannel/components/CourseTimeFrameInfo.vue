@@ -4,6 +4,7 @@ import { computed } from "vue";
 import { formatDate } from "@/utils/dateUtil";
 
 const dto = defineModel({ type: Object as () => TrainingUnitsDto });
+const props = defineProps({chosenDate: Date});
 
 const dates = computed(() => {
   if (dto.value === undefined) {
@@ -23,16 +24,21 @@ const holidayDates = computed(() => {
 
 <template>
   <div class="flex flex-col gap-2 text-center">
-    <div class="flex gap-8 justify-around items-center">
-      <div class="flex flex-col justify-center items-center font-bold">
+    <div class="flex gap-12 justify-around items-center">
+      <div class="w-22 flex flex-col justify-center items-center font-bold">
         <div class="flex justify-between items-center flex-row">From:</div>
         <div v-if="dates.length > 0">{{ formatDate(dates[0]) }}</div>
+        <div v-else-if="props.chosenDate === undefined">?</div>
+        <div v-else class="w-full">{{formatDate(props.chosenDate)}}</div>
       </div>
 
-      <div class="flex flex-col justify-center items-center font-bold">
+      <div class="w-22 flex flex-col justify-center items-center font-bold">
         <div class="flex justify-between items-center flex-row">To:</div>
         <div v-if="dates.length > 0">
           {{ formatDate(dates[dates.length - 1]) }}
+        </div>
+        <div v-else class="w-full">
+          ?
         </div>
       </div>
     </div>
