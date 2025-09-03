@@ -54,8 +54,9 @@ const holidayDates = computed(() => {
             <span class="font-bold">
               {{ holiday.holidayName }}
             </span>
+            :
             <span class="font-bold">{{ formatDate(holiday.fromDate) }}</span> -
-            <span class="font-bold">{{ formatDate(holiday.fromDate) }}</span>
+            <span class="font-bold">{{ formatDate(holiday.toDate) }}</span>
           </div>
         </div>
       </Message>

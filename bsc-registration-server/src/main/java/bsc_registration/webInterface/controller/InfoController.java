@@ -1,5 +1,6 @@
 package bsc_registration.webInterface.controller;
 
+import bsc_registration.domain.entities.CourseType;
 import bsc_registration.domain.entities.TrainingPlace;
 import bsc_registration.domain.service.InfoService;
 import bsc_registration.webInterface.dto.TrainerInfoDto;
@@ -27,4 +28,8 @@ public class InfoController {
 		return infoService.getAllTrainingPlaces();
 	}
 
+  @GetMapping("/courseTypes")
+  public List<CourseType> getAllCourseTypes() {
+    return infoService.getAllCourseTypes();
+  }
 }

@@ -1,8 +1,10 @@
 package bsc_registration.domain.service;
 
-import bsc_registration.domain.entities.Course;
-import bsc_registration.domain.entities.HolidayDateInfo;
+import bsc_registration.domain.entities.*;
 import bsc_registration.infrastructure.repository.CourseRepository;
+import bsc_registration.infrastructure.repository.CourseTypeRepository;
+import bsc_registration.infrastructure.repository.TrainingPlaceRepository;
+import bsc_registration.infrastructure.repository.UserRepository;
 import bsc_registration.webInterface.dto.CourseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ import java.util.Optional;
 public class CourseService {
 
 	private final CourseRepository courseRepository;
+  private final UserRepository userRepository;
+  private final TrainingPlaceRepository placeRepository;
+  private final CourseTypeRepository courseTypeRepository;
 
   public List<CourseDto> getALlCourses() {
     List<Course> all = courseRepository.findAll();
@@ -27,7 +32,7 @@ public class CourseService {
     return all.stream().map(course -> new CourseDto(
       course.getCourseId(),
       course.getCourseName(),
-      course.getCourseType(),
+      course.getCourseType().getCourseTypeId(),
       course.getStartDate(),
       course.getEndDate(),
       course.getNumberOfParticipants(),
@@ -53,11 +58,29 @@ public class CourseService {
 		return courseRepository.getDateInHoliday(date);
 	}
 
-	public void createCourse() {
+	public void createCourse(final CourseDto courseDto) {
 
-		final Course.CourseBuilder courseBuilder = Course.builder();
+    final var courseBuilder = Course.builder();
 
-		courseRepository.save(new Course());
+    courseBuilder.courseName(courseDto.getCourseName());
+
+    final CourseType courseType = courseTypeRepository.findById(courseDto.getCourseTypeId()).orElseThrow();
+    courseBuilder.courseType(courseType);
+
+    courseBuilder.startDate(courseDto.getStartDate());
+    courseBuilder.endDate(courseDto.getEndDate());
+    courseBuilder.numberOfParticipants(courseDto.getNumberOfMaxParticipants());
+    courseBuilder.trainingUnits(courseDto.getTrainingUnits());
+
+    final BscUser courseOwner = userRepository.findById(courseDto.getCourseOwnerId()).orElseThrow();
+
+    courseBuilder.courseOwner(courseOwner);
+
+    final TrainingPlace place = placeRepository.findById(courseDto.getPlaceId()).orElseThrow();
+
+    courseBuilder.place(place);
+
+		courseRepository.save(courseBuilder.build());
 	}
 
 	public void updateCourse(final CourseDto courseDto) {

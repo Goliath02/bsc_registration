@@ -7,3 +7,7 @@ export async function getTrainers() {
 export async function getTrainingPlaces() {
   return apiClient.get("/api/info/places");
 }
+
+export async function getCourseTypes() {
+  return apiClient.get("/api/info/courseTypes");
+}

@@ -2,20 +2,40 @@
 import { computed, onMounted, ref, watch } from "vue";
 import CourseTimeFrameInfo from "@/AdminPannel/components/CourseTimeFrameInfo.vue";
 import { getHolidayInfo } from "@/service/DateService";
-import { getTrainers, getTrainingPlaces } from "@/service/InfoService";
+import { getCourseTypes, getTrainers, getTrainingPlaces } from "@/service/InfoService";
 import { apiClient } from "@/apiClient";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { yupResolver } from "@primevue/forms/resolvers/yup";
+import * as yup from "yup";
+import { Form } from "@primevue/forms";
 
 const open = defineModel<boolean>({ required: true });
 
-const courseTitle = ref("");
-const courseType = ref("");
-const startDate = ref();
-const trainingUnits = ref();
-const maxParticipants = ref();
-const courseStatus = ref();
-const trainer = ref();
-const place = ref();
+const addCourseDto = ref({
+  courseTitle: "",
+  courseType: "",
+  startDate: undefined,
+  trainingUnits: "",
+  maxParticipants: "",
+  courseStatus: undefined as { name: string, code: string } | undefined,
+  trainer: "",
+  place: ""
+})
+
+
+const resolver = yupResolver(
+  yup.object().shape({
+    courseTitle: yup.string().required(),
+    courseType: yup.string().required(),
+    startDate: yup.date().required("Geburtsdatum angeben."),
+    trainingUnits: yup.number().required(),
+    maxParticipants: yup.number().required(),
+    courseStatus: yup.object().required(),
+    trainer: yup.number().required(),
+    place: yup.number().required()
+  }),
+);
+
 
 const queryClient = useQueryClient();
 
@@ -29,31 +49,47 @@ const { data: availablePlaces, isLoading: placesLoading } = useQuery({
   queryFn: getTrainingPlaces
 })
 
+const { data: availableCourseTypes, isLoading: courseTypesLoading } = useQuery({
+  queryKey: ['courseTypes'],
+  queryFn: getCourseTypes
+})
+
 
 const { data: dateInfos, isLoading, isError: isHolidayError } = useQuery({
-  queryKey: ['holidayInfo', startDate, trainingUnits],
-  queryFn: () => getHolidayInfo(startDate.value, trainingUnits.value),
-  enabled: computed(() => !!startDate.value && !!trainingUnits.value)
+  queryKey: ['holidayInfo', addCourseDto.value.startDate, addCourseDto.value.trainingUnits],
+  queryFn: () => getHolidayInfo(addCourseDto.value.startDate, addCourseDto.value.trainingUnits),
+  enabled: computed(() => !!addCourseDto.value.startDate && !!addCourseDto.value.trainingUnits)
 })
+
+const invalidateDateCalulator = () => {
+  queryClient.invalidateQueries({ queryKey: ['holidayInfo'] })
+};
 
 const { mutate: saveCourse, isPending, isSuccess, isError:isSaveCourseError } = useMutation({
   mutationFn: () =>
     apiClient.post("/api/course/create", {
-      title: courseTitle.value,
-      type: courseType.value,
-      fromDate: startDate.value,
-      toDate: startDate.value,
-      totalUnits: trainingUnits.value,
-      trainer: trainer.value,
-      place: place.value,
-      participants: 0,
-      maxParticipants: 0,
-      status: "PLANING",
+      title: addCourseDto.value.courseTitle,
+      type: addCourseDto.value.courseType,
+      fromDate: addCourseDto.value.startDate,
+      toDate: addCourseDto.value.trainingUnits,
+      totalUnits: addCourseDto.value.maxParticipants,
+      trainer: addCourseDto.value.courseStatus,
+      place: addCourseDto.value.trainer,
+      maxParticipants: addCourseDto.value.maxParticipants,
+      status: addCourseDto.value.courseStatus,
     }),
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ['courses'] })
   }
 })
+
+
+const onFormSubmit = (values) => {
+
+  if (values.valid) {
+    saveCourse();
+  }
+};
 
 const trainingStatus = ref([
   { name: 'In Planning', code: 'PLANNING' },
@@ -74,66 +110,86 @@ const trainingStatus = ref([
     :show-header="false"
     class="p-4"
   >
-    <div class="flex flex-col gap-4 justify-center items-center w-full">
+    <Form
+      v-slot="$form"
+      :initialValues="addCourseDto"
+      id="defaultRegistrationForm"
+      :resolver="resolver"
+      @submit="onFormSubmit"
+      class="flex flex-col gap-4 justify-center items-center w-full">
+
+
       <h1 class="text-4xl font-bold">Kurs hinzufügen</h1>
 
       <InputText
-        v-model="courseTitle"
+        v-model="addCourseDto.courseTitle"
         placeholder="Kurs-Titel"
         class="w-full"
+        name="courseTitle"
       />
       <Select
         class="w-full"
-        v-model="courseType"
+        v-model="addCourseDto.courseType"
         placeholder="Kurs Typ"
-        :options="['Not Swimmer', 'Swimmer', 'Aqua-Gymnastics']"
+        :options="availableCourseTypes.data"
+        option-label="courseTypeName"
+        option-value="courseTypeId"
+        name="courseType"
       />
 
       <div class="flex gap-4 md:flex-row flex-col w-full">
         <DatePicker
-          v-model="startDate"
+          @valueChange="invalidateDateCalulator"
+          v-model="addCourseDto.startDate"
           showIcon
           fluid
           :showOnFocus="false"
           showTime
           hourFormat="24"
-          placeholder="Start-datum"
+          placeholder="Start-Datum"
           dateFormat="dd.mm.yy"
+          name="startDate"
         />
-        <InputNumber v-model="trainingUnits" placeholder="Trainingseinheiten" />
+        <InputNumber @valueChange="invalidateDateCalulator" v-model="addCourseDto.trainingUnits" name="trainingUnits" placeholder="Trainingseinheiten" />
       </div>
 
-      <CourseTimeFrameInfo v-model="dateInfos" :chosen-date="startDate" />
+      <CourseTimeFrameInfo v-model="dateInfos" :chosen-date="addCourseDto.startDate" />
 
       <div class="flex gap-4 md:flex-row flex-col w-full">
-        <InputNumber v-model="maxParticipants" placeholder="Max Teilehmer (Bsp. 5-15)" class="w-full" />
+        <InputNumber v-model="addCourseDto.maxParticipants" placeholder="Max Teilehmer (Bsp. 5-15)" name="maxParticipants" class="w-full" />
 
         <Select
-          v-model="courseStatus"
+          v-model="addCourseDto.courseStatus"
           placeholder="Course status"
           :options="trainingStatus"
           optionLabel="name"
           class="w-full"
+          name="courseStatus"
         />
       </div>
 
       <Select
-        v-model="availableTrainers"
+        v-model="addCourseDto.trainer"
         optionLabel="trainerName"
         placeholder="Trainer"
-        :options="['Kevin', 'Julia', 'Jeremy']"
+        :options="availableTrainers.data"
+        option-value="trainerId"
+        name="trainer"
         class="w-full"
       />
       <Select
         class="w-full"
-        v-model="place"
+        v-model="addCourseDto.place"
         placeholder="Ort"
-        :options="['Konrad-Adenauer', 'Fritz-Erler', 'Eutingen']"
+        :options="availablePlaces.data"
+        option-label="name"
+        option-value="id"
+        name="place"
       />
 
       <div class="flex gap-4 w-full justify-center items-center">
         <Button @click="open = false" class="w-24 h-10 px-4 py-2">Zurück</Button>
-        <Button @click="saveCourse()" class="w-24 h-10 px-4 py-2">
+        <Button type="submit" class="w-24 h-10 px-4 py-2">
           <ProgressSpinner
             v-if="isPending"
             style="
@@ -149,7 +205,7 @@ const trainingStatus = ref([
           <p v-else >Speichern</p>
         </Button>
       </div>
-    </div>
+    </Form>
   </Dialog>
 </template>
 

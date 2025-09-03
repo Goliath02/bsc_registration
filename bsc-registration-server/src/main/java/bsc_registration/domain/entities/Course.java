@@ -1,7 +1,6 @@
 package bsc_registration.domain.entities;
 
 import bsc_registration.enums.CourseStatus;
-import bsc_registration.webInterface.dto.CourseType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +28,8 @@ public class Course {
 	@Column
 	private String courseName;
 
-	@Column
+	@ManyToOne()
+  @JoinColumn(name = "course_type_id")
 	private CourseType courseType;
 
 	@Column

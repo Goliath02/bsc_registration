@@ -14,10 +14,10 @@ import java.time.LocalDate;
 public class CourseDto {
 	private Long courseId;
 	private String courseName;
-	private CourseType courseType;
+	private long courseTypeId;
 	private LocalDate startDate;
 	private LocalDate endDate;
-	private int numberOfParticipants;
+	private int numberOfMaxParticipants;
 	private int trainingUnits;
 	private long courseOwnerId;
 	private long placeId;
