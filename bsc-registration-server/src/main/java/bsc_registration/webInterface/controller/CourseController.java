@@ -2,6 +2,7 @@ package bsc_registration.webInterface.controller;
 
 import bsc_registration.domain.service.CourseService;
 import bsc_registration.domain.utils.DateUtil;
+import bsc_registration.webInterface.dto.CourseDetails;
 import bsc_registration.webInterface.dto.CourseDto;
 import bsc_registration.webInterface.dto.CreateCourseRequestDto;
 import bsc_registration.webInterface.dto.TrainingUnitsDto;
@@ -33,6 +34,11 @@ public class CourseController {
     return courseService.getALlCourses();
   }
 
+  @GetMapping("/{courseId}")
+  public CourseDetails getCourseDetails(@PathVariable(name = "courseId") final long courseId) {
+    return courseService.getCourseDetails(courseId);
+  }
+
   @PostMapping("/create")
   @Transactional(rollbackOn = Exception.class)
   public ResponseEntity createCourse(@RequestBody final CreateCourseRequestDto courseDto) {
@@ -52,7 +58,7 @@ public class CourseController {
 
   @DeleteMapping("/delete/{courseId}")
   @Transactional(rollbackOn = Exception.class)
-  public ResponseEntity deleteCourse(@RequestParam final Long courseId) {
+  public ResponseEntity deleteCourse(@PathVariable final Long courseId) {
     courseService.deleteCourse(courseId);
 
     return ResponseEntity.ok().build();

@@ -20,6 +20,7 @@ import TrainerPage from "@/AdminPannel/Pages/TrainerPage.vue";
 import SettingsPage from "@/AdminPannel/Pages/SettingsPage.vue";
 import MembersPage from "@/AdminPannel/Pages/MembersPage.vue";
 import TrainingPlacesPage from "@/AdminPannel/Pages/TrainingPlacesPage.vue";
+import CourseDetailsPage from "@/AdminPannel/Pages/CourseDetailsPage.vue";
 
 const routes = [
   {
@@ -74,6 +75,7 @@ const routes = [
       { path: "/dashboard", component: Dashboardpage, name: "Dashboard" },
       { path: "/profile", component: ProfilePage, name: "Profile" },
       { path: "/courses", component: CoursePage, name: "Courses" },
+      { path: "/course/:id", component: CourseDetailsPage, name: "course", props: true },
       { path: "/members", component: MembersPage, name: "Members" },
       {
         path: "/places",

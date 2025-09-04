@@ -6,6 +6,7 @@ import bsc_registration.infrastructure.repository.CourseRepository;
 import bsc_registration.infrastructure.repository.CourseTypeRepository;
 import bsc_registration.infrastructure.repository.TrainingPlaceRepository;
 import bsc_registration.infrastructure.repository.UserRepository;
+import bsc_registration.webInterface.dto.CourseDetails;
 import bsc_registration.webInterface.dto.CourseDto;
 import bsc_registration.webInterface.dto.CreateCourseRequestDto;
 import bsc_registration.webInterface.dto.TrainingUnitsDto;
@@ -124,4 +125,22 @@ public class CourseService {
 			throw new IllegalArgumentException("Course with id " + courseId + " not found");
 		}
 	}
+
+  public CourseDetails getCourseDetails(final long courseId) {
+
+    final Course course = courseRepository.findById(courseId).orElseThrow(IllegalArgumentException::new);
+
+    return new CourseDetails(
+      courseId,
+      course.getCourseName(),
+      course.getCourseType().getCourseTypeName(),
+      course.getStartDate(),
+      course.getEndDate(),
+      course.getNumberOfMaxParticipants(),
+      course.getTrainingUnits(),
+      course.getCourseStatus(),
+      course.getCourseOwner().getFullName(),
+      course.getPlace().getName()
+      );
+  }
 }

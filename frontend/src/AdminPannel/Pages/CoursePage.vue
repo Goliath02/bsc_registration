@@ -62,6 +62,7 @@ const openDialog = () => {
       <CourseCard v-else
         v-for="course of courses"
         :key="course.courseId"
+        :course-id="course.courseId"
         :course-name="course.courseName"
         :course-owner-name="course.courseOwnerName"
         :status="course.courseStatus"

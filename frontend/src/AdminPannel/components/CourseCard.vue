@@ -2,7 +2,7 @@
 import Card from "primevue/card";
 import ProgressBar from "primevue/progressbar";
 import { formatDate } from "@/utils/dateUtil";
-
+import router from "@/router.js";
 
 const props = defineProps({
   courseId: Number,
@@ -18,6 +18,10 @@ const props = defineProps({
   unitsDone: Number,
 });
 
+const routeToDetails = () => {
+  router.push("/course/" + props.courseId);
+}
+
 
 </script>
 
@@ -31,6 +35,7 @@ const props = defineProps({
     </template>
     <template #title>
       <div
+        @click="routeToDetails"
         class="flex items-center justify-between px-2 py-1 hover:bg-[#262626] rounded-lg transition-colors cursor-pointer"
       >
         <h3 class="underline font-bold">{{ courseName }}</h3>
