@@ -1,21 +1,24 @@
 <script setup lang="ts">
 import Card from "primevue/card";
 import ProgressBar from "primevue/progressbar";
+import { formatDate } from "@/utils/dateUtil";
 
 
 const props = defineProps({
   courseId: Number,
   courseName: String,
-  courseOwnerId: Number,
+  courseOwnerName: Number,
   status: String,
   startDate: String,
   endDate: String,
   trainingUnits: Number,
-  placeId: String,
+  placeName: String,
   numberOfMaxParticipants: Number,
   participants: Number,
   unitsDone: Number,
 });
+
+
 </script>
 
 <template>
@@ -42,15 +45,15 @@ const props = defineProps({
         class="flex items-center w-min px-2 gap-2 cursor-pointer hover:text-white transition-colors whitespace-nowrap"
       >
         <div class="pi pi-user"></div>
-        <div>{{ courseOwnerId }}</div>
+        <div>{{ courseOwnerName }}</div>
       </div>
     </template>
     <template #content>
       <div>
         <div class="flex flex-col gap-2 px-2">
           <div class="flex justify-between items-center font-bold">
-            <div>{{ startDate }}</div>
-            <div>{{ endDate }}</div>
+            <div>{{ formatDate(startDate) }}</div>
+            <div>{{ formatDate(endDate) }}</div>
           </div>
 
           <div class="px-4 flex flex-col gap-1 align-center justify-center">
@@ -74,7 +77,7 @@ const props = defineProps({
           class="flex items-center gap-2 cursor-pointer border border-transparent hover:bg-[#262626] px-2 py-2 rounded-lg transition-colors"
         >
           <div style="font-size: 1.2em" class="pi pi-map-marker"></div>
-          <h5>{{ placeId }}</h5>
+          <h5>{{ placeName }}</h5>
         </div>
 
         <div

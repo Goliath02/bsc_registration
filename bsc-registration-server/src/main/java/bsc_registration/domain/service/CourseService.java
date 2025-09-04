@@ -37,13 +37,14 @@ public class CourseService {
     return all.stream().map(course -> new CourseDto(
       course.getCourseId(),
       course.getCourseName(),
-      course.getCourseType().getCourseTypeId(),
+      course.getCourseType().getCourseTypeName(),
+      course.getCourseStatus(),
       course.getStartDate(),
       course.getEndDate(),
       course.getNumberOfParticipants(),
       course.getTrainingUnits(),
-      course.getCourseOwner().getUserId(),
-      course.getPlace().getId()
+      course.getCourseOwner().getFullName(),
+      course.getPlace().getName()
       )).toList();
   }
 

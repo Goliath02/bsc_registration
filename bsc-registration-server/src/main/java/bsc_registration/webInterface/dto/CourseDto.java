@@ -1,5 +1,6 @@
 package bsc_registration.webInterface.dto;
 
+import bsc_registration.enums.CourseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,11 +15,12 @@ import java.time.LocalDate;
 public class CourseDto {
 	private Long courseId;
 	private String courseName;
-	private long courseTypeId;
+	private String courseType;
+  private CourseStatus courseStatus;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private int numberOfMaxParticipants;
 	private int trainingUnits;
-	private long courseOwnerId;
-	private long placeId;
+	private String courseOwnerName;
+	private String placeName;
 }
