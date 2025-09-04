@@ -65,23 +65,23 @@ const invalidateDateCalulator = () => {
   queryClient.invalidateQueries({ queryKey: ['holidayInfo'] })
 };
 
-const { mutate: saveCourse, isPending, isSuccess, isError:isSaveCourseError } = useMutation({
+const { mutate: saveCourse, isPending, isSuccess, isError: isSaveCourseError } = useMutation({
   mutationFn: () =>
     apiClient.post("/api/course/create", {
-      title: addCourseDto.value.courseTitle,
-      type: addCourseDto.value.courseType,
-      fromDate: addCourseDto.value.startDate,
-      toDate: addCourseDto.value.trainingUnits,
-      totalUnits: addCourseDto.value.maxParticipants,
-      trainer: addCourseDto.value.courseStatus,
-      place: addCourseDto.value.trainer,
-      maxParticipants: addCourseDto.value.maxParticipants,
-      status: addCourseDto.value.courseStatus,
+      courseName: addCourseDto.value.courseTitle,
+      startDateTime: addCourseDto.value.startDate,
+      trainingUnits: addCourseDto.value.trainingUnits,
+      courseOwnerId: addCourseDto.value.trainer,
+      placeId: addCourseDto.value.place,
+      numberOfMaxParticipants: addCourseDto.value.maxParticipants,
+      courseTypeId: addCourseDto.value.courseType,
+      courseStatus: addCourseDto.value.courseStatus?.code
     }),
   onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['courses'] })
+    queryClient.invalidateQueries({ queryKey: ["courses"] });
+    open.value = false;
   }
-})
+});
 
 
 const onFormSubmit = (values) => {

@@ -22,8 +22,16 @@ public class Course {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long courseId;
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "courses")
-	private List<BscUser> user;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+    name = "course_members",
+    joinColumns = @JoinColumn(name = "course_id"),
+    inverseJoinColumns = @JoinColumn(name = "member_id")
+  )
+  private List<BscMember> members;
+
+  @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CourseTraining> courseTrainings;
 
 	@Column
 	private String courseName;
@@ -51,7 +59,7 @@ public class Course {
   @Enumerated(EnumType.STRING)
   private CourseStatus courseStatus;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private BscUser courseOwner;
 

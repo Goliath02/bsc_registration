@@ -1,11 +1,15 @@
 package bsc_registration.domain.service;
 
 import bsc_registration.domain.entities.*;
+import bsc_registration.domain.utils.DateUtil;
 import bsc_registration.infrastructure.repository.CourseRepository;
 import bsc_registration.infrastructure.repository.CourseTypeRepository;
 import bsc_registration.infrastructure.repository.TrainingPlaceRepository;
 import bsc_registration.infrastructure.repository.UserRepository;
 import bsc_registration.webInterface.dto.CourseDto;
+import bsc_registration.webInterface.dto.CreateCourseRequestDto;
+import bsc_registration.webInterface.dto.TrainingUnitsDto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,7 @@ public class CourseService {
   private final UserRepository userRepository;
   private final TrainingPlaceRepository placeRepository;
   private final CourseTypeRepository courseTypeRepository;
+  private final DateUtil dateUtil;
 
   public List<CourseDto> getALlCourses() {
     List<Course> all = courseRepository.findAll();
@@ -42,23 +47,12 @@ public class CourseService {
       )).toList();
   }
 
-	public List<HolidayDateInfo> getHolidayInfoForCourse(final LocalDate startDate, final LocalDate endDate) {
-		return courseRepository.getHolidayDateInfoBetweenDates(startDate, endDate);
-	}
-
 	public List<HolidayDateInfo> getAllHolidays() {
 		return courseRepository.getAllHolidays();
 	}
 
-	public boolean isDateBetweenHoliday(final LocalDate date) {
-		return courseRepository.isDateInHoliday(date);
-	}
-
-	public Optional<HolidayDateInfo> getDateInHoliday(final LocalDate date) {
-		return courseRepository.getDateInHoliday(date);
-	}
-
-	public void createCourse(final CourseDto courseDto) {
+  @Transactional(rollbackOn = Exception.class)
+	public void createCourse(final CreateCourseRequestDto courseDto) {
 
     final var courseBuilder = Course.builder();
 
@@ -67,8 +61,13 @@ public class CourseService {
     final CourseType courseType = courseTypeRepository.findById(courseDto.getCourseTypeId()).orElseThrow();
     courseBuilder.courseType(courseType);
 
-    courseBuilder.startDate(courseDto.getStartDate());
-    courseBuilder.endDate(courseDto.getEndDate());
+    courseBuilder.courseStatus(courseDto.getCourseStatus());
+
+    final TrainingUnitsDto trainingUnitsDto = dateUtil.calculateTrainingDates(courseDto.getStartDateTime()
+      .toLocalDate(), courseDto.getTrainingUnits(), getAllHolidays());
+
+    courseBuilder.startDate(courseDto.getStartDateTime().toLocalDate());
+    courseBuilder.endDate(trainingUnitsDto.getDates().getLast());
     courseBuilder.numberOfParticipants(courseDto.getNumberOfMaxParticipants());
     courseBuilder.trainingUnits(courseDto.getTrainingUnits());
 
@@ -80,8 +79,20 @@ public class CourseService {
 
     courseBuilder.place(place);
 
-		courseRepository.save(courseBuilder.build());
-	}
+    final Course course = courseBuilder.build();
+
+    List<LocalDate> dates = trainingUnitsDto.getDates();
+
+    List<CourseTraining> trainingUnits = dates.stream().map(d -> {
+      CourseTraining ct = new CourseTraining();
+      ct.setCourse(course);
+      return ct;
+    }).toList();
+
+    course.setCourseTrainings(trainingUnits);
+
+    courseRepository.save(course);
+  }
 
 	public void updateCourse(final CourseDto courseDto) {
 
@@ -101,7 +112,6 @@ public class CourseService {
 
 			courseRepository.save(course);
 		}
-
 	}
 
 	public void deleteCourse(final Long courseId) {

@@ -3,6 +3,7 @@ package bsc_registration.webInterface.controller;
 import bsc_registration.domain.service.CourseService;
 import bsc_registration.domain.utils.DateUtil;
 import bsc_registration.webInterface.dto.CourseDto;
+import bsc_registration.webInterface.dto.CreateCourseRequestDto;
 import bsc_registration.webInterface.dto.TrainingUnitsDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class CourseController {
   @GetMapping("/holidayDateInfo")
   public TrainingUnitsDto getHolidayDateInfo(@RequestParam OffsetDateTime startDate, @RequestParam final int trainingUnits) {
 
-    return dateUtil.calculateTrainingDates(startDate.toLocalDate(), trainingUnits);
+    return dateUtil.calculateTrainingDates(startDate.toLocalDate(), trainingUnits, courseService.getAllHolidays());
   }
 
 
@@ -34,7 +35,7 @@ public class CourseController {
 
   @PostMapping("/create")
   @Transactional(rollbackOn = Exception.class)
-  public ResponseEntity createCourse(@RequestBody final CourseDto courseDto) {
+  public ResponseEntity createCourse(@RequestBody final CreateCourseRequestDto courseDto) {
 
     courseService.createCourse(courseDto);
 

@@ -14,15 +14,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DateUtil {
 
-	private final CourseService courseService;
 
-	public TrainingUnitsDto calculateTrainingDates(LocalDate startDate, final int trainingUnits) {
+	public TrainingUnitsDto calculateTrainingDates(LocalDate startDate, final int trainingUnits, final List<HolidayDateInfo> allHolidays) {
 
 		final List<LocalDate> trainingDates = new ArrayList<>();
 
 		final List<HolidayDateInfo> holidayDates = new ArrayList<>();
 
-    List<HolidayDateInfo> allHolidays = courseService.getAllHolidays();
 
     int trainingUnitsPlanned = 0;
     LocalDate nextDate = startDate;
@@ -35,11 +33,12 @@ public class DateUtil {
           holidayDateInfo.getToDate()));
       } else {
         trainingDates.add(nextDate);
+        trainingUnitsPlanned++;
       }
 
       nextDate = nextDate.plusWeeks(1);
 
-    } while (trainingUnits != trainingUnitsPlanned++);
+    } while (trainingUnits != trainingUnitsPlanned);
 
     return new TrainingUnitsDto(trainingDates, trainingUnits, holidayDates.stream().distinct().toList());
 
