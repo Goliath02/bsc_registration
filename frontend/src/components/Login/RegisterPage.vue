@@ -2,28 +2,28 @@
 import { ref } from "vue";
 import { Button, InputText } from "primevue";
 import Bsc_header from "@/components/BSC_Header.vue";
+import {useMutation} from "@tanstack/vue-query";
+import {apiClient} from "@/apiClient";
+import router from "@/router"
 
 const email = ref("");
-const password = ref("");
+const signUpKey = ref("");
 
-const loading = ref(false);
-const logInFailed = ref(false);
+const { mutate: registerUser, isPending, isSuccess, isError } = useMutation({
+  mutationFn: () =>
+      apiClient.post(
+          "/api/auth/login",
+          {
+            email: email,
+            signUpKey: signUpKey,
+          },
+      ),
+  onSuccess: () => {
+    router.push("/changePassword");
+  }
+});
 
-async function handleLogin() {
-  loading.value = true;
-
-  // auth
-  //   .login(email.value, password.value)
-  //   .then()
-  //   .catch(() => {
-  //     logInFailed.value = true;
-  //   })
-  //   .finally(() => {
-  //     loading.value = false;
-  //   });
-}
 </script>
-
 <template>
   <Bsc_header />
   <main
@@ -61,7 +61,7 @@ async function handleLogin() {
             type="text"
             placeholder="Email address"
             class="w-full px-3 py-2 shadow-sm rounded-lg"
-            @keyup.enter="handleLogin"
+            @keyup.enter="registerUser()"
           />
         </div>
         <div class="flex flex-col gap-2 w-full">
@@ -71,12 +71,12 @@ async function handleLogin() {
             >Password</label
           >
           <InputText
-            v-model="password"
+            v-model="signUpKey"
             id="password1"
             type="password"
             placeholder="Password"
             class="w-full px-3 py-2 shadow-sm rounded-lg"
-            @keyup.enter="handleLogin"
+            @keyup.enter="registerUser()"
           />
         </div>
         <div
@@ -85,7 +85,7 @@ async function handleLogin() {
           <div class="flex items-center gap-2"></div>
 
           <div class="w-full h-5">
-            <Message v-if="logInFailed" class="w-full" severity="error"
+            <Message v-if="isError" class="w-full" severity="error"
               >Login failed, please check your credentials</Message
             >
           </div>
@@ -95,10 +95,10 @@ async function handleLogin() {
         label="Sign In"
         icon="pi pi-user"
         class="w-full py-2 rounded-lg flex justify-center items-center gap-2"
-        @click="handleLogin"
+        @click="registerUser()"
       >
         <ProgressSpinner
-          v-if="loading"
+          v-if="isPending"
           style="
             width: 1.5em;
             height: 1.5em;
