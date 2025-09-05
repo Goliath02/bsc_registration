@@ -21,6 +21,7 @@ import SettingsPage from "@/AdminPannel/Pages/SettingsPage.vue";
 import MembersPage from "@/AdminPannel/Pages/MembersPage.vue";
 import TrainingPlacesPage from "@/AdminPannel/Pages/TrainingPlacesPage.vue";
 import CourseDetailsPage from "@/AdminPannel/Pages/CourseDetailsPage.vue";
+import RegisterPage from "@/components/Login/RegisterPage.vue";
 
 const routes = [
   {
@@ -66,6 +67,11 @@ const routes = [
     component: LoginPage,
     name: "Login",
   },
+    {
+        path: "/register",
+        component: RegisterPage,
+        name: "Register",
+    },
   {
     path: "/courseManager",
     component: CourseManager,
