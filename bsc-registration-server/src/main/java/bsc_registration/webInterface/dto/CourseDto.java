@@ -16,7 +16,7 @@ public class CourseDto {
 	private Long courseId;
 	private String courseName;
 	private String courseType;
-  private CourseStatus courseStatus;
+    private CourseStatus courseStatus;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private int numberOfMaxParticipants;

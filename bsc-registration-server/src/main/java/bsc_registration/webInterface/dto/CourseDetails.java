@@ -14,7 +14,7 @@ public class CourseDetails {
 
   private String courseName;
 
-  private String courseType;
+  private long courseTypeId;
 
   private LocalDate startDate;
   private LocalDate endDate;
@@ -24,8 +24,8 @@ public class CourseDetails {
 
   private CourseStatus courseStatus;
 
-  private String courseOwnerName;
+  private long courseOwnerId;
 
-  private String placeName;
+  private long placeId;
 
 }

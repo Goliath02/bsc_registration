@@ -70,7 +70,7 @@ public class CourseService {
 
     courseBuilder.startDate(courseDto.getStartDateTime().toLocalDate());
     courseBuilder.endDate(trainingUnitsDto.getDates().getLast());
-    courseBuilder.numberOfParticipants(courseDto.getNumberOfMaxParticipants());
+    courseBuilder.numberOfMaxParticipants(courseDto.getNumberOfMaxParticipants());
     courseBuilder.trainingUnits(courseDto.getTrainingUnits());
 
     final BscUser courseOwner = userRepository.findById(courseDto.getCourseOwnerId()).orElseThrow();
@@ -96,25 +96,29 @@ public class CourseService {
     courseRepository.save(course);
   }
 
-	public void updateCourse(final CourseDto courseDto) {
+    public void updateCourse(final long courseId, final CreateCourseRequestDto courseDto) {
 
-		final Optional<Course> byId = courseRepository.findById(courseDto.getCourseId());
+        final Course courseToChange = courseRepository.findById(courseId).orElseThrow(() -> new IllegalArgumentException("Course with id " + courseId + " not found"));
+        final CourseType courseType = courseTypeRepository.findById(courseDto.getCourseTypeId()).orElseThrow();
+        final BscUser courseOwner = userRepository.findById(courseDto.getCourseOwnerId()).orElseThrow();
 
-		if (byId.isPresent()) {
-			final Course course = byId.get();
+        courseToChange.setCourseName(courseDto.getCourseName());
+        courseToChange.setCourseType(courseType);
+        courseToChange.setCourseOwner(courseOwner);
+        courseToChange.setTrainingUnits(courseDto.getTrainingUnits());
 
-			//TODO finish (should fetch courseOwner by id +  set type + placeById
-			course.setCourseName(course.getCourseName());
-			course.setCourseType(course.getCourseType());
-			course.setCourseOwner(course.getCourseOwner());
-			course.setTrainingUnits(course.getTrainingUnits());
-			course.setStartDate(course.getStartDate());
-			course.setEndDate(course.getEndDate());
-			course.setNumberOfParticipants(course.getNumberOfParticipants());
+        final TrainingUnitsDto trainingUnitsDto = dateUtil.calculateTrainingDates(courseDto.getStartDateTime()
+                .toLocalDate(), courseDto.getTrainingUnits(), getAllHolidays());
 
-			courseRepository.save(course);
-		}
-	}
+        courseToChange.setStartDate(courseDto.getStartDateTime().toLocalDate());
+        courseToChange.setEndDate(trainingUnitsDto.getDates().getLast());
+
+        courseToChange.setStartDate(courseDto.getStartDateTime().toLocalDate());
+        courseToChange.setEndDate(courseToChange.getEndDate());
+        courseToChange.setNumberOfParticipants(courseToChange.getNumberOfParticipants());
+
+        courseRepository.save(courseToChange);
+    }
 
 	public void deleteCourse(final Long courseId) {
 		final Optional<Course> byId = courseRepository.findById(courseId);
@@ -133,14 +137,14 @@ public class CourseService {
     return new CourseDetails(
       courseId,
       course.getCourseName(),
-      course.getCourseType().getCourseTypeName(),
+      course.getCourseType().getCourseTypeId(),
       course.getStartDate(),
       course.getEndDate(),
       course.getNumberOfMaxParticipants(),
       course.getTrainingUnits(),
       course.getCourseStatus(),
-      course.getCourseOwner().getFullName(),
-      course.getPlace().getName()
+      course.getCourseOwner().getUserId(),
+      course.getPlace().getId()
       );
   }
 }

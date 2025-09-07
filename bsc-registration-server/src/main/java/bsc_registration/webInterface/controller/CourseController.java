@@ -48,10 +48,10 @@ public class CourseController {
     return ResponseEntity.ok().build();
   }
 
-  @PutMapping("/update")
+  @PutMapping("/update/{courseId}")
   @Transactional(rollbackOn = Exception.class)
-  public ResponseEntity updateCourse(final CourseDto courseDto) {
-    courseService.updateCourse(courseDto);
+  public ResponseEntity updateCourse(@PathVariable final long courseId, final CreateCourseRequestDto courseDto) {
+    courseService.updateCourse(courseId, courseDto);
 
     return ResponseEntity.ok().build();
   }
