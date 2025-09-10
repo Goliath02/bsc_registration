@@ -11,7 +11,7 @@ export async function getTrainers(): Promise<Trainer[]> {
     return response.data
 }
 
-const getTrainerById = (trainerId: number, availableTrainers: Trainer[]) : Trainer | undefined => {
+export const getTrainerById = (trainerId: number, availableTrainers: Trainer[]) : Trainer | undefined => {
     return availableTrainers.find(trainer => trainer.trainerId === trainerId);
 }
 
@@ -33,7 +33,7 @@ export async function getTrainingPlaces(): Promise<Place[]> {
     return response.data;
 }
 
-const getTrainingPlaceById = (placeId: number, trainingPlaces: Place[]) : Place | undefined => {
+export const getTrainingPlaceById = (placeId: number, trainingPlaces: Place[]) : Place | undefined => {
     return trainingPlaces.find(place => place.placeId === placeId);
 }
 
@@ -47,6 +47,6 @@ export async function getCourseTypes(): Promise<CourseType[]> {
     return response.data;
 }
 
-const gerCourseTypeById = (courseTypeId: number, courseTypes: CourseType[]) : CourseType | undefined => {
+export const gerCourseTypeById = (courseTypeId: number, courseTypes: CourseType[]) : CourseType | undefined => {
     return courseTypes.find(courseType => courseType.courseTypeId === courseTypeId);
 }

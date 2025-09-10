@@ -7,9 +7,26 @@ import { formatDate } from "@/utils/dateUtil";
 import { ref } from "vue";
 import DeleteCourseDialog from "@/AdminPannel/components/DeleteCourseDialog.vue";
 import AddCourseDialog from "@/AdminPannel/components/AddCourseDialog.vue";
-import {Trainer} from "@/service/InfoService";
+import { CourseType, getCourseTypes, getTrainers, getTrainingPlaces, getTrainingPlaceById, gerCourseTypeById,
+  getTrainerById, Place, Trainer } from "@/service/InfoService";
 
 const route = useRoute();
+
+const {data: availableTrainers, isLoading: trainersLoading} = useQuery<Trainer[]>({
+  queryKey: ['trainers'],
+  queryFn: getTrainers
+})
+
+const {data: availablePlaces, isLoading: placesLoading} = useQuery({
+  queryKey: ['trainingPlaces'],
+  queryFn: getTrainingPlaces
+})
+
+const {data: availableCourseTypes, isLoading: courseTypesLoading} = useQuery({
+  queryKey: ['courseTypes'],
+  queryFn: getCourseTypes
+})
+
 
 const courseId = route.params.id;
 
@@ -29,9 +46,6 @@ export type CourseDetails = {
   placeId: number
 }
 
-const getTrainerById = (trainerId: number) : Trainer | undefined => {
-  return availableTrainers.find(trainer => trainer.trainerId === trainerId);
-}
 
 const getCourseDetails = async (): CourseDetails => {
   return (await apiClient.get("/api/course/" + courseId)).data;
@@ -68,13 +82,13 @@ const { data: courseDetails, isLoading } = useQuery<CourseDetails>({
     <AddCourseDialog v-model="isChangeDialogOpen"
                      :is-change="true"
                      :course-title="courseDetails.courseName"
-                     :course-type="courseDetails.courseType"
+                     :course-type="gerCourseTypeById(courseDetails.courseTypeId, availableCourseTypes).courseTypeName"
                      :start-date="courseDetails.startDate"
                      :training-units="courseDetails.trainingUnits"
                      :max-participants="courseDetails.numberOfMaxParticipants"
                      :course-status="courseDetails.courseStatus"
-                     :trainer="courseDetails.courseOwnerName"
-                     :place="courseDetails.placeName"
+                     :trainer="getTrainerById(courseDetails.courseOwnerId, availableTrainers).trainerName"
+                     :place="getTrainingPlaceById(courseDetails.placeId, availablePlaces).name"
     />
     <div class="flex justify-between mx-8 mt-4">
     </div>
@@ -95,12 +109,12 @@ const { data: courseDetails, isLoading } = useQuery<CourseDetails>({
       <div class="flex gap-16">
 
         <div class="flex flex-col gap-4">
-          <div>{{courseDetails.courseOwnerName}}</div>
+          <div>{{getTrainerById(courseDetails.courseOwnerId).trainerName}}</div>
           <div>{{formatDate(courseDetails.startDate)}}</div>
         </div>
 
         <div class="flex flex-col gap-4">
-          <div>{{courseDetails.placeName}}</div>
+          <div>{{getTrainingPlaceById(courseDetails.placeId).name}}</div>
           <div>{{formatDate(courseDetails.endDate)}}</div>
         </div>
 
