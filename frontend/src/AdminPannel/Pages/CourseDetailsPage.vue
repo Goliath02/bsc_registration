@@ -7,6 +7,7 @@ import { formatDate } from "@/utils/dateUtil";
 import { ref } from "vue";
 import DeleteCourseDialog from "@/AdminPannel/components/DeleteCourseDialog.vue";
 import AddCourseDialog from "@/AdminPannel/components/AddCourseDialog.vue";
+import {Trainer} from "@/service/InfoService";
 
 const route = useRoute();
 
@@ -18,14 +19,18 @@ const isChangeDialogOpen = ref(false);
 export type CourseDetails = {
   courseId: number
   courseName: string
-  courseType: string
+  courseTypeId: number
   startDate: Date
   endDate: string
   numberOfMaxParticipants: number
   trainingUnits: number
   courseStatus: string
-  courseOwnerName: string
-  placeName: string
+  courseOwnerId: number
+  placeId: number
+}
+
+const getTrainerById = (trainerId: number) : Trainer | undefined => {
+  return availableTrainers.find(trainer => trainer.trainerId === trainerId);
 }
 
 const getCourseDetails = async (): CourseDetails => {

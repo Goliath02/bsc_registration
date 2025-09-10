@@ -137,14 +137,14 @@ public class CourseService {
     return new CourseDetails(
       courseId,
       course.getCourseName(),
-      course.getCourseType().getCourseTypeName(),
+      course.getCourseType().getCourseTypeId(),
       course.getStartDate(),
       course.getEndDate(),
       course.getNumberOfMaxParticipants(),
       course.getTrainingUnits(),
       course.getCourseStatus(),
-      course.getCourseOwner().getFullName(),
-      course.getPlace().getName()
+      course.getCourseOwner().getUserId(),
+      course.getPlace().getId()
       );
   }
 }

@@ -2,7 +2,7 @@
 import {computed, onMounted, ref} from "vue";
 import CourseTimeFrameInfo from "@/AdminPannel/components/CourseTimeFrameInfo.vue";
 import {getHolidayInfo} from "@/service/DateService";
-import {getCourseTypes, getTrainers, getTrainingPlaces} from "@/service/InfoService";
+import {getCourseTypes, getTrainers, getTrainingPlaces, Trainer} from "@/service/InfoService";
 import {apiClient} from "@/apiClient";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/vue-query";
 import {yupResolver} from "@primevue/forms/resolvers/yup";
@@ -52,10 +52,10 @@ const resolver = yupResolver(
     yup.object().shape({
       courseTitle: yup.string().required(),
       courseType: yup.string().required(),
-      startDate: yup.date().required("Geburtsdatum angeben."),
+      startDate: yup.date().required(),
       trainingUnits: yup.number().required(),
       maxParticipants: yup.number().required(),
-      courseStatus: yup.object().required(),
+      courseStatus: yup.string().required(),
       trainer: yup.number().required(),
       place: yup.number().required()
     }),
@@ -63,7 +63,7 @@ const resolver = yupResolver(
 
 const queryClient = useQueryClient();
 
-const {data: availableTrainers, isLoading: trainersLoading} = useQuery({
+const {data: availableTrainers, isLoading: trainersLoading} = useQuery<Trainer[]>({
   queryKey: ['trainers'],
   queryFn: getTrainers
 })
@@ -178,7 +178,7 @@ const trainingStatus = ref([
           class="w-full"
           v-model="addCourseDto.courseType"
           placeholder="Kurs Typ"
-          :options="availableCourseTypes.data"
+          :options="availableCourseTypes"
           option-label="courseTypeName"
           option-value="courseTypeId"
           name="courseType"
@@ -222,7 +222,7 @@ const trainingStatus = ref([
           v-model="addCourseDto.trainer"
           optionLabel="trainerName"
           placeholder="Trainer"
-          :options="availableTrainers.data"
+          :options="availableTrainers"
           option-value="trainerId"
           name="trainer"
           class="w-full"
@@ -231,7 +231,7 @@ const trainingStatus = ref([
           class="w-full"
           v-model="addCourseDto.place"
           placeholder="Ort"
-          :options="availablePlaces.data"
+          :options="availablePlaces"
           option-label="name"
           option-value="id"
           name="place"
