@@ -22,10 +22,10 @@ const resolver = yupResolver(
     surename: yup.string().required("Nachname wird benötigt."),
     birthday: yup.date().required("Geburtsdatum angeben."),
     gender: yup.string().required("Geschlecht angeben."),
-    email: yup.string().required("Email wird benötigt."),
-    phone: yup.string().required("Telefonnummer wird benötigt."),
+    email: yup.string().email("Bitte ein gültige Email angeben").required("Email wird benötigt."),
+    phone: yup.string().matches(/^[0-9]+$/, "Es sind nur Zahlen erlaubt").required("Telefonnummer wird benötigt."),
     street: yup.string().required("Straße wird benötigt."),
-    plz: yup.string().required("Postleitzahl wird benötigt."),
+    plz: yup.string().matches(/^[0-9]+$/, "Es sind nur Zahlen erlaubt").required("Postleitzahl wird benötigt."),
     place: yup.string().required("Ort wird benötigt."),
     file: yup
       .mixed()
