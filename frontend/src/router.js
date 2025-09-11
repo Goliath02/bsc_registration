@@ -60,30 +60,30 @@ const routes = [
     ],
   },
 
-  {
-    path: "/login",
-    component: LoginPage,
-    name: "Login",
-  },
-  {
-    path: "/courseManager",
-    component: CourseManager,
-    name: "CourseManager",
-    meta: { requiresAuth: true },
-    children: [
-      { path: "/dashboard", component: Dashboardpage, name: "Dashboard" },
-      { path: "/profile", component: ProfilePage, name: "Profile" },
-      { path: "/courses", component: CoursePage, name: "Courses" },
-      { path: "/members", component: MembersPage, name: "Members" },
-      {
-        path: "/places",
-        component: TrainingPlacesPage,
-        name: "TrainingPlaces",
-      },
-      { path: "/trainer", component: TrainerPage, name: "Trainer" },
-      { path: "/settings", component: SettingsPage, name: "Settings" },
-    ],
-  },
+  // {
+  //   path: "/login",
+  //   component: LoginPage,
+  //   name: "Login",
+  // },
+  // {
+  //   path: "/courseManager",
+  //   component: CourseManager,
+  //   name: "CourseManager",
+  //   meta: { requiresAuth: true },
+  //   children: [
+  //     { path: "/dashboard", component: Dashboardpage, name: "Dashboard" },
+  //     { path: "/profile", component: ProfilePage, name: "Profile" },
+  //     { path: "/courses", component: CoursePage, name: "Courses" },
+  //     { path: "/members", component: MembersPage, name: "Members" },
+  //     {
+  //       path: "/places",
+  //       component: TrainingPlacesPage,
+  //       name: "TrainingPlaces",
+  //     },
+  //     { path: "/trainer", component: TrainerPage, name: "Trainer" },
+  //     { path: "/settings", component: SettingsPage, name: "Settings" },
+  //   ],
+  // },
 ];
 
 const router = createRouter({
@@ -107,7 +107,7 @@ router.beforeEach(async (to, from, next) => {
     next(); // Zugriff erlaubt
   } catch (error) {
     console.warn("Nicht eingeloggt");
-    next("/login"); // Weiterleitung zur Login-Seite
+    next("/"); // Weiterleitung zur Login-Seite
   }
 });
 export default router;
