@@ -78,6 +78,8 @@ public class RegistrationController {
 			return ResponseEntity.status(400).body(Errors.EMAIL_NOT_FOUND);
 		}
 
+    registrationService.saveRegistration(formData);
+
 		return ResponseEntity.ok().build();
 	}
 

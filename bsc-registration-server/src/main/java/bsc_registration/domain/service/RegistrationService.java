@@ -105,4 +105,11 @@ public class RegistrationService {
 		return configLoader.loadCourses();
 	}
 
+  public void saveRegistration(final FormData formData) {
+
+
+
+
+
+  }
 }
