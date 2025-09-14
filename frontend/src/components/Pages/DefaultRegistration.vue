@@ -232,6 +232,7 @@ onMounted(() => {
           class="w-full"
           name="birthday"
           v-model="useRegistrationStore().registrationData.mainData.birthday"
+          dateFormat="dd.mm.yy"
           inputId="dd-date"
           showIcon
           iconDisplay="input"

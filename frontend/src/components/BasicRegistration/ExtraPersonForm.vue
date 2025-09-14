@@ -15,7 +15,7 @@ const genders = ["Männlich", "Weiblich", "Divers"];
     <div class="flex justify-between">
       <h3 class="font-bold text-[1.2em]">Extra Person {{ props.index + 1 }}</h3>
       <button
-        class="fill-stone-400 hover:fill-stone-200"
+        class="fill-stone-400 hover:fill-stone-200 hover:cursor-pointer"
         @click="useRegistrationStore().removeExtraPersonForm(props.index)"
       >
         <svg

@@ -1,12 +1,15 @@
 package bsc_registration.domain.service;
 
+import bsc_registration.domain.entities.BscMember;
 import bsc_registration.domain.entities.NswRegistration;
 import bsc_registration.domain.utils.CsvUtil;
 import bsc_registration.domain.utils.DevUtil;
 import bsc_registration.infrastructure.config.BscCourseConfig;
 import bsc_registration.infrastructure.config.ConfigLoader;
+import bsc_registration.infrastructure.repository.BscMemberRepository;
 import bsc_registration.infrastructure.repository.NswRegistrationRepository;
 import bsc_registration.webInterface.dto.ExtraPerson;
+import bsc_registration.webInterface.dto.FinancialData;
 import bsc_registration.webInterface.dto.FormData;
 import bsc_registration.webInterface.dto.MainData;
 import jakarta.mail.MessagingException;
@@ -32,6 +35,7 @@ public class RegistrationService {
 	final private ConfigLoader configLoader;
 
 	final private NswRegistrationRepository nswRepository;
+	final private BscMemberRepository memberRepository;
 
 	final private DevUtil devUtil;
 	final private CsvUtil csvUtil;
@@ -71,35 +75,59 @@ public class RegistrationService {
 
 	public void setOnRegistrationNswList(final FormData formData) {
 
-		final MainData mainData = formData.mainData();
-		final List<ExtraPerson> extraPeople = formData.mainData().morePersons();
+    final MainData mainData = formData.mainData();
+    final FinancialData financialData = formData.financial();
+    final List<ExtraPerson> extraPeople = formData.mainData().morePersons();
 
-		final List<NswRegistration> registrations = new ArrayList<>();
+    final List<NswRegistration> registrations = new ArrayList<>();
 
-		final var mainRegistration = new NswRegistration(
-				null,
-				mainData.name(),
-				mainData.surename(),
-				mainData.email(),
-				mainData.phone(),
-				LocalDate.now()
-		);
+    final var mainRegistration = new NswRegistration(
+      null,
+      mainData.name(),
+      mainData.surename(),
+      mainData.email(),
+      mainData.phone(),
+      LocalDate.now(),
+      mainData.type(),
+      mainData.reason(),
+      mainData.birthday(),
+      mainData.gender(),
+      mainData.street(),
+      mainData.plz(),
+      mainData.place(),
+      mainData.entryDate(),
+      financialData.iban(),
+      financialData.nameOfBankOwner(),
+      financialData.sureNameBankOwner()
+    );
 
-		registrations.add(mainRegistration);
+    registrations.add(mainRegistration);
 
-		for (ExtraPerson extraPerson : extraPeople) {
-			final var extraRegistration = new NswRegistration(
-					null,
-					extraPerson.extraName(),
-					extraPerson.extraSureName(),
-					mainData.email(),
-					mainData.phone(),
-					LocalDate.now()
-			);
-			registrations.add(extraRegistration);
-		}
-		nswRepository.saveAll(registrations);
-	}
+    for (ExtraPerson extraPerson : extraPeople) {
+      final var extraRegistration = new NswRegistration(
+        null,
+        extraPerson.extraName(),
+        extraPerson.extraSureName(),
+        mainData.email(),
+        mainData.phone(),
+        LocalDate.now(),
+        mainData.type(),
+        mainData.reason(),
+        mainData.birthday(),
+        extraPerson.extraGender(),
+        mainData.street(),
+        mainData.plz(),
+        mainData.place(),
+        mainData.entryDate(),
+        financialData.iban(),
+        financialData.nameOfBankOwner(),
+        financialData.sureNameBankOwner()
+
+      );
+      registrations.add(extraRegistration);
+    }
+    nswRepository.saveAll(registrations);
+  }
 
 	public List<String> getCourses() {
 		return configLoader.loadCourses();
@@ -107,9 +135,57 @@ public class RegistrationService {
 
   public void saveRegistration(final FormData formData) {
 
+    final MainData mainData = formData.mainData();
+    final FinancialData financialData = formData.financial();
+    final List<ExtraPerson> extraPeople = formData.mainData().morePersons();
 
+    final List<BscMember> registrations = new ArrayList<>();
 
+    final var mainRegistration = new BscMember(
+      null,
+      mainData.name(),
+      mainData.surename(),
+      mainData.email(),
+      mainData.phone(),
+      LocalDate.now(),
+      mainData.type(),
+      mainData.reason(),
+      mainData.birthday(),
+      mainData.gender(),
+      mainData.street(),
+      mainData.plz(),
+      mainData.place(),
+      mainData.entryDate(),
+      financialData.iban(),
+      financialData.nameOfBankOwner(),
+      financialData.sureNameBankOwner()
+    );
 
+    registrations.add(mainRegistration);
 
+    for (ExtraPerson extraPerson : extraPeople) {
+      final var extraRegistration = new BscMember(
+        null,
+        extraPerson.extraName(),
+        extraPerson.extraSureName(),
+        mainData.email(),
+        mainData.phone(),
+        LocalDate.now(),
+        mainData.type(),
+        mainData.reason(),
+        mainData.birthday(),
+        extraPerson.extraGender(),
+        mainData.street(),
+        mainData.plz(),
+        mainData.place(),
+        mainData.entryDate(),
+        financialData.iban(),
+        financialData.nameOfBankOwner(),
+        financialData.sureNameBankOwner()
+
+      );
+      registrations.add(extraRegistration);
+    }
+    memberRepository.saveAll(registrations);
   }
 }

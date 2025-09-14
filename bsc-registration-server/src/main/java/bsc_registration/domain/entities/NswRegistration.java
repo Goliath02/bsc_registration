@@ -42,12 +42,6 @@ public class NswRegistration {
   private String reason;
 
   @Column
-  private String name;
-
-  @Column
-  private String surename;
-
-  @Column
   private LocalDate birthday;
 
   @Column
@@ -64,9 +58,6 @@ public class NswRegistration {
 
   @Column
   private LocalDate entryDate;
-
-  @Column
-  private List<ExtraPerson> morePersons;
 
   @Column
   private String iban;

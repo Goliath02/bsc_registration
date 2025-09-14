@@ -65,6 +65,8 @@ public class RegistrationController {
 			}
 		}
 
+    registrationService.saveRegistration(formData);
+
 		try {
 			registrationService.sendEmailToRegisteredUser(formData);
 			registrationService.sendEmailToRegistration(formData, studentIdentificationFiles);
@@ -77,8 +79,6 @@ public class RegistrationController {
 
 			return ResponseEntity.status(400).body(Errors.EMAIL_NOT_FOUND);
 		}
-
-    registrationService.saveRegistration(formData);
 
 		return ResponseEntity.ok().build();
 	}
