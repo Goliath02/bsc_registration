@@ -99,6 +99,7 @@ const genders = ["Männlich", "Weiblich", "Divers"];
               :inputId="`extraBirthday-${index}`"
               :name="`morePersons[${index}].extraBirthday`"
               v-model="extraModelValues.extraBirthday"
+              dateFormat="dd.mm.yy"
               showIcon
               iconDisplay="input"
             />

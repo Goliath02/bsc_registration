@@ -1,16 +1,10 @@
 services:
   api:
-    image: goliath02/bsc_registration:1.0.1
+    image: goliath02/bsc_registration:2.0
     container_name: bsc-registration-server
     platform: ${DOCKER_DEFAULT_PLATFORM}
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - MAIL_PASSWORD=${MAIL_PASSWORD}
-      - MAIL_USERNAME=${MAIL_USERNAME}
-      - SENDER_MAIL=${SENDER_MAIL}
-      - SPRING_DATASOURCE_URL=${POSTGRES_DATABASE_URL}
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+    env_file:
+      - dev.env
     volumes:
       - ./logs:/app/logs
       - ./config:/app/config
@@ -19,8 +13,6 @@ services:
       - postgres_db
     networks:
       - backend
-    profiles:
-      - prod
 
   nginx:
     image: nginx:1.27.2-alpine-slim
@@ -33,42 +25,20 @@ services:
     restart: always
     networks:
       - backend
-    profiles:
-      - prod
 
   postgres_db:
     image: postgres:latest
     platform: ${DOCKER_DEFAULT_PLATFORM}
     container_name: PostgresCont
     restart: always
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=bank
+    env_file:
+      - dev.env
     ports:
       - '127.0.0.1:5432:5432'
     volumes:
       - ./db:/data/postgres
     networks:
       - backend
-    profiles:
-      - prod
-
-  postgres_dev:
-    image: postgres:latest
-    container_name: postgres-dev
-    restart: always
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=bank
-    ports:
-      - '5432:5432'
-    volumes:
-      - ./db:/data/postgres
-    profiles:
-      - dev
-
 
 networks:
   backend:

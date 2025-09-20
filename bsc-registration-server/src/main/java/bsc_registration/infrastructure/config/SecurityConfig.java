@@ -40,7 +40,11 @@ public class SecurityConfig {
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests ->
 						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/api/auth/login",
-										"/api/auth/signUp")
+										"/api/auth/signUp",
+                                        "/assets/**",
+                                        "/BSCSpear.ico",
+                                        "/index.html"
+                                )
 								.permitAll()
 								.requestMatchers(HttpMethod.POST, "/api/auth/key/create", "/api/mail/send", "/api/mail/sendAll")
 								.hasAuthority("ADMIN")

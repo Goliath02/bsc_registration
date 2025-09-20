@@ -21,7 +21,7 @@ FROM amazoncorretto:21-alpine
 
 WORKDIR /app
 
-COPY ./config/bscConf.json ./config/
+COPY ./bsc-registration-server/src/main/resources/bscConf.json ./config/bscConf.json
 
 COPY --from=serverbuilder ./server/target/*.jar app.jar
 ENTRYPOINT ["java","-jar","app.jar"]

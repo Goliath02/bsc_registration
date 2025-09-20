@@ -173,7 +173,7 @@ public class RegistrationService {
         LocalDate.now(),
         mainData.type(),
         mainData.reason(),
-        mainData.birthday(),
+        extraPerson.extraBirthday(),
         extraPerson.extraGender(),
         mainData.street(),
         mainData.plz(),
