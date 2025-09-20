@@ -19,8 +19,6 @@ services:
       - postgres_db
     networks:
       - backend
-    profiles:
-      - prod
 
   nginx:
     image: nginx:1.27.2-alpine-slim
@@ -33,8 +31,6 @@ services:
     restart: always
     networks:
       - backend
-    profiles:
-      - prod
 
   postgres_db:
     image: postgres:latest
@@ -51,24 +47,6 @@ services:
       - ./db:/data/postgres
     networks:
       - backend
-    profiles:
-      - prod
-
-  postgres_dev:
-    image: postgres:latest
-    container_name: postgres-dev
-    restart: always
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=bank
-    ports:
-      - '5432:5432'
-    volumes:
-      - ./db:/data/postgres
-    profiles:
-      - dev
-
 
 networks:
   backend:
