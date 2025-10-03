@@ -22,6 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
@@ -32,7 +34,17 @@ public class SecurityConfig {
 
 	private final UserRepository userRepository;
 
-	@Bean
+    @Configuration
+    public class WebConfig implements WebMvcConfigurer {
+        @Override
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
+            registry.addResourceHandler("/assets/**")
+                    .addResourceLocations("classpath:/static/assets/");
+        }
+    }
+
+
+    @Bean
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter, LoginRateFilter loginRateFilter) throws Exception {
 
 		return http
@@ -40,10 +52,11 @@ public class SecurityConfig {
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests ->
 						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/api/auth/login",
-										"/api/auth/signUp",
+                                         "/index.html",
                                         "/assets/**",
                                         "/BSCSpear.ico",
-                                        "/index.html"
+                                        "/**/*.css", "/**/*.js",
+                                        "/**/*.png", "/**/*.jpg", "/**/*.svg", "/**/*.ico"
                                 )
 								.permitAll()
 								.requestMatchers(HttpMethod.POST, "/api/auth/key/create", "/api/mail/send", "/api/mail/sendAll")
@@ -87,17 +100,21 @@ public class SecurityConfig {
 		return authProvider;
 	}
 
-	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(List.of("http://localhost:5173")); // dein Frontend
-		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-		configuration.setAllowedHeaders(List.of("*"));
-		configuration.setExposedHeaders(List.of("Authorization"));
-		configuration.setAllowCredentials(true);
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://registration.erster-bsc-pforzheim.de"
+        ));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Authorization"));
+        configuration.setAllowCredentials(true);
 
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 }
