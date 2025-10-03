@@ -11,9 +11,9 @@ WORKDIR /server
 
 COPY ./bsc-registration-server ./
 
+COPY --from=node ./frontend/dist/index.html ./src/main/resources/static/index.html
 COPY --from=node ./frontend/dist/assets ./src/main/resources/static/assets
 COPY --from=node ./frontend/dist/BSCSpear.ico ./src/main/resources/static/BSCSpear.ico
-COPY --from=node ./frontend/dist/*.html ./src/main/resources/templates/index.html
 
 RUN mvn package
 
