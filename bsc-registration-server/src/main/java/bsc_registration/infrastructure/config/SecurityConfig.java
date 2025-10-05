@@ -49,7 +49,7 @@ public class SecurityConfig {
 
 		return http
 				.cors(cors -> cors.configurationSource(corsConfigurationSource())) // <-- Aktivieren statt deaktivieren
-				.csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests ->
 						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/api/auth/login",
                                          "/index.html",
@@ -59,6 +59,7 @@ public class SecurityConfig {
                                         "/**/*.png", "/**/*.jpg", "/**/*.svg", "/**/*.ico"
                                 )
 								.permitAll()
+                                .requestMatchers(HttpMethod.POST, "/registrate").permitAll()
 								.requestMatchers(HttpMethod.POST, "/api/auth/key/create", "/api/mail/send", "/api/mail/sendAll")
 								.hasAuthority("ADMIN")
 								.requestMatchers("api/course/", "api/info/**")
@@ -109,8 +110,7 @@ public class SecurityConfig {
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setExposedHeaders(List.of("Authorization"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

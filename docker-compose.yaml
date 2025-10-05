@@ -27,7 +27,7 @@ services:
       - backend
 
   postgres_db:
-    image: postgres:latest
+    image: postgres:17-alpine
     platform: ${DOCKER_DEFAULT_PLATFORM}
     container_name: PostgresCont
     restart: always
