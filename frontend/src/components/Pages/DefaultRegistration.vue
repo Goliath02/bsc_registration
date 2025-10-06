@@ -10,6 +10,8 @@ import { computed, onMounted, ref } from "vue";
 import axios from "axios";
 import Button from "primevue/button";
 import Popover from "primevue/popover";
+import DatePicker from "primevue/datepicker";
+import FloatLabel from "primevue/floatlabel";
 import * as yup from "yup";
 import { yupResolver } from "@primevue/forms/resolvers/yup";
 import router from "@/router.js";
@@ -226,7 +228,7 @@ onMounted(() => {
       </FloatLabel>
     </div>
 
-    <div class="flex gap-[1.5em]">
+    <div class="flex gap-[1.5em] w-full">
       <FloatLabel variant="in" class="w-full">
         <DatePicker
           class="w-full"
@@ -235,6 +237,7 @@ onMounted(() => {
           dateFormat="dd.mm.yy"
           inputId="dd-date"
           showIcon
+          fluid
           iconDisplay="input"
         />
         <label for="dd-date">Geburtsdatum</label>
@@ -366,6 +369,7 @@ onMounted(() => {
             v-model="useRegistrationStore().registrationData.mainData.entryDate"
             inputId="dd-entry"
             showIcon
+            fluid
             iconDisplay="input"
           />
           <label for="dd-entry">Anmeldedatum</label>
