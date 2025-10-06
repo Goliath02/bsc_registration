@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { Button, InputText } from "primevue";
 import Bsc_header from "@/components/BSC_Header.vue";
+import { useAuthStore } from "@/stores/authStore";
 
 const email = ref("");
 const password = ref("");
@@ -9,18 +10,20 @@ const password = ref("");
 const loading = ref(false);
 const logInFailed = ref(false);
 
+const auth = useAuthStore();
+
 async function handleLogin() {
   loading.value = true;
 
-  // auth
-  //   .login(email.value, password.value)
-  //   .then()
-  //   .catch(() => {
-  //     logInFailed.value = true;
-  //   })
-  //   .finally(() => {
-  //     loading.value = false;
-  //   });
+  auth
+    .login(email.value, password.value)
+    .then()
+    .catch(() => {
+      logInFailed.value = true;
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 }
 </script>
 
