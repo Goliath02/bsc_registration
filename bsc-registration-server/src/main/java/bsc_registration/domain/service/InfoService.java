@@ -21,6 +21,7 @@ public class InfoService {
   private final TrainingPlaceRepository placeRepository;
   private final CourseTypeRepository courseTypeRepository;
 
+  @Deprecated
   public List<TrainerInfoDto> getAllTrainers() {
 
     List<BscUser> userByAuthority = userRepository.findUserByAuthorityId(AuthorityType.COURSE_OWNER);
@@ -28,6 +29,7 @@ public class InfoService {
     return userByAuthority.stream().map(trainer -> new TrainerInfoDto(trainer.getUserId(), trainer.getFullName())).toList();
   }
 
+  @Deprecated
   public List<TrainingPlace> getAllTrainingPlaces() {
     return placeRepository.findAll();
   }
