@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +37,29 @@ import static java.lang.String.format;
 public class EmailService {
 
 	public static final String BASIC_MAIL_TITEL = "1.BSC Pforzheim Info";
-	private final MailSenderConfig mailSenderConfig;
+    public static final String INVITE_TEMPLATE = "InviteTemplate";
+    private final MailSenderConfig mailSenderConfig;
 
 	private final BscMemberRepository bscMemberRepository;
+
+    public void sendTrainerInviteMail(final String email, final String signUpKey) throws MessagingException, MailSendException, IOException {
+
+        final var mailSender = mailSenderConfig.getJavaMailSender();
+
+        final var message = mailSender.createMimeMessage();
+
+        message.setFrom(new InternetAddress(sendFrom));
+        message.setRecipients(MimeMessage.RecipientType.TO, email);
+
+        final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
+        messageHelper.setFrom(sendFrom);
+        messageHelper.setTo(InternetAddress.parse(email));
+        messageHelper.setSubject("1.BSC Trainer-Einladung");
+
+        messageHelper.setText(buildInviteMailHtml("1.BSC Trainer-Einladung", "Einladung", signUpKey), true);
+
+        mailSender.send(message);
+    }
 
 	@Value("${mail.from}")
 	private String sendFrom;
@@ -314,5 +335,23 @@ public class EmailService {
 				mainData.phone()
 		);
 	}
+
+    private String buildInviteMailHtml(final String title, final String message, final String signUpKey) throws IOException {
+
+        final String template = loadTemplate(INVITE_TEMPLATE);
+
+        return template.replace("{{title}}", title)
+                .replace("{{message}}", message)
+                .replace("{{link}}", signUpKey);
+    }
+
+    private String buildLinkToken(final String signUpKey) {
+        return format("https://registration.erster-bsc-pforzheim.de/sign-up?token=%s", signUpKey);
+    }
+
+    private String loadTemplate(String name) throws IOException {
+        var resource = new ClassPathResource("templates/email" + name + ".html");
+        return Files.readString(resource.getFile().toPath());
+    }
 
 }

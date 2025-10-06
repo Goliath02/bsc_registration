@@ -9,6 +9,7 @@ import bsc_registration.infrastructure.repository.UserRepository;
 import bsc_registration.webInterface.dto.AuthorityType;
 import bsc_registration.webInterface.dto.LoginDto;
 import bsc_registration.webInterface.dto.SignUpDto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -67,6 +68,7 @@ public class AuthService {
 		return null;
 	}
 
+    @Transactional(rollbackOn = Exception.class)
 	public SignUpKey createSignUpKey(final AuthorityType authorityEnum) {
 		final var signUpKey = new SignUpKey();
 
