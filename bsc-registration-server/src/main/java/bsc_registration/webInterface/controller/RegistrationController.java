@@ -27,11 +27,6 @@ public class RegistrationController {
 		this.registrationService = registrationModule;
 	}
 
-	@GetMapping("/")
-	public String getFrontend() {
-		return "index";
-	}
-
 	@GetMapping("/courses")
 	@ResponseBody()
 	public ResponseEntity<List<String>> getConfig() {

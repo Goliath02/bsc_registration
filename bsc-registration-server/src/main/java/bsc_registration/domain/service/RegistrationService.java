@@ -27,7 +27,7 @@ import java.util.List;
 
 
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 @Slf4j
 public class RegistrationService {
 
@@ -173,7 +173,7 @@ public class RegistrationService {
         LocalDate.now(),
         mainData.type(),
         mainData.reason(),
-        mainData.birthday(),
+        extraPerson.extraBirthday(),
         extraPerson.extraGender(),
         mainData.street(),
         mainData.plz(),

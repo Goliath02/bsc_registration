@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Button, InputText } from "primevue";
-import { useAuthStore } from "@/stores/authStore";
 import Bsc_header from "@/components/BSC_Header.vue";
 
 const email = ref("");
 const password = ref("");
-const auth = useAuthStore();
 
 const loading = ref(false);
 const logInFailed = ref(false);
@@ -14,15 +12,15 @@ const logInFailed = ref(false);
 async function handleLogin() {
   loading.value = true;
 
-  auth
-    .login(email.value, password.value)
-    .then()
-    .catch(() => {
-      logInFailed.value = true;
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  // auth
+  //   .login(email.value, password.value)
+  //   .then()
+  //   .catch(() => {
+  //     logInFailed.value = true;
+  //   })
+  //   .finally(() => {
+  //     loading.value = false;
+  //   });
 }
 </script>
 
