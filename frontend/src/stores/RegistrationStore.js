@@ -78,10 +78,10 @@ export const useRegistrationStore = defineStore("registrationStore", {
     calculatePrice() {
       switch (useRegistrationStore().registrationData.mainData.type) {
         case RegistrationType.MEMBER:
-          useRegistrationStore().price = 85.0;
+          useRegistrationStore().price = 105.0;
           break;
         case RegistrationType.STUDENT:
-          useRegistrationStore().price = 50.0;
+          useRegistrationStore().price = 85.0;
           break;
         case RegistrationType.FAMILY:
           useRegistrationStore().price = 85.0;
