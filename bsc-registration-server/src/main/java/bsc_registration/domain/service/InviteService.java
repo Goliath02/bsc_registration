@@ -35,4 +35,9 @@ public class InviteService {
 
         return memberInviteRepository.findAll();
     }
+
+    public void deleteInvite(long inviteId) {
+        memberInviteRepository.deleteById(inviteId);
+        authService.deleteMemberWithKey(inviteId);
+    }
 }

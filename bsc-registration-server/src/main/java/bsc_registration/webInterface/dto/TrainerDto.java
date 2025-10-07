@@ -9,4 +9,6 @@ public class TrainerDto {
 
     private String email;
 
+    private String password;
+
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface KeyRepository extends JpaRepository<SignUpKey, String> {
+public interface KeyRepository extends JpaRepository<SignUpKey, Long> {
 
 	@Query("""
 			SELECT k FROM SignUpKey k

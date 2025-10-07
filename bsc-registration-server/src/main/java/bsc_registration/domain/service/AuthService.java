@@ -81,7 +81,14 @@ public class AuthService {
 		return signUpKey;
 	}
 
-	public void saveSignUpKey(SignUpKey signUpKey) {
+	public void saveSignUpKey(final SignUpKey signUpKey) {
 		keyRepository.save(signUpKey);
 	}
+
+    public void deleteMemberWithKey(final long keyId) {
+
+        final SignUpKey signUpKey = keyRepository.findById(keyId).orElseThrow();
+
+        keyRepository.delete(signUpKey);
+    }
 }

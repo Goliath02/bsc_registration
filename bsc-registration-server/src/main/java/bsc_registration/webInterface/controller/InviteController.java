@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,9 +31,7 @@ public class InviteController {
     public ResponseEntity<InviteResponse> inviteMember(final InviteDto inviteDto) {
 
         try {
-
             inviteService.createInvite(inviteDto);
-
         } catch (MailSendException e) {
             return ResponseEntity.badRequest().body(InviteResponse.MAIL_INVALID);
         } catch (Exception e) {
@@ -45,6 +40,11 @@ public class InviteController {
         }
 
         return ResponseEntity.ok(InviteResponse.SUCCESS);
+    }
+
+    @DeleteMapping
+    public void invalidateInvite(@RequestParam final long inviteId) {
+        inviteService.deleteInvite(inviteId);
     }
 
 
