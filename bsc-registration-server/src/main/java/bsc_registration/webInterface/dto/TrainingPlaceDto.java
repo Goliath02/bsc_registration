@@ -9,7 +9,5 @@ public class TrainingPlaceDto {
     private String houseNumber;
     private String streetNumberAddition;
     private String city;
-    private String state;
-    private String country;
     private String postalCode;
 }

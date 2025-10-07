@@ -25,8 +25,9 @@ public class TrainingPlaceService {
 
         trainingPlace.setName(dto.getName());
         trainingPlace.setStreet(dto.getStreet());
+        trainingPlace.setHouseNumber(dto.getHouseNumber());
+        trainingPlace.setStreetNumberAddition(dto.getStreetNumberAddition());
         trainingPlace.setCity(dto.getCity());
-        trainingPlace.setCountry(dto.getCountry());
         trainingPlace.setPostalCode(dto.getPostalCode());
 
         placeRepository.save(trainingPlace);
@@ -39,7 +40,6 @@ public class TrainingPlaceService {
         trainingPlace.setName(dto.getName());
         trainingPlace.setStreet(dto.getStreet());
         trainingPlace.setCity(dto.getCity());
-        trainingPlace.setCountry(dto.getCountry());
         trainingPlace.setPostalCode(dto.getPostalCode());
         placeRepository.save(trainingPlace);
     }
