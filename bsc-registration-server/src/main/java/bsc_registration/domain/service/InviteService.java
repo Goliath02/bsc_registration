@@ -29,6 +29,7 @@ public class InviteService {
 
         emailService.sendTrainerInviteMail(inviteDto.getEmail(), signUpKey.getKey());
 
+        authService.saveSignUpKey(signUpKey);
     }
 
     public List<MemberInvite> getAllInvites() {

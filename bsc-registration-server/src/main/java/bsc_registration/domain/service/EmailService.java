@@ -340,9 +340,9 @@ public class EmailService {
 
         final String template = loadTemplate(INVITE_TEMPLATE);
 
-        return template.replace("{{title}}", title)
-                .replace("{{message}}", message)
-                .replace("{{link}}", signUpKey);
+        return template.replace("${title}", title)
+                .replace("${message}", message)
+                .replace("${link}", signUpKey);
     }
 
     private String buildLinkToken(final String signUpKey) {
@@ -350,7 +350,7 @@ public class EmailService {
     }
 
     private String loadTemplate(String name) throws IOException {
-        var resource = new ClassPathResource("templates/email" + name + ".html");
+        var resource = new ClassPathResource("templates/email/" + name + ".html");
         return Files.readString(resource.getFile().toPath());
     }
 

@@ -28,7 +28,7 @@ public class InviteController {
     ;
 
     @PostMapping("/member")
-    public ResponseEntity<InviteResponse> inviteMember(final InviteDto inviteDto) {
+    public ResponseEntity<InviteResponse> inviteMember(@RequestBody final InviteDto inviteDto) {
 
         try {
             inviteService.createInvite(inviteDto);
