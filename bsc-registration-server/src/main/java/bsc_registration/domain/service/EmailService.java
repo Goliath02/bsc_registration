@@ -14,17 +14,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.CharEncoding;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static bsc_registration.domain.utils.FormUtil.calculateAge;
 import static bsc_registration.domain.utils.FormUtil.formatDate;
@@ -34,6 +40,7 @@ import static java.lang.String.format;
 @Service
 @RequiredArgsConstructor()
 @Slf4j
+@EnableAsync
 public class EmailService {
 
 	public static final String BASIC_MAIL_TITEL = "1.BSC Pforzheim Info";
@@ -41,6 +48,15 @@ public class EmailService {
     private final MailSenderConfig mailSenderConfig;
 
 	private final BscMemberRepository bscMemberRepository;
+
+    private final ExecutorService executor = Executors.newFixedThreadPool(5);
+
+    public void sendMailToAllBscMembers(final String title, final String message, final ByteArrayDataSource attachment) throws MessagingException {
+        bscMemberRepository.findAll()
+                .stream()
+                .filter(bscMember -> bscMember.getEmail() != null)
+                .forEach(bscMember -> executor.submit(() -> sendMail(bscMember.getEmail(), title, message, attachment.)));
+    }
 
     public void sendTrainerInviteMail(final String email, final String signUpKey) throws MessagingException, MailSendException, IOException {
 
@@ -164,7 +180,34 @@ public class EmailService {
 
 	}
 
-	public void sendInfoEmailToUsers(final List<String> emails) throws
+    @Async
+    protected void sendMail(String to, String subject, String text, File attachment) {
+        try {
+
+            final String template = loadHtmlTemplate("MailTemplate.html");
+
+            final var mailSender = mailSenderConfig.getJavaMailSender();
+
+            final var message = mailSender.createMimeMessage();
+
+            message.setFrom(new InternetAddress(sendFrom));
+            message.setRecipients(MimeMessage.RecipientType.TO, to);
+
+            final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
+            messageHelper.setFrom(sendFrom);
+            messageHelper.setTo(InternetAddress.parse(to));
+            messageHelper.setSubject(subject);
+
+            messageHelper.setText(template, true);
+
+            mailSender.send(message);
+            System.out.println("Mail erfolgreich gesendet an: " + to);
+        } catch (Exception e) {
+            System.err.println("Fehler beim Senden an " + to + ": " + e.getMessage());
+        }
+    }
+
+    public void sendInfoEmailToUsers(final List<String> emails) throws
 			IOException {
 
 		final ArrayList<BscNameMail> invalidMails = new ArrayList<>();
