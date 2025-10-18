@@ -84,9 +84,9 @@ public class EmailService {
                 Im Anhang findet ihr die Ausschreibung mit allen Disziplinen und Strecken. Dort seht ihr auch, welche Lagen und Distanzen für welche Altersgruppen empfohlen sind – aber keine Sorge: Das sind keine festen Vorgaben.
                 Wenn du lieber eine kürzere Strecke schwimmen möchtest oder dich in einer anderen Lage ausprobieren willst – mach es einfach! Jeder darf mitmachen, so wie es für ihn oder sie am besten passt. 🙌
                 <br><br>
-                Wir freuen uns auf viele motivierte Schwimmerinnen und Schwimmer, spannende Läufe und vor allem auf einen Tag voller Teamgeist, Spaß und gemeinsamer BSC-Energie! 💙
+                Wir freuen uns auf viele motivierte Schwimmerinnen und Schwimmer, spannende Läufe und vor allem auf einen Tag voller Teamgeist, Spaß und gemeinsamer BSC-Energie! ❤️
                 <br><br>
-                Also: Pack die Badehose ein, schnapp dir deine Vereinsfreunde und sei dabei, wenn wir gemeinsam zeigen, was in uns steckt! 🏆
+                Also: Sei dabei, wenn wir gemeinsam zeigen, was in uns steckt! 🏆
                 <br><br>
                 Mit sportlichen Grüßen
                 """;
@@ -109,7 +109,7 @@ public class EmailService {
             String template = loadHtmlTemplate(templateFileName);
 
             if (message != null) {
-                template = insertMessageIntoTemplate(title, message);
+                template = insertMessageIntoTemplate(template, title, message);
             }
 
             final var mailSender = mailSenderConfig.getJavaMailSender();
@@ -411,9 +411,7 @@ public class EmailService {
 		);
 	}
 
-    private String insertMessageIntoTemplate(final String title, final String message) throws IOException {
-
-        final String template = loadTemplate(INVITE_TEMPLATE);
+    private String insertMessageIntoTemplate(final String template, final String title, final String message) {
 
         return template.replace("${title}", title)
                 .replace("${message}", message);
