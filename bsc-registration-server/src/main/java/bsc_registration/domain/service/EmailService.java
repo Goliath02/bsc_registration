@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.CharEncoding;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -23,7 +23,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -51,13 +50,6 @@ public class EmailService {
 
     private final ExecutorService executor = Executors.newFixedThreadPool(5);
 
-    public void sendMailToAllBscMembers(final String title, final String message, final ByteArrayDataSource attachment) throws MessagingException {
-        bscMemberRepository.findAll()
-                .stream()
-                .filter(bscMember -> bscMember.getEmail() != null)
-                .forEach(bscMember -> executor.submit(() -> sendMail(bscMember.getEmail(), title, message, attachment.)));
-    }
-
     public void sendTrainerInviteMail(final String email, final String signUpKey) throws MessagingException, MailSendException, IOException {
 
         final var mailSender = mailSenderConfig.getJavaMailSender();
@@ -79,6 +71,73 @@ public class EmailService {
 
 	@Value("${mail.from}")
 	private String sendFrom;
+
+
+    public void sendInviteToVM() throws IOException {
+
+        final String messageForVM = """
+                Liebe BSC-Mitglieder,
+                <br><br>
+                es ist wieder so weit – die Vereinsmeisterschaften Teil 2 stehen vor der Tür! 🎉
+                Wir möchten alle Mitglieder herzlich einladen, dabei zu sein – ganz egal ob jung oder alt, ob Wettkampferfahren oder Freizeit-Schwimmer. Hauptsache, ihr habt Spaß im Wasser! 💦
+                <br><br>
+                Im Anhang findet ihr die Ausschreibung mit allen Disziplinen und Strecken. Dort seht ihr auch, welche Lagen und Distanzen für welche Altersgruppen empfohlen sind – aber keine Sorge: Das sind keine festen Vorgaben.
+                Wenn du lieber eine kürzere Strecke schwimmen möchtest oder dich in einer anderen Lage ausprobieren willst – mach es einfach! Jeder darf mitmachen, so wie es für ihn oder sie am besten passt. 🙌
+                <br><br>
+                Wir freuen uns auf viele motivierte Schwimmerinnen und Schwimmer, spannende Läufe und vor allem auf einen Tag voller Teamgeist, Spaß und gemeinsamer BSC-Energie! 💙
+                <br><br>
+                Also: Pack die Badehose ein, schnapp dir deine Vereinsfreunde und sei dabei, wenn wir gemeinsam zeigen, was in uns steckt! 🏆
+                <br><br>
+                Mit sportlichen Grüßen
+                """;
+
+
+        this.sendMailToAllBscMembers("1.BSC Vereinsmeisterschafter Teil 2 2025", "MailMessageTemplate", messageForVM, "Ausschreibung_VM2_2025.pdf");
+    }
+
+    public void sendMailToAllBscMembers(final String title, final String templateFileName, final String message, final String attachmentTitle) {
+        bscMemberRepository.findAll()
+                .stream()
+                .filter(bscMember -> bscMember.getEmail() != null)
+                .forEach(bscMember -> executor.submit(() -> sendMail(bscMember.getEmail(), title, templateFileName, message, attachmentTitle)));
+    }
+
+    @Async
+    protected void sendMail(String receiverMail, String title, String templateFileName, String message, String attachmentFileName) {
+        try {
+
+            String template = loadHtmlTemplate(templateFileName);
+
+            if (message != null) {
+                template = insertMessageIntoTemplate(title, message);
+            }
+
+            final var mailSender = mailSenderConfig.getJavaMailSender();
+
+            final var mail = mailSender.createMimeMessage();
+
+            mail.setFrom(new InternetAddress(sendFrom));
+            mail.setRecipients(MimeMessage.RecipientType.TO, receiverMail);
+
+            final var messageHelper = new MimeMessageHelper(mail, true, CharEncoding.UTF_8);
+            messageHelper.setFrom(sendFrom);
+            messageHelper.setTo(InternetAddress.parse(receiverMail));
+            messageHelper.setSubject(title);
+
+            messageHelper.setText(template, true);
+
+            if (attachmentFileName != null) {
+                final InputStreamSource attachment = loadPdfFromResource(attachmentFileName);
+                System.out.println("attachment file exists " + attachmentFileName);
+                messageHelper.addAttachment(attachmentFileName, attachment);
+            }
+
+            mailSender.send(mail);
+            System.out.println("Mail erfolgreich gesendet an: " + receiverMail);
+        } catch (Exception e) {
+            System.err.println("Fehler beim Senden an " + receiverMail + ": " + e.getMessage());
+        }
+    }
 
 	public void sendMailToRegistration(final List<String> targetEmails, final String csv, final List<MultipartFile> files) throws MessagingException {
 
@@ -108,8 +167,8 @@ public class EmailService {
 
 		mailSender.send(message);
 	}
+    //Is keept for future purposes
 
-	//Is keept for future purposes
 	public void sendEmailToCourseOwner(final List<String> targetEmails, final FormData formData) throws MessagingException {
 
 		final var mailSender = mailSenderConfig.getJavaMailSender();
@@ -152,7 +211,7 @@ public class EmailService {
 	}
 
 	public String loadHtmlTemplate(String filename) throws IOException {
-		ClassPathResource resource = new ClassPathResource("templates/email/" + filename);
+		ClassPathResource resource = new ClassPathResource("templates/email/" + filename + ".html");
 		byte[] data = resource.getInputStream().readAllBytes();
 		return new String(data, StandardCharsets.UTF_8);
 	}
@@ -179,33 +238,6 @@ public class EmailService {
 		mailSender.send(message);
 
 	}
-
-    @Async
-    protected void sendMail(String to, String subject, String text, File attachment) {
-        try {
-
-            final String template = loadHtmlTemplate("MailTemplate.html");
-
-            final var mailSender = mailSenderConfig.getJavaMailSender();
-
-            final var message = mailSender.createMimeMessage();
-
-            message.setFrom(new InternetAddress(sendFrom));
-            message.setRecipients(MimeMessage.RecipientType.TO, to);
-
-            final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
-            messageHelper.setFrom(sendFrom);
-            messageHelper.setTo(InternetAddress.parse(to));
-            messageHelper.setSubject(subject);
-
-            messageHelper.setText(template, true);
-
-            mailSender.send(message);
-            System.out.println("Mail erfolgreich gesendet an: " + to);
-        } catch (Exception e) {
-            System.err.println("Fehler beim Senden an " + to + ": " + e.getMessage());
-        }
-    }
 
     public void sendInfoEmailToUsers(final List<String> emails) throws
 			IOException {
@@ -379,6 +411,14 @@ public class EmailService {
 		);
 	}
 
+    private String insertMessageIntoTemplate(final String title, final String message) throws IOException {
+
+        final String template = loadTemplate(INVITE_TEMPLATE);
+
+        return template.replace("${title}", title)
+                .replace("${message}", message);
+    }
+
     private String buildInviteMailHtml(final String title, final String message, final String signUpKey) throws IOException {
 
         final String template = loadTemplate(INVITE_TEMPLATE);
@@ -392,9 +432,19 @@ public class EmailService {
         return format("https://registration.erster-bsc-pforzheim.de/sign-up?token=%s", signUpKey);
     }
 
-    private String loadTemplate(String name) throws IOException {
-        var resource = new ClassPathResource("templates/email/" + name + ".html");
+    private String loadTemplate(final String fileName) throws IOException {
+        var resource = new ClassPathResource("templates/email/" + fileName + ".html");
         return Files.readString(resource.getFile().toPath());
+    }
+
+    private InputStreamSource loadPdfFromResource(final String filename) throws IOException {
+        final ClassPathResource resource = new ClassPathResource("attachments/" + filename);
+
+        if (!resource.exists()) {
+            throw new IOException("File not found with name: " + filename);
+        }
+
+        return resource;
     }
 
 }
