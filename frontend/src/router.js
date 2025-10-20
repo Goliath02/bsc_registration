@@ -22,6 +22,7 @@ import MembersPage from "@/AdminPannel/Pages/MembersPage.vue";
 import TrainingPlacesPage from "@/AdminPannel/Pages/TrainingPlacesPage.vue";
 import CourseDetailsPage from "@/AdminPannel/Pages/CourseDetailsPage.vue";
 import RegisterPage from "@/components/Login/RegisterPage.vue";
+import InvitesPage from "@/AdminPannel/Pages/InvitesPage.vue";
 
 const routes = [
   {
@@ -89,6 +90,7 @@ const routes = [
         name: "TrainingPlaces",
       },
       { path: "/trainer", component: TrainerPage, name: "Trainer" },
+      { path: "/invites", component: InvitesPage, name: "Einladungen" },
       { path: "/settings", component: SettingsPage, name: "Settings" },
     ],
   },

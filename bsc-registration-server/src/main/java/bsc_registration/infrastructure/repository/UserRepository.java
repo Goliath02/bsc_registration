@@ -24,4 +24,7 @@ public interface UserRepository extends JpaRepository<BscUser, Long> {
 
 	@Query("SELECT u FROM BscUser u WHERE u.signUpKey.authority.authority = :authority")
 	List<BscUser> findUserByAuthorityId(final AuthorityType authority);
+
+    @Query("SELECT u FROM BscUser u WHERE u.signUpKey.signUpKeyId = :signUpKeyId")
+    Optional<BscUser> findBySignUpKeyId(long signUpKeyId);
 }

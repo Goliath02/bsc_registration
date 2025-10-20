@@ -7,13 +7,13 @@ import PageTemplate from "@/AdminPannel/Pages/PageTemplate.vue";
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import AddTrainingPlaceDialog from "@/AdminPannel/components/AddTrainingPlaceDialog.vue";
+import AddInviteDialog from "@/AdminPannel/components/AddInviteDialog.vue";
 
 
 const isOpen = ref(false);
 
-const getTrainer = async () => {
-  const {data} = await apiClient.get("/api/trainers", {
+const getInviteHistory = async () => {
+  const {data} = await apiClient.get("/api/invites/history", {
     headers: {
       "Content-Type": "application/json",
     },
@@ -23,18 +23,18 @@ const getTrainer = async () => {
 };
 
 const {data, isLoading, error} = useQuery({
-  queryKey: ["trainer"],
-  queryFn: getTrainer,
+  queryKey: ["invites"],
+  queryFn: getInviteHistory,
 });
 
-const trainer = ref(data);
+const invites = ref(data);
 
 const openDialog = () => {
   isOpen.value = true;
 };
 
 const buttonVNode = h(Button, {
-  label: "Add Course",
+  label: "Einladung hinzufügen",
   icon: "pi pi-plus",
   onClick: () => console.log("Dialog öffnen...")
 });
@@ -50,19 +50,19 @@ const editingRows = ref([]);
 const onRowEditSave = (event) => {
   let { newData, index } = event;
 
-  trainer.value[index] = newData;
+  invites.value[index] = newData;
 };
 
 </script>
 
 <template>
 
-  <PageTemplate title="Trainers">
+  <PageTemplate title="Einladungen">
 
-    <AddTrainerDialog v-model="isOpen"/>
+    <AddInviteDialog v-model="isOpen"/>
 
     <template #actionButton>
-      <Button @click="openDialog" label="Trainer hinzufügen" icon="pi pi-plus" />
+      <Button @click="openDialog" label="Einladung erstellen" icon="pi pi-plus" />
     </template>
 
     <div
@@ -83,12 +83,12 @@ const onRowEditSave = (event) => {
             animationDuration="1.5s"
         />
       </div>
-      <div v-else-if="trainer.length === 0" class="w-full h-48 flex justify-center items-center" >
-        <h2 class="text-2xl font-bold text-[#888888]">Es gibt noch keine Trainer :(</h2>
+      <div v-else-if="invites.length === 0" class="w-full h-48 flex justify-center items-center" >
+        <h2 class="text-2xl font-bold text-[#888888]">Es gibt noch keine Einladungen</h2>
       </div>
 
       <div class="card">
-        <DataTable  v-model:selection="selectedPlace" selectionMode="single" :value="trainer" tableStyle="min-width: 50rem" dataKey="id" editMode="row"   @row-edit-save="onRowEditSave" v-model:editingRows="editingRows">
+        <DataTable v-model:selection="selectedPlace" selectionMode="single" :value="invites" tableStyle="min-width: 50rem" dataKey="id" editMode="row" @row-edit-save="onRowEditSave" v-model:editingRows="editingRows">
           <Column field="id" header="ID"></Column>
           <Column field="name" header="Name">
             <template #editor="{ data, field }">

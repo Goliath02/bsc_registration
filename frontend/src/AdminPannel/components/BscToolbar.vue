@@ -32,6 +32,7 @@ const navigationItems = [
   { icon: "pi pi-calendar", label: "Courses", route: "/courses" },
   { icon: "pi pi-map-marker", label: "TrainingPlaces", route: "/places" },
   { icon: "pi pi-user-plus", label: "Trainer", route: "/trainer" },
+  { icon: "pi pi-user-plus", label: "Einladungen", route: "/invites" },
   { icon: "pi pi-users", label: "Members", route: "/members" },
   { icon: "pi pi-user", label: "Profil", route: "/profile" },
   { icon: "pi pi-cog", label: "Einstellungen", route: "/settings" },

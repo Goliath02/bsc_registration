@@ -18,10 +18,11 @@ public class InfoController {
 
 	private final InfoService infoService;
 
-	@GetMapping("/trainers")
-	public List<TrainerInfoDto> getAllTrainer() {
-		return infoService.getAllTrainers();
-	}
+    @GetMapping("/trainers")
+    @Deprecated
+    public List<TrainerInfoDto> getAllTrainer() {
+        return infoService.getAllTrainers();
+    }
 
 	@GetMapping("/places")
     @Deprecated

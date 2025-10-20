@@ -1,6 +1,5 @@
 package bsc_registration.domain.entities;
 
-import bsc_registration.webInterface.dto.AuthorityType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,5 +21,8 @@ public class SignUpKey {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "authority_id")
 	private BscAuthority authority;
+
+    @OneToOne(mappedBy = "signUpKey", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private BscUser user;
 
 }
