@@ -2,6 +2,8 @@ package bsc_registration.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -34,14 +36,15 @@ public class BscUser implements UserDetails {
 	)
 	private List<BscAuthority> authorities;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY,  cascade = CascadeType.DETACH)
 	@JoinTable(
 			joinColumns = @JoinColumn(name = "courseOwnerId"),
 			inverseJoinColumns = @JoinColumn(name = "courseId"))
 	private List<Course> courses;
 
-	@OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "sign_up_key_id", referencedColumnName = "signUpKeyId")
+    @OnDelete(action = OnDeleteAction.CASCADE)
 	private SignUpKey signUpKey;
 
 	@Override

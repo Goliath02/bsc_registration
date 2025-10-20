@@ -21,6 +21,7 @@ public class InfoService {
   private final TrainingPlaceRepository placeRepository;
   private final CourseTypeRepository courseTypeRepository;
 
+  @Deprecated
   public List<TrainerInfoDto> getAllTrainers() {
 
     List<BscUser> userByAuthority = userRepository.findUserByAuthorityId(AuthorityType.COURSE_OWNER);

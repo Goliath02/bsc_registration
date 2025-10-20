@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 @Service
@@ -39,6 +41,27 @@ public class EmailService {
     private final MailSenderConfig mailSenderConfig;
 
     private final BscMemberRepository bscMemberRepository;
+
+    private final ExecutorService executor = Executors.newFixedThreadPool(5);
+
+    public void sendTrainerInviteMail(final String email, final String signUpKey) throws MessagingException, MailSendException, IOException {
+
+        final var mailSender = mailSenderConfig.getJavaMailSender();
+
+        final var message = mailSender.createMimeMessage();
+
+        message.setFrom(new InternetAddress(sendFrom));
+        message.setRecipients(MimeMessage.RecipientType.TO, email);
+
+        final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
+        messageHelper.setFrom(sendFrom);
+        messageHelper.setTo(InternetAddress.parse(email));
+        messageHelper.setSubject("1.BSC Trainer-Einladung");
+
+        messageHelper.setText(buildInviteMailHtml("1.BSC Trainer-Einladung", "Einladung", signUpKey), true);
+
+        mailSender.send(message);
+    }
 
     @Value("${mail.from}")
     private String sendFrom;

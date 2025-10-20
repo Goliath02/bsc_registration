@@ -1,5 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import PageTemplate from "@/AdminPannel/Pages/PageTemplate.vue";
+</script>
 
-<template>Members</template>
+<template>
+  <PageTemplate title="Members">
+
+  </PageTemplate>
+</template>
 
 <style scoped></style>
