@@ -28,6 +28,7 @@ public class InfoService {
     return userByAuthority.stream().map(trainer -> new TrainerInfoDto(trainer.getUserId(), trainer.getFullName())).toList();
   }
 
+  @Deprecated
   public List<TrainingPlace> getAllTrainingPlaces() {
     return placeRepository.findAll();
   }

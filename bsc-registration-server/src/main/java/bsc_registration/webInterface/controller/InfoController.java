@@ -24,6 +24,7 @@ public class InfoController {
 	}
 
 	@GetMapping("/places")
+    @Deprecated
 	public List<TrainingPlace> getAllTrainingPlaces() {
 		return infoService.getAllTrainingPlaces();
 	}
