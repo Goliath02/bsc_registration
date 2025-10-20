@@ -18,6 +18,7 @@ import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,9 +36,11 @@ import java.util.concurrent.Executors;
 @Service
 @RequiredArgsConstructor()
 @Slf4j
+@EnableAsync
 public class EmailService {
 
-    public static final String BASIC_MAIL_TITEL = "1.BSC Pforzheim Info";
+	public static final String BASIC_MAIL_TITEL = "1.BSC Pforzheim Info";
+    public static final String INVITE_TEMPLATE = "InviteTemplate";
     private final MailSenderConfig mailSenderConfig;
 
     private final BscMemberRepository bscMemberRepository;
@@ -66,7 +69,8 @@ public class EmailService {
     @Value("${mail.from}")
     private String sendFrom;
 
-    public void sendInviteToVM() {
+
+    public void sendInviteToVM() throws IOException {
 
         final String messageForVM = """
                 Liebe BSC-Mitglieder,
@@ -84,7 +88,8 @@ public class EmailService {
                 Mit sportlichen Grüßen
                 """;
 
-        this.sendMailToAllBscMembers("1.BSC Vereinsmeisterschafter Teil 2 2025", "MailMessageTemplate", messageForVM, null);
+
+        this.sendMailToAllBscMembers("1.BSC Vereinsmeisterschafter Teil 2 2025", "MailMessageTemplate", messageForVM, "Ausschreibung_VM2_2025.pdf");
     }
 
     public void sendMailToAllBscMembers(final String title, final String templateFileName, final String message, final String attachmentTitle) {
@@ -161,7 +166,7 @@ public class EmailService {
             String template = loadHtmlTemplate(info.templateFileName());
 
             if (info.message() != null) {
-                template = insertMessageIntoTemplate(template, info.title(), info.message());
+    template = insertMessageIntoTemplate(template, info.title(), info.message());
             }
 
             final var mailSender = mailSenderConfig.getJavaMailSender();
@@ -244,7 +249,7 @@ public class EmailService {
     }
 
     public String loadHtmlTemplate(String filename) throws IOException {
-        ClassPathResource resource = new ClassPathResource("templates/email/" + filename);
+        ClassPathResource resource = new ClassPathResource("templates/email/" + filename + ".html");
         byte[] data = resource.getInputStream().readAllBytes();
         return new String(data, StandardCharsets.UTF_8);
     }
@@ -348,5 +353,20 @@ public class EmailService {
 
         return resource;
     }
+
+
+    private String buildInviteMailHtml(final String title, final String message, final String signUpKey) throws IOException {
+
+        final String template = loadTemplate(INVITE_TEMPLATE);
+
+        return template.replace("${title}", title)
+                .replace("${message}", message)
+                .replace("${link}", signUpKey);
+    }
+
+    private String buildLinkToken(final String signUpKey) {
+        return format("https://registration.erster-bsc-pforzheim.de/sign-up?token=%s", signUpKey);
+    }
+
 
 }
