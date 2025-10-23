@@ -10,6 +10,7 @@ import { computed, onMounted, ref } from "vue";
 import axios from "axios";
 import Button from "primevue/button";
 import Popover from "primevue/popover";
+import DatePicker from "primevue/datepicker";
 import * as yup from "yup";
 import { yupResolver } from "@primevue/forms/resolvers/yup";
 import router from "@/router.js";
@@ -233,6 +234,7 @@ onMounted(() => {
           name="birthday"
           v-model="useRegistrationStore().registrationData.mainData.birthday"
           dateFormat="dd.mm.yy"
+          fluid
           inputId="dd-date"
           showIcon
           iconDisplay="input"
@@ -364,6 +366,7 @@ onMounted(() => {
             class="w-full"
             name="entryDate"
             v-model="useRegistrationStore().registrationData.mainData.entryDate"
+            fluid
             inputId="dd-entry"
             showIcon
             iconDisplay="input"

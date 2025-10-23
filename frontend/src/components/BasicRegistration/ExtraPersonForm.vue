@@ -101,6 +101,7 @@ const genders = ["Männlich", "Weiblich", "Divers"];
               v-model="extraModelValues.extraBirthday"
               dateFormat="dd.mm.yy"
               showIcon
+              fluid
               iconDisplay="input"
             />
             <label :for="`extraBirthday-${index}`">Geburtsdatum</label>
