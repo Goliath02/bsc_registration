@@ -188,7 +188,7 @@ const onFormSubmit = (values) => {
       <label for="dd-dataStatute">
         <p>
           Ich erkenne die <a href="">Satzung</a> des Vereins an und verpflichte
-          mich zur Zahlung des Mitgliedsbeitrags.
+          mich zur Zahlung des Mitgliedsbeitrags durch SEPA Lastschrift Mandat.
         </p>
       </label>
     </div>
