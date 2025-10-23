@@ -235,9 +235,9 @@ onMounted(() => {
           name="birthday"
           v-model="useRegistrationStore().registrationData.mainData.birthday"
           dateFormat="dd.mm.yy"
+          fluid
           inputId="dd-date"
           showIcon
-          fluid
           iconDisplay="input"
         />
         <label for="dd-date">Geburtsdatum</label>
