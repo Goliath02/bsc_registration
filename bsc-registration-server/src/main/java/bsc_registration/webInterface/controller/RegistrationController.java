@@ -1,10 +1,13 @@
 package bsc_registration.webInterface.controller;
 
+import bsc_registration.domain.service.PdfService;
 import bsc_registration.domain.service.RegistrationService;
 import bsc_registration.webInterface.dto.Errors;
 import bsc_registration.webInterface.dto.FormData;
 import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
@@ -17,15 +20,30 @@ import java.util.List;
 
 @Controller
 @CrossOrigin
+@RequiredArgsConstructor
 @Slf4j
 public class RegistrationController {
 
 	public static final long EIGHT_MB = 8000000L;
 	private final RegistrationService registrationService;
+    private final PdfService pdfService;
 
-	public RegistrationController(final RegistrationService registrationModule) {
-		this.registrationService = registrationModule;
-	}
+
+    @GetMapping("/pdfTest")
+    public ResponseEntity<byte[]> testPdf() {
+        try {
+            byte[] tests = pdfService.generateRegistrationPdf("./", "test.pdf", "10.04.2002", "test");
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"anmeldung.pdf\"")
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(tests);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 	@GetMapping("/courses")
 	@ResponseBody()
