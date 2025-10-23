@@ -95,24 +95,27 @@ public class EmailService {
 	}
 
 
-	public void sendEmailToUser(final String email, final FormData formData) throws MessagingException, MailSendException {
+    public void sendEmailToUser(final String email, final FormData formData, final byte[] pdf) throws MessagingException, MailSendException {
 
-		final var mailSender = mailSenderConfig.getJavaMailSender();
+        final var mailSender = mailSenderConfig.getJavaMailSender();
 
-		final var message = mailSender.createMimeMessage();
+        final var message = mailSender.createMimeMessage();
 
-		message.setFrom(new InternetAddress(sendFrom));
-		message.setRecipients(MimeMessage.RecipientType.TO, email);
+        message.setFrom(new InternetAddress(sendFrom));
+        message.setRecipients(MimeMessage.RecipientType.TO, email);
 
-		final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
-		messageHelper.setFrom(sendFrom);
-		messageHelper.setTo(InternetAddress.parse(email));
-		messageHelper.setSubject("1.BSC Pforzheim Info");
+        final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
+        messageHelper.setFrom(sendFrom);
+        messageHelper.setTo(InternetAddress.parse(email));
+        messageHelper.setSubject("1.BSC Pforzheim Info");
 
-		messageHelper.setText(buildUserMailHtml(formData), true);
+        messageHelper.setText(buildUserMailHtml(formData), true);
 
-		mailSender.send(message);
-	}
+        ByteArrayDataSource pdfAttachment = new ByteArrayDataSource(pdf, "application/pdf");
+        messageHelper.addAttachment("anmeldung.pdf", pdfAttachment);
+
+        mailSender.send(message);
+    }
 
 	public String loadHtmlTemplate(String filename) throws IOException {
 		ClassPathResource resource = new ClassPathResource("templates/email/" + filename);

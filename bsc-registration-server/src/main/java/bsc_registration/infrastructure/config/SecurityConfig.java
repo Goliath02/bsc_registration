@@ -51,7 +51,7 @@ public class SecurityConfig {
 				.cors(cors -> cors.configurationSource(corsConfigurationSource())) // <-- Aktivieren statt deaktivieren
                 .csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests ->
-						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/api/auth/login",
+						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw","/pdfTest", "/api/auth/login",
                                          "/index.html",
                                         "/assets/**",
                                         "/BSCSpear.ico",

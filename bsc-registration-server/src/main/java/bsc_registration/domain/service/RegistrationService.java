@@ -32,6 +32,7 @@ import java.util.List;
 public class RegistrationService {
 
 	final private EmailService emailService;
+    final private PdfService pdfService;
 	final private ConfigLoader configLoader;
 
 	final private NswRegistrationRepository nswRepository;
@@ -68,10 +69,13 @@ public class RegistrationService {
 		emailService.sendEmailToCourseOwner(courseOwner, formData);
 	}
 
-	public void sendEmailToRegisteredUser(final FormData formData) throws MessagingException, MailSendException {
-		emailService.sendEmailToUser(formData.mainData().email(), formData);
-		log.info("Email was sent successfully to: {}", formData.mainData().email());
-	}
+    public void sendEmailToRegisteredUser(final FormData formData) throws MessagingException, MailSendException, IOException {
+
+        final byte[] pdf = pdfService.generateRegistrationPdf(formData);
+
+        emailService.sendEmailToUser(formData.mainData().email(), formData, pdf);
+        log.info("Email was sent successfully to: {}", formData.mainData().email());
+    }
 
 	public void setOnRegistrationNswList(final FormData formData) {
 

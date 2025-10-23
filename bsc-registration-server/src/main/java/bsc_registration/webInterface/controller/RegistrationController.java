@@ -1,10 +1,15 @@
 package bsc_registration.webInterface.controller;
 
+import bsc_registration.domain.service.PdfService;
 import bsc_registration.domain.service.RegistrationService;
 import bsc_registration.webInterface.dto.Errors;
+import bsc_registration.webInterface.dto.FinancialData;
 import bsc_registration.webInterface.dto.FormData;
+import bsc_registration.webInterface.dto.MainData;
 import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
@@ -13,19 +18,60 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
 @CrossOrigin
+@RequiredArgsConstructor
 @Slf4j
 public class RegistrationController {
 
 	public static final long EIGHT_MB = 8000000L;
 	private final RegistrationService registrationService;
+    private final PdfService pdfService;
 
-	public RegistrationController(final RegistrationService registrationModule) {
-		this.registrationService = registrationModule;
-	}
+
+    @GetMapping("/pdfTest")
+    public ResponseEntity<byte[]> testPdf() {
+
+        final MainData mainData = new MainData(
+                "MITGLIED",
+                "Swim",
+                "Anna",
+                "Schmidt",
+                LocalDate.of(1992, 5, 15),
+                "Weiblich",
+                "anna.schmidt@example.com",
+                "0176 12345678",
+                "Blumenstraße",
+                "76133",
+                "Karlsruhe",
+                LocalDate.of(2024, 2, 1),
+                List.of()
+        );
+
+        final FinancialData financialData = new FinancialData(
+                "DE89 3704 0044 0532 0130 00",
+                "Anna",
+                "Schmidt"
+        );
+
+        final FormData formData = new FormData(mainData, financialData, true, true, true);
+
+        try {
+            byte[] tests = pdfService.generateRegistrationPdf(formData);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"anmeldung.pdf\"")
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(tests);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 	@GetMapping("/courses")
 	@ResponseBody()
@@ -75,7 +121,7 @@ public class RegistrationController {
 			return ResponseEntity.status(400).body(Errors.EMAIL_NOT_FOUND);
 		}
 
-		return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
 	}
 
 	@PostMapping(value = "/registrateNsw", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
