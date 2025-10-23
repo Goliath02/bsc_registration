@@ -15,6 +15,8 @@ import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -184,7 +186,14 @@ public class PdfService {
         content.endText();
         drawLine(content, x + 70, y - 3, x + 185, y - 3);
 
-        content.beginText();
+        // Unterschrift & Datum
+            content.beginText();
+            content.setFont(PDType1Font.HELVETICA_OBLIQUE, 12);
+            content.newLineAtOffset(50, 580);
+            content.showText("Ort, Datum: ________________________________   " +
+                    LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+            content.newLineAtOffset(0, -40);
+            content.showText("Unterschrift: ________________________________");
         content.newLineAtOffset(x + 200, y);
         content.showText("Unterschrift Mitglied:");
         content.endText();
@@ -214,24 +223,24 @@ public class PdfService {
 
     private float labeledField(PDPageContentStream content, String label, String value, float x, float y) throws IOException {
         y -= 20;
-    
+
     // Fixed label width for alignment
     float labelWidth = 120;
-    
+
     // Draw label
     content.beginText();
     content.setFont(PDType1Font.HELVETICA, 12);
     content.newLineAtOffset(x, y);
     content.showText(label);
     content.endText();
-    
+
     // Draw value aligned at fixed position
     content.beginText();
     content.setFont(PDType1Font.HELVETICA, 12);
     content.newLineAtOffset(x + labelWidth, y);
     content.showText(value != null ? value : "");
     content.endText();
-    
+
     // Draw line under the value
     drawLine(content, x, y - 3, 500, y - 3);
     return y;
