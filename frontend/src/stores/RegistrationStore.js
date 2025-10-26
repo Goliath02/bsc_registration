@@ -74,29 +74,39 @@ export const useRegistrationStore = defineStore("registrationStore", {
     requestFailedWithError: "",
   }),
 
-  actions: {
-    calculatePrice() {
-      switch (useRegistrationStore().registrationData.mainData.type) {
-        case RegistrationType.MEMBER:
-          useRegistrationStore().price = 105.0;
-          break;
-        case RegistrationType.STUDENT:
-          useRegistrationStore().price = 85.0;
-          break;
-        case RegistrationType.FAMILY:
-          useRegistrationStore().price = 85.0;
+    getters: {
+        calculatePrice(state) {
+            const main = state.registrationData.mainData;
+            let total = 0;
 
-          for (const person of useRegistrationStore().registrationData.mainData
-            .morePersons) {
-            if (dateUtil.getTypeByBirthday(person.birthday) === AgeType.CHILD) {
-              useRegistrationStore().price += 15.0;
+            switch (main.type) {
+                case RegistrationType.MEMBER:
+                    total = 105.0;
+                    break;
+
+                case RegistrationType.STUDENT:
+                    total = 85.0;
+                    break;
+
+                case RegistrationType.FAMILY:
+                    total = 85.0;
+
+                    for (const person of main.morePersons) {
+                        if (dateUtil.getTypeByBirthday(person.birthday) === AgeType.CHILD) {
+                            total += 15.0;
+                        } else {
+                            total += 25.0;
+                        }
+                    }
+                    break;
             }
-            useRegistrationStore().price += 25.0;
-          }
-          break;
-      }
-      return useRegistrationStore().price;
+
+            return total;
+        },
     },
+
+
+    actions: {
 
     removeExtraPersonForm(index) {
       useRegistrationStore().registrationData.mainData.morePersons.splice(
@@ -217,3 +227,6 @@ export const useRegistrationStore = defineStore("registrationStore", {
     },
   },
 });
+
+
+
