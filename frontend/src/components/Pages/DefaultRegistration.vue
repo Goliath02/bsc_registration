@@ -367,7 +367,6 @@ onMounted(() => {
             class="w-full"
             name="entryDate"
             v-model="useRegistrationStore().registrationData.mainData.entryDate"
-            fluid
             inputId="dd-entry"
             showIcon
             fluid
