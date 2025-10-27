@@ -2509,6 +2509,4 @@ prod.env
 /node_modules/vue-router/vue-router-auto.d.ts
 /node_modules/vue-router/vue-router-auto-routes.d.ts
 /node_modules/.package-lock.json
-/package-lock.json
-/frontend/package-lock.json
 /.idea/
