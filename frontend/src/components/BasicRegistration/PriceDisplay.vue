@@ -4,7 +4,7 @@ import { useRegistrationStore } from "@/stores/RegistrationStore";
 const store = useRegistrationStore();
 
 const getPrice = () => {
-  return store.calculatePrice().toFixed(2);
+  return store.calculatePrice.toFixed(2);
 };
 </script>
 
