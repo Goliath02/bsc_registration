@@ -1,0 +1,59 @@
+name: Verify Build
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - master  # "master" handled by deploy workflow
+
+jobs:
+  verify:
+    name: Test build for Spring Boot + Vue + Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Cache npm dependencies
+      - name: Cache frontend dependencies
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Cache Maven dependencies
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Build frontend (Vue)
+      - name: Build frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+
+      # --- Build backend (Spring Boot) ---
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '21'
+          cache: 'maven'
+
+      # Build backend (Spring Boot)
+      - name: Build backend
+        working-directory: bsc-registration-server
+        run: |
+          mvn -B package -DskipTests
+
+      # Optional: Test Docker build (just to ensure Dockerfile works)
+      - name: Test Docker build
+        run: docker build -t test-build .
