@@ -20,74 +20,118 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Service class for authentication-related operations.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-	private final AuthenticationManager authenticationManager;
-	private final UserRepository userRepository;
-	private final AuthorityRepository authorityRepository;
-	private final BCryptPasswordEncoder bCryptPasswordEncoder;
-	private final KeyRepository keyRepository;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final KeyRepository keyRepository;
 
-	public BscUser signup(SignUpDto input) {
-		final BscUser user = new BscUser();
+    /**
+     * Registers a new user.
+     *
+     * @param input the sign up DTO
+     * @return the created BscUser entity
+     */
+    public BscUser signup(SignUpDto input) {
+        final BscUser user = new BscUser();
 
-		user.setUserName(input.getUsername());
-		user.setEmail(input.getEmail());
-		user.setPassword(bCryptPasswordEncoder.encode(input.getPassword()));
+        user.setUserName(input.getUsername());
+        user.setEmail(input.getEmail());
 
-		Optional<SignUpKey> optionalKey = keyRepository.getKeyByKey(input.getSignUpKey());
+        // Encode password
+        user.setPassword(bCryptPasswordEncoder.encode(input.getPassword()));
 
-		final SignUpKey signUpKey = optionalKey.orElseThrow();
+        Optional<SignUpKey> optionalKey = keyRepository.getKeyByKey(input.getSignUpKey());
 
-		if (userRepository.hasUserWithKey(signUpKey)) {
-			throw new IllegalArgumentException();
-		}
+        final SignUpKey signUpKey = optionalKey.orElseThrow(() ->
+                new IllegalArgumentException("Invalid Sign Up Key provided")
+        );
 
-		user.setSignUpKey(signUpKey);
+        if (userRepository.hasUserWithKey(signUpKey)) {
+            throw new IllegalArgumentException("User already exists with this Sign Up Key");
+        }
 
-		final Optional<BscAuthority> byAuthority =
-      authorityRepository.findByAuthority(AuthorityType.valueOf(signUpKey.getAuthority().getAuthority()));
+        user.setSignUpKey(signUpKey);
 
-		user.setAuthorities(List.of(byAuthority.orElseThrow()));
+        final Optional<BscAuthority> authority =
+                authorityRepository.findByAuthority(AuthorityType.valueOf(signUpKey.getAuthority().getAuthority()));
 
-		return userRepository.save(user);
-	}
+        user.setAuthorities(List.of(authority.orElseThrow(() ->
+                new IllegalArgumentException("Invalid authority")
+        )));
 
-	public BscUser authenticate(final LoginDto loginDto) {
+        return userRepository.save(user);
+    }
 
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+    /**
+     * Authenticates a user.
+     *
+     * @param loginDto the login DTO
+     * @return the authenticated BscUser entity
+     */
+    public BscUser authenticate(final LoginDto loginDto) {
+        // Authenticate user
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
 
-		final BscUser bscUser = userRepository.findByEmail(loginDto.getEmail()).orElseThrow();
+        final BscUser bscUser = userRepository.findByEmail(loginDto.getEmail()).orElseThrow(() ->
+                new IllegalArgumentException("Invalid username or password")
+        );
 
-		if (bCryptPasswordEncoder.matches(loginDto.getPassword(), bscUser.getPassword())) {
-			return bscUser;
-		}
+        // Verify password
+        if (bCryptPasswordEncoder.matches(loginDto.getPassword(), bscUser.getPassword())) {
+            return bscUser;
+        }
 
-		return null;
-	}
+        throw new IllegalArgumentException("Invalid username or password");
+    }
 
+    /**
+     * Creates a sign up key.
+     *
+     * @param authorityEnum the authority type
+     * @return the created SignUpKey entity
+     */
     @Transactional(rollbackOn = Exception.class)
-	public SignUpKey createSignUpKey(final AuthorityType authorityEnum) {
-		final var signUpKey = new SignUpKey();
+    public SignUpKey createSignUpKey(final AuthorityType authorityEnum) {
+        final var signUpKey = new SignUpKey();
 
-    final BscAuthority bscAuthority = authorityRepository.findByAuthority(authorityEnum).orElseThrow();
+        final BscAuthority bscAuthority = authorityRepository.findByAuthority(authorityEnum).orElseThrow(() ->
+                new IllegalArgumentException("Invalid authority")
+        );
 
-    signUpKey.setAuthority(bscAuthority);
+        signUpKey.setAuthority(bscAuthority);
 
-		signUpKey.setKey(UUID.randomUUID().toString());
+        // Generate and set unique key
+        signUpKey.setKey(UUID.randomUUID().toString());
 
-		return signUpKey;
-	}
+        return signUpKey;
+    }
 
-	public void saveSignUpKey(final SignUpKey signUpKey) {
-		keyRepository.save(signUpKey);
-	}
+    /**
+     * Saves a sign up key.
+     *
+     * @param signUpKey the SignUpKey entity to save
+     */
+    public void saveSignUpKey(final SignUpKey signUpKey) {
+        keyRepository.save(signUpKey);
+    }
 
+    /**
+     * Deletes a member associated with the given keyId.
+     *
+     * @param keyId the ID of the sign up key
+     */
     public void deleteMemberWithKey(final long keyId) {
-
-        final SignUpKey signUpKey = keyRepository.findById(keyId).orElseThrow();
+        final SignUpKey signUpKey = keyRepository.findById(keyId).orElseThrow(() ->
+                new IllegalArgumentException("Invalid Sign Up Key ID")
+        );
 
         keyRepository.delete(signUpKey);
     }
