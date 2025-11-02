@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="73d94c93-99fe-4a08-9e0f-09cc1d6dbd5f" name="Changes" comment="WIP Email">
+    <list default="true" id="73d94c93-99fe-4a08-9e0f-09cc1d6dbd5f" name="Changes" comment="fixup! [*] Rework EmailService.java">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bsc-registration-server/src/main/resources/bscConf.json" beforeDir="false" afterPath="$PROJECT_DIR$/bsc-registration-server/src/main/resources/bscConf.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/BasicRegistration/ExtraPersonForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/BasicRegistration/ExtraPersonForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Pages/DefaultRegistration.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Pages/DefaultRegistration.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Pages/FinanzialRegistration.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Pages/FinanzialRegistration.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,21 +18,18 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
-        <option value="Interface" />
-        <option value="Class" />
-        <option value="Enum" />
-        <option value="Vue Composition API Component" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="2.0-release" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -43,16 +37,6 @@
     &quot;assignee&quot;: &quot;Goliath02&quot;
   }
 }</component>
-  <component name="GitRewordedCommitMessages">
-    <option name="commitMessagesMapping">
-      <RewordedCommitMessageMapping>
-        <option name="originalMessage" value="WIP course page" />
-        <option name="rewordedMessage" value="WIP course page" />
-      </RewordedCommitMessageMapping>
-    </option>
-    <option name="currentCommit" value="1" />
-    <option name="onto" value="1cf83c2a0f3600dd48b3241a208b964b315c25b1" />
-  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Goliath02/bsc_registration.git&quot;,
@@ -60,6 +44,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.jdks/corretto-23.0.2/lib/src.zip!/java.base/java/util/concurrent/ExecutorService.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/bsc-registration-server/src/main/java/bsc_registration/BackendApplication.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="JsbtTreeLayoutManager">
@@ -82,61 +67,39 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yaml.api: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yaml.postgres_db: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
     &quot;Maven.registration [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.registration [compile].executor&quot;: &quot;Run&quot;,
     &quot;Maven.registration [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.registration [validate].executor&quot;: &quot;Run&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.BackendApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;2.0-release&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;10-implement-admin-dashboard-for-creating-courses&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/regin/IdeaProjects/bsc_registration/bsc-registration-server/src/main/resources/templates/email&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;npm.build.executor&quot;: &quot;Run&quot;,
     &quot;npm.dev.executor&quot;: &quot;Run&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\regin\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-  },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
-    ],
-    &quot;vue.recent.templates&quot;: [
-      &quot;Vue Composition API Component&quot;
-    ]
   }
 }</component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\regin\IdeaProjects\bsc_registration\bsc-registration-server\src\main\resources\templates\email" />
-      <recent name="C:\Users\regin\IdeaProjects\bsc_registration\bsc-registration-server\src\main\resources" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\regin\IdeaProjects\bsc_registration\bsc-registration-server\src\main\resources" />
-      <recent name="C:\Users\regin\IdeaProjects\bsc_registration\bsc-registration-server\src\main\resources\templates\email\attachments" />
-    </key>
-  </component>
-  <component name="RunManager" selected="npm.dev">
+  <component name="RunManager" selected="Spring Boot.BackendApplication">
     <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <option name="ALTERNATIVE_JRE_PATH" value="openjdk-23" />
+      <option name="ALTERNATIVE_JRE_PATH" value="ms-21" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="envFilePaths">
         <option value="$PROJECT_DIR$/dev.env" />
       </option>
@@ -183,12 +146,6 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
-      <deployment type="docker-compose.yml">
-        <settings />
-      </deployment>
-      <method v="2" />
-    </configuration>
     <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
       <deployment type="dockerfile">
         <settings />
@@ -198,6 +155,12 @@
     <configuration name="docker-compose.yaml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
+          <option name="envFilePath" value="C:\Users\regin\IdeaProjects\bsc_registration\dev.env" />
+          <option name="envFilePaths">
+            <list>
+              <option value="C:\Users\regin\IdeaProjects\bsc_registration\dev.env" />
+            </list>
+          </option>
           <option name="sourceFilePath" value="docker-compose.yaml" />
         </settings>
       </deployment>
@@ -252,8 +215,8 @@
     </configuration>
     <list>
       <item itemvalue="Docker.Dockerfile" />
-      <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
       <item itemvalue="Docker.docker-compose.yaml.postgres_db: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
       <item itemvalue="npm.build" />
       <item itemvalue="npm.dev" />
       <item itemvalue="Spring Boot.BackendApplication" />
@@ -261,18 +224,18 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.dev" />
+        <item itemvalue="Docker.Dockerfile" />
+        <item itemvalue="npm.dev" />
         <item itemvalue="npm.build" />
         <item itemvalue="Docker.docker-compose.yaml.postgres_db: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
-        <item itemvalue="Docker.Dockerfile" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
       </set>
     </attachedChunks>
   </component>
@@ -288,102 +251,27 @@
       <workItem from="1743238486279" duration="275000" />
       <workItem from="1743539776703" duration="1075000" />
       <workItem from="1743541284813" duration="2880000" />
-      <workItem from="1759058546695" duration="58000" />
-      <workItem from="1759058610506" duration="566000" />
-      <workItem from="1759059269228" duration="198000" />
-      <workItem from="1759333298705" duration="115000" />
-      <workItem from="1759736226241" duration="539000" />
-      <workItem from="1759736815675" duration="136000" />
-      <workItem from="1759736959314" duration="769000" />
-      <workItem from="1759737911371" duration="97000" />
-      <workItem from="1759738017796" duration="23211000" />
-      <workItem from="1759822393601" duration="204000" />
-      <workItem from="1759835541450" duration="21538000" />
-      <workItem from="1759938534755" duration="448000" />
-      <workItem from="1760126722341" duration="2006000" />
-      <workItem from="1760206032689" duration="1074000" />
-      <workItem from="1760265760046" duration="143000" />
-      <workItem from="1760265952344" duration="254000" />
-      <workItem from="1760266217986" duration="277000" />
-      <workItem from="1760725353235" duration="13555000" />
-      <workItem from="1760961446880" duration="1601000" />
-      <workItem from="1761073268487" duration="5468000" />
-      <workItem from="1761156381349" duration="1021000" />
-      <workItem from="1761237825334" duration="1556000" />
+      <workItem from="1762109111141" duration="10361000" />
+      <workItem from="1762153802308" duration="11748000" />
+      <workItem from="1762168996816" duration="1848000" />
     </task>
-    <task id="LOCAL-00001" summary="Build &amp; price fixes">
+    <task id="LOCAL-00001" summary="fixup! [*] Rework EmailService.java">
       <option name="closed" value="true" />
-      <created>1759742320691</created>
+      <created>1762121207248</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1759742320691</updated>
+      <updated>1762121207248</updated>
     </task>
-    <task id="LOCAL-00002" summary="Fix UI">
+    <task id="LOCAL-00002" summary="fixup! [*] Rework EmailService.java">
       <option name="closed" value="true" />
-      <created>1759749737820</created>
+      <created>1762171993907</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1759749737820</updated>
+      <updated>1762171993907</updated>
     </task>
-    <task id="LOCAL-00003" summary="Add back Login features">
-      <option name="closed" value="true" />
-      <created>1759755079407</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1759755079407</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Update package.json versions">
-      <option name="closed" value="true" />
-      <created>1759773361785</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1759773361785</updated>
-    </task>
-    <task id="LOCAL-00005" summary="WIP">
-      <option name="closed" value="true" />
-      <created>1759773414604</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1759773414604</updated>
-    </task>
-    <task id="LOCAL-00006" summary="WIP">
-      <option name="closed" value="true" />
-      <created>1759842865263</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1759842865264</updated>
-    </task>
-    <task id="LOCAL-00007" summary="WIP">
-      <option name="closed" value="true" />
-      <created>1759867074026</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1759867074026</updated>
-    </task>
-    <task id="LOCAL-00008" summary="WIP Email">
-      <option name="closed" value="true" />
-      <created>1760745634622</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1760745634622</updated>
-    </task>
-    <task id="LOCAL-00009" summary="WIP Email">
-      <option name="closed" value="true" />
-      <created>1760748012080</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1760748012080</updated>
-    </task>
-    <option name="localTasksCounter" value="10" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -400,7 +288,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/2.0-release" />
+                        <option value="10-implement-admin-dashboard-for-creating-courses" />
                       </list>
                     </value>
                   </entry>
@@ -413,17 +301,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Build &amp; price fixes" />
-    <MESSAGE value="Fix UI" />
-    <MESSAGE value="Add back Login features" />
-    <MESSAGE value="Update package.json versions" />
-    <MESSAGE value="WIP" />
-    <MESSAGE value="WIP Email" />
-    <MESSAGE value="Try to implement input otp in IBANInput.vue" />
-    <option name="LAST_COMMIT_MESSAGE" value="Try to implement input otp in IBANInput.vue" />
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
+    <MESSAGE value="fixup! [*] Rework EmailService.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixup! [*] Rework EmailService.java" />
   </component>
 </project>

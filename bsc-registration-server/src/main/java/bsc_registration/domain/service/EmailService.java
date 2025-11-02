@@ -3,8 +3,7 @@ package bsc_registration.domain.service;
 
 import bsc_registration.infrastructure.config.MailSenderConfig;
 import bsc_registration.infrastructure.repository.BscMemberRepository;
-import bsc_registration.webInterface.dto.*;
-import jakarta.mail.Message;
+import bsc_registration.webInterface.dto.BscNameMail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -24,9 +23,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
-import static bsc_registration.domain.utils.FormUtil.calculateAge;
-import static bsc_registration.domain.utils.FormUtil.formatDate;
 import static java.lang.String.format;
 
 
@@ -35,284 +34,308 @@ import static java.lang.String.format;
 @Slf4j
 public class EmailService {
 
-	public static final String BASIC_MAIL_TITEL = "1.BSC Pforzheim Info";
+    public static final String BASIC_MAIL_TITEL = "1.BSC Pforzheim Info";
 	private final MailSenderConfig mailSenderConfig;
 
-	private final BscMemberRepository bscMemberRepository;
+    private final BscMemberRepository bscMemberRepository;
 
 	@Value("${mail.from}")
 	private String sendFrom;
 
-	public void sendMailToRegistration(final List<String> targetEmails, final String csv, final List<MultipartFile> files) throws MessagingException {
+    public void sendInviteToVM() {
 
-		final var mailSender = mailSenderConfig.getJavaMailSender();
+        final String messageForVM = """
+                Liebe BSC-Mitglieder,
+                <br><br>
+                es ist wieder so weit – die Vereinsmeisterschaften Teil 2 stehen vor der Tür! 🎉
+                Wir möchten alle Mitglieder herzlich einladen, dabei zu sein – ganz egal ob jung oder alt, ob Wettkampferfahren oder Freizeit-Schwimmer. Hauptsache, ihr habt Spaß im Wasser! 💦
+                <br><br>
+                Im Anhang findet ihr die Ausschreibung mit allen Disziplinen und Strecken. Dort seht ihr auch, welche Lagen und Distanzen für welche Altersgruppen empfohlen sind – aber keine Sorge: Das sind keine festen Vorgaben.
+                Wenn du lieber eine kürzere Strecke schwimmen möchtest oder dich in einer anderen Lage ausprobieren willst – mach es einfach! Jeder darf mitmachen, so wie es für ihn oder sie am besten passt. 🙌
+                <br><br>
+                Wir freuen uns auf viele motivierte Schwimmerinnen und Schwimmer, spannende Läufe und vor allem auf einen Tag voller Teamgeist, Spaß und gemeinsamer BSC-Energie! ❤️
+                <br><br>
+                Also: Sei dabei, wenn wir gemeinsam zeigen, was in uns steckt! 🏆
+                <br><br>
+                Mit sportlichen Grüßen
+                """;
 
-		final var message = mailSender.createMimeMessage();
+        this.sendMailToAllBscMembers("1.BSC Vereinsmeisterschafter Teil 2 2025", "MailMessageTemplate", messageForVM, null);
+    }
 
-		message.setFrom(new InternetAddress(sendFrom));
+    public void sendMailToAllBscMembers(final String title, final String templateFileName, final String message, final String attachmentTitle) {
 
-		message.setRecipients(Message.RecipientType.TO, String.join(",", targetEmails));
+        List<CompletableFuture<String>> futures = bscMemberRepository.findAll().stream()
+                .filter(member -> member.getEmail() != null)
+                .map(member -> CompletableFuture.supplyAsync(
+                        () -> {
+                            try {
+                                sendMail(member.getEmail(), title, templateFileName, message, attachmentTitle);
+                                return null; // Erfolg → kein Fehler
+                            } catch (Exception e) {
+                                log.error("Fehler beim Senden an {}: {}", member.getEmail(), e.getMessage());
+                                return member.getEmail(); // Fehleradresse zurückgeben
+                            }
+                        }, executor
+                ))
+                .toList();
 
-		MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
-		messageHelper.setFrom(sendFrom);
-		messageHelper.setTo(targetEmails.toArray(new String[0]));
-		messageHelper.setSubject("Neue Anmeldung vom für den 1.BSC!");
-		messageHelper.setText("Neue Anmeldedaten im Anhang");
+        List<String> failedAddresses = futures.stream()
+                .map(CompletableFuture::join)
+                .filter(Objects::nonNull)
+                .toList();
 
-		if (files != null) {
-			for (MultipartFile file : files) {
-				messageHelper.addAttachment(file.getOriginalFilename(), file);
-			}
-		}
+        log.info("Fehlerhafte Mails: {}", failedAddresses);
+    }
 
-		ByteArrayDataSource inputStream = new ByteArrayDataSource(csv.getBytes(StandardCharsets.UTF_8), "application/octet-stream");
+    @Async
+    protected CompletableFuture<Void> sendMail(
+            String receiverMail,
+            String title,
+            String templateFileName,
+            String message,
+            String attachmentFileName
+    ) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                String template = loadHtmlTemplate(templateFileName);
 
-		messageHelper.addAttachment("NeueMitglieder.csv", inputStream);
+                if (message != null) {
+                    template = insertMessageIntoTemplate(template, title, message);
+                }
 
-		mailSender.send(message);
-	}
+                final var mailSender = mailSenderConfig.getJavaMailSender();
+                final var mail = mailSender.createMimeMessage();
 
-	//Is keept for future purposes
-	public void sendEmailToCourseOwner(final List<String> targetEmails, final FormData formData) throws MessagingException {
+                mail.setFrom(new InternetAddress(sendFrom));
+                mail.setRecipients(MimeMessage.RecipientType.TO, receiverMail);
 
-		final var mailSender = mailSenderConfig.getJavaMailSender();
+                final var helper = new MimeMessageHelper(mail, true, CharEncoding.UTF_8);
+                helper.setFrom(sendFrom);
+                helper.setTo(InternetAddress.parse(receiverMail));
+                helper.setSubject(title);
+                helper.setText(template, true);
 
-		final var message = mailSender.createMimeMessage();
+                if (attachmentFileName != null && ! attachmentFileName.isEmpty()) {
+                    final InputStreamSource attachment = loadPdfFromResource(attachmentFileName);
+                    log.debug("Attachment file exists: {}", attachmentFileName);
+                    helper.addAttachment(attachmentFileName, attachment);
+                }
 
-		message.setFrom(new InternetAddress(sendFrom));
+                mailSender.send(mail);
+                log.info("Mail erfolgreich gesendet an: {}", receiverMail);
+            } catch (Exception e) {
+                log.error("Fehler beim Senden an {}: {}", receiverMail, e.getMessage(), e);
+                throw new RuntimeException(e);
+            }
+        });
+    }
 
-		message.setRecipients(Message.RecipientType.TO, String.join(",", targetEmails));
+    @Async
+    public CompletableFuture<Void> sendMail(final BscNameMailInfo info) {
+        try {
+            String template = loadHtmlTemplate(info.templateFileName());
 
-		MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
-		messageHelper.setFrom(sendFrom);
-		messageHelper.setTo(targetEmails.toArray(new String[0]));
-		messageHelper.setSubject("1.BSC Pforzheim Info");
+            if (info.message() != null) {
+                template = insertMessageIntoTemplate(template, info.title(), info.message());
+            }
 
-		messageHelper.setText(buildCourseOwnerHtml(formData), true);
+            final var mailSender = mailSenderConfig.getJavaMailSender();
 
-		mailSender.send(message);
+            MimeMessage mail = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mail, true, StandardCharsets.UTF_8.name());
 
-	}
+            helper.setFrom(sendFrom);
+            helper.setTo(InternetAddress.parse(info.receiverMail()));
+            helper.setSubject(info.title());
+            helper.setText(template, true);
+
+            if (info.attachmentFileName() != null && ! info.attachmentFileName().isEmpty()) {
+                helper.addAttachment(info.attachmentFileName(), info.csvFile());
+            }
+
+            if (info.files() != null) {
+                for (MultipartFile file : info.files()) {
+                    helper.addAttachment(file.getOriginalFilename(), file);
+                }
+            }
+
+            mailSender.send(mail);
+            log.info("Mail erfolgreich gesendet an {}", info.receiverMail());
+
+            return CompletableFuture.completedFuture(null);
+
+        } catch (Exception e) {
+            log.error("Fehler beim Senden an {}: {}", info.receiverMail(), e.getMessage(), e);
+            CompletableFuture<Void> failed = new CompletableFuture<>();
+            failed.completeExceptionally(e);
+            return failed;
+        }
+    }
 
 
-	public void sendEmailToUser(final String email, final FormData formData) throws MessagingException, MailSendException {
+    protected record BscNameMailInfo(
+            String receiverMail, String title, String templateFileName, String message,
+            String attachmentFileName,
+            ByteArrayDataSource csvFile,
+            List<MultipartFile> files
+    ) {
 
-		final var mailSender = mailSenderConfig.getJavaMailSender();
+        public BscNameMailInfo(
+                String receiverMail,
+                String title,
+                String templateFileName,
+                String message,
+                String attachmentFileName,
+                ByteArrayDataSource csvFile,
+                List<MultipartFile> files
+        ) {
+            this.receiverMail = receiverMail;
+            this.title = title;
+            this.templateFileName = templateFileName;
+            this.message = message;
+            this.attachmentFileName = attachmentFileName;
+            this.csvFile = csvFile;
+            this.files = files;
+        }
 
-		final var message = mailSender.createMimeMessage();
+        public BscNameMailInfo(
+                String receiverMail,
+                String title,
+                String templateFileName,
+                String message,
+                String attachmentFileName,
+                List<MultipartFile> files
+        ) {
+            this(
+                    receiverMail,
+                    title,
+                    templateFileName,
+                    message,
+                    attachmentFileName,
+                    null,
+                    files
+            );
+        }
+    }
 
-		message.setFrom(new InternetAddress(sendFrom));
-		message.setRecipients(MimeMessage.RecipientType.TO, email);
+    public String loadHtmlTemplate(String filename) throws IOException {
+        ClassPathResource resource = new ClassPathResource("templates/email/" + filename);
+        byte[] data = resource.getInputStream().readAllBytes();
+        return new String(data, StandardCharsets.UTF_8);
+    }
 
-		final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
-		messageHelper.setFrom(sendFrom);
-		messageHelper.setTo(InternetAddress.parse(email));
-		messageHelper.setSubject("1.BSC Pforzheim Info");
+    public void sendInfoEmailToUser(final String email) throws MessagingException,
+            MailSendException, IOException {
 
-		messageHelper.setText(buildUserMailHtml(formData), true);
+        final String template = loadHtmlTemplate("MailTemplate.html");
 
-		mailSender.send(message);
-	}
+        final var mailSender = mailSenderConfig.getJavaMailSender();
 
-	public String loadHtmlTemplate(String filename) throws IOException {
-		ClassPathResource resource = new ClassPathResource("templates/email/" + filename);
-		byte[] data = resource.getInputStream().readAllBytes();
-		return new String(data, StandardCharsets.UTF_8);
-	}
+        final var message = mailSender.createMimeMessage();
 
-	public void sendInfoEmailToUser(final String email) throws MessagingException,
-			MailSendException, IOException {
+        message.setFrom(new InternetAddress(sendFrom));
+        message.setRecipients(MimeMessage.RecipientType.TO, email);
 
-		final String template = loadHtmlTemplate("MailTemplate.html");
+        final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
+        messageHelper.setFrom(sendFrom);
+        messageHelper.setTo(InternetAddress.parse(email));
+        messageHelper.setSubject("1.BSC Pforzheim Info");
 
-		final var mailSender = mailSenderConfig.getJavaMailSender();
+        messageHelper.setText(template, true);
 
-		final var message = mailSender.createMimeMessage();
-
-		message.setFrom(new InternetAddress(sendFrom));
-		message.setRecipients(MimeMessage.RecipientType.TO, email);
-
-		final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
-		messageHelper.setFrom(sendFrom);
-		messageHelper.setTo(InternetAddress.parse(email));
-		messageHelper.setSubject("1.BSC Pforzheim Info");
-
-		messageHelper.setText(template, true);
-
-		mailSender.send(message);
-
-	}
+        mailSender.send(message);
+    }
 
 	public void sendInfoEmailToUsers(final List<String> emails) throws
-			IOException {
+            IOException {
 
-		final ArrayList<BscNameMail> invalidMails = new ArrayList<>();
+        final ArrayList<BscNameMail> invalidMails = new ArrayList<>();
 
-		final String template = loadHtmlTemplate("MailTemplate.html");
+        final String template = loadHtmlTemplate("MailTemplate.html");
 
-		List<BscNameMail> receiversMails;
+        List<BscNameMail> receiversMails;
 
-		if (emails.isEmpty()) {
-			receiversMails =
-					bscMemberRepository.findAll()
-							.stream()
-							.filter(bscMember -> bscMember.getEmail() != null)
-							.map(member -> new BscNameMail(member.getName(),
-									member.getEmail()))
-							.toList();
-		} else {
-			receiversMails = emails.stream().map(e -> new BscNameMail("anonymous", e)).toList();
-		}
-		final var mailSender = mailSenderConfig.getJavaMailSender();
+        if (emails.isEmpty()) {
+            receiversMails =
+                    bscMemberRepository.findAll()
+                            .stream()
+                            .filter(bscMember -> bscMember.getEmail() != null)
+                            .map(member -> new BscNameMail(
+                                    member.getName(),
+                                    member.getEmail()
+                            ))
+                            .toList();
+        } else {
+            receiversMails = emails.stream().map(e -> new BscNameMail("anonymous", e)).toList();
+        }
+        final var mailSender = mailSenderConfig.getJavaMailSender();
 
-		receiversMails.forEach(member -> {
+        receiversMails.forEach(member -> {
 
-			try {
-				final var message = mailSender.createMimeMessage();
+            try {
+                final var message = mailSender.createMimeMessage();
 
-				message.setFrom(new InternetAddress(sendFrom));
-				message.setRecipients(MimeMessage.RecipientType.TO, member.getEmail());
+                message.setFrom(new InternetAddress(sendFrom));
+                message.setRecipients(MimeMessage.RecipientType.TO, member.getEmail());
 
-				final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
-				messageHelper.setFrom(sendFrom);
-				messageHelper.setTo(InternetAddress.parse(member.getEmail()));
-				messageHelper.setSubject(BASIC_MAIL_TITEL);
+                final var messageHelper = new MimeMessageHelper(message, true, CharEncoding.UTF_8);
+                messageHelper.setFrom(sendFrom);
+                messageHelper.setTo(InternetAddress.parse(member.getEmail()));
+                messageHelper.setSubject(BASIC_MAIL_TITEL);
 
-				messageHelper.setText(template, true);
+                messageHelper.setText(template, true);
 
-				mailSender.send(message);
-			} catch (MailSendException e) {
-				invalidMails.add(new BscNameMail(member.getName(), member.getEmail()));
-				log.error("Error sending email to user: {}", member, e);
-			} catch (MessagingException e) {
-				log.error("Could nor authenticate with mail server: {}", e.getMessage());
-			} catch (MailAuthenticationException e) {
-				log.error("Error occurred: {}", e.getMessage());
-			}
-		});
+                mailSender.send(message);
+            } catch (MailSendException e) {
+                invalidMails.add(new BscNameMail(member.getName(), member.getEmail()));
+                log.error("Error sending email to user: {}", member, e);
+            } catch (MessagingException e) {
+                log.error("Could nor authenticate with mail server: {}", e.getMessage());
+            } catch (MailAuthenticationException e) {
+                log.error("Error occurred: {}", e.getMessage());
+            }
+        });
 
-		log.info("Sending email to {} users was successful from {}.", (receiversMails.size() - invalidMails.size()), invalidMails.size());
+        log.info("Sending email to {} users was successful from {}.", (receiversMails.size() - invalidMails.size()), invalidMails.size());
 
-		if (!invalidMails.isEmpty()) {
-			log.warn("The following emails could not be sent: {}", invalidMails);
-		}
-	}
+        if (! invalidMails.isEmpty()) {
+            log.warn("The following emails could not be sent: {}", invalidMails);
+        }
+    }
 
-	private String buildUserMailHtml(final FormData formData) {
+    private String insertMessageIntoTemplate(final String template, final String title, final String message) {
 
-		StringBuilder morePersonsInfoText = new StringBuilder();
+        return template.replace("${title}", title)
+                .replace("${message}", message);
+    }
 
-		if (!formData.mainData().morePersons().isEmpty()) {
-			morePersonsInfoText.append("<p>Weitere Personen anghaben:</p><br>");
+    private String buildInviteMailHtml(final String title, final String message, final String signUpKey) throws IOException {
 
-			for (ExtraPerson person : formData.mainData().morePersons()) {
+        final String template = loadTemplate(INVITE_TEMPLATE);
 
-				final String personInfo = format("""
-						<p>Geschlecht: %s</p>
-						<p>Vorname: %s</p>
-						<p>Nachname: %s</p>
-						<p>Geburtsdatum: %s</p>
-						<br>
-						""", person.extraGender(), person.extraName(), person.extraSureName(), person.extraBirthday());
+        return template.replace("${title}", title)
+                .replace("${message}", message)
+                .replace("${link}", signUpKey);
+    }
 
-				morePersonsInfoText.append(personInfo).append("\n");
-			}
-		}
+    private String buildLinkToken(final String signUpKey) {
+        return format("https://registration.erster-bsc-pforzheim.de/sign-up?token=%s", signUpKey);
+    }
 
-		final MainData mainData = formData.mainData();
-		final FinancialData fData = formData.financial();
+    private String loadTemplate(final String fileName) throws IOException {
+        var resource = new ClassPathResource("templates/email/" + fileName + ".html");
+        return Files.readString(resource.getFile().toPath());
+    }
 
-		final String infoText = format("""
-						<p>Wir haben folgende Informationen über Sie erhalten:</p>
-						<p>Art der Registrierung: %s</p>
-						<p>Kategorie: %s</p>
-						<p>Geschlecht: %s</p>
-						<p>Vorname: %s</p>
-						<p>Nachname: %s</p>
-						<p>Geburtsdatum: %s</p>
-						<p>Email: %s</p>
-						<p>Telefon/Mobil: %s</p>
-						<p>Straße: %s</p>
-						<p>Postleitzahl: %s</p>
-						<p>Ort: %s</p>
-						<br>
-						<p>IBAN: %s</p>
-						<p>Bankkonto Besitzer Vorname: %s</p>
-						<p>Bankkonto Besitzer Nachname: %s</p>
-						<br>
-						%s
-						
-						<p>Bitte gedulden Sie sich bitte noch etwas und warten Sie auf eine Antwort von einem unserer Spaten-Leitung.</p>
-						<p>Wir melden uns persönlich bei Ihnen und teilen Sie in eine passende Gruppe ein, dass Ihrem Niveu entspricht.</p>
-						
-						""",
-				mainData.type(), mainData.reason(), mainData.gender(), mainData.name(),
-				mainData.surename(), mainData.birthday(), mainData.email(), mainData.phone(),
-				mainData.street(), mainData.plz(), mainData.place(),
+    private InputStreamSource loadPdfFromResource(final String filename) throws IOException {
+        final ClassPathResource resource = new ClassPathResource("attachments/" + filename);
 
-				fData.iban(), fData.nameOfBankOwner(), fData.sureNameBankOwner(),
+        if (! resource.exists()) {
+            throw new IOException("File not found with name: " + filename);
+        }
 
-				morePersonsInfoText
-		);
-
-		return format("""
-				<!DOCTYPE html>
-				          <head>
-				          	<meta charset="UTF-8">
-				          	<title>Info</title>
-				          </head>
-				
-				          <div class="headerWrapper">
-				          	<img src="https://erster-bsc-pforzheim.de/wp-content/uploads/2023/03/BcsLogoCutout.png" style="height: 5em">
-				          </div>
-				
-				          <div class="bodyWrapper">
-				          	<h1>Information zu Ihrer Registrierung</h1>
-				          	%s
-				          	<p>Weitere Informationen finden Sie unter der <a href="https://erster-bsc-pforzheim.de/" style="color: cornflowerblue">Website</a>.</p>
-				          	<p>Wenn Sie weitere Fragen haben kontaktieren Sie gerne <a href="mailto: vorstand@erster-bsc-pforzheim.de" style="color: cornflowerblue">vorstand@erster-bsc-pforzheim.de</a>.</p>
-				""", infoText);
-	}
-
-	private String buildCourseOwnerHtml(final FormData formData) {
-
-		final var mainData = formData.mainData();
-
-		return format("""
-						<!DOCTYPE html>
-						<html>
-						    <head>
-						        <meta charset="UTF-8">
-						        <title>Registration</title>
-						    </head>
-						    <body>
-						        <h1>Neue Registration</h1>
-						        <div>
-						         Name: %s %s
-						        </div>
-						        <div>
-						         Geschlecht: %s
-						        </div>
-						        <div>
-						         Geburtstag: %s (%d)
-						        </div>
-						        <div>
-						         Email: %s
-						        </div>
-						        <div>
-						         Telefon: %s
-						        </div>
-						    </body>
-						</html>
-						""",
-				mainData.name(),
-				mainData.surename(),
-				mainData.gender(),
-				formatDate(mainData.birthday()),
-				calculateAge(mainData.birthday()),
-				mainData.email(),
-				mainData.phone()
-		);
-	}
+        return resource;
+    }
 
 }

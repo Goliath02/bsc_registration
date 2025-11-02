@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 @Controller
 @CrossOrigin
@@ -40,56 +42,52 @@ public class RegistrationController {
 		return ResponseEntity.ok(registrationService.getPriceList());
 	}
 
-	@PostMapping(value = "/registrate", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity validateRegistration(@RequestPart final FormData formData,
-	                                           @RequestPart(required = false) final List<MultipartFile> studentIdentificationFiles) {
+    @PostMapping(value = "/registrate", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity validateRegistration(
+            @RequestPart final FormData formData,
+            @RequestPart(required = false) final List<MultipartFile> studentIdentificationFiles
+    ) {
 
-		if (formData == null) {
-			return ResponseEntity.status(400).body("Form-data is empty");
-		}
+        if (formData == null) {
+            return ResponseEntity.status(400).body("Form-data is empty");
+        }
 
-		log.info("Received registration data: {}", formData);
+        log.info("Received registration data: {}", formData);
 
-		if (studentIdentificationFiles != null) {
+        if (studentIdentificationFiles != null) {
 
-			for (MultipartFile file : studentIdentificationFiles) {
-				//Is bigger than 8MB
-				if (file.getSize() > EIGHT_MB) {
-					return ResponseEntity.status(413).body(Errors.IMAGE_TOO_LARGE);
-				}
-			}
-		}
+            for (MultipartFile file : studentIdentificationFiles) {
+                //Is bigger than 8MB
+                if (file.getSize() > EIGHT_MB) {
+                    return ResponseEntity.status(413).body(Errors.IMAGE_TOO_LARGE);
+                }
+            }
+        }
 
-    registrationService.saveRegistration(formData);
+        registrationService.saveRegistration(formData);
 
-		try {
-			registrationService.sendEmailToRegisteredUser(formData);
-			registrationService.sendEmailToRegistration(formData, studentIdentificationFiles);
-			registrationService.sendEmailToCourseOwner(formData);
-		} catch (MessagingException | IOException e) {
-			log.error("Registration failed with Excpetion: {}", e.getMessage());
-			return ResponseEntity.status(500).body(Errors.INTERNAL_ERROR);
-		} catch (MailSendException e) {
-			log.error("Registration failed with Excpetion: {}", e.getMessage());
+        try {
+            CompletableFuture<Void> f1 = registrationService.sendEmailToRegisteredUser(formData);
+            CompletableFuture<Void> f2 = registrationService.sendEmailToRegistration(formData, studentIdentificationFiles);
+            CompletableFuture<Void> f3 = registrationService.sendEmailToCourseOwner(formData);
 
-			return ResponseEntity.status(400).body(Errors.EMAIL_NOT_FOUND);
-		}
+            CompletableFuture.allOf(f1, f2, f3).join();
 
-		return ResponseEntity.ok().build();
-	}
+            return ResponseEntity.ok().build();
 
-	@PostMapping(value = "/registrateNsw", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity validateNswRegistration(@RequestPart final FormData formData) {
-
-		if (formData == null) {
-			return ResponseEntity.status(400).body("Form-data is empty");
-		}
-
-		log.info("Received new nsw registration data: {}", formData);
-
-		registrationService.setOnRegistrationNswList(formData);
-
-		return ResponseEntity.ok().build();
-	}
+        } catch (CompletionException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof MailSendException) {
+                log.error("Mail send failed: {}", cause.getMessage());
+                return ResponseEntity.status(400).body(Errors.EMAIL_NOT_FOUND);
+            } else if (cause instanceof MessagingException || cause instanceof IOException) {
+                log.error("Registration failed: {}", cause.getMessage());
+                return ResponseEntity.status(500).body(Errors.INTERNAL_ERROR);
+            } else {
+                log.error("Unexpected error: {}", cause.getMessage());
+                return ResponseEntity.status(500).body(Errors.INTERNAL_ERROR);
+            }
+        }
+    }
 
 }
