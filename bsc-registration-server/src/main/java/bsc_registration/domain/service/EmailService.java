@@ -32,6 +32,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static java.lang.String.format;
+
 
 @Service
 @RequiredArgsConstructor()
@@ -39,7 +41,7 @@ import java.util.concurrent.Executors;
 @EnableAsync
 public class EmailService {
 
-	public static final String BASIC_MAIL_TITEL = "1.BSC Pforzheim Info";
+    public static final String BASIC_MAIL_TITEL = "1.BSC Pforzheim Info";
     public static final String INVITE_TEMPLATE = "InviteTemplate";
     private final MailSenderConfig mailSenderConfig;
 
@@ -69,8 +71,7 @@ public class EmailService {
     @Value("${mail.from}")
     private String sendFrom;
 
-
-    public void sendInviteToVM() throws IOException {
+    public void sendInviteToVM() {
 
         final String messageForVM = """
                 Liebe BSC-Mitglieder,
@@ -88,8 +89,7 @@ public class EmailService {
                 Mit sportlichen Grüßen
                 """;
 
-
-        this.sendMailToAllBscMembers("1.BSC Vereinsmeisterschafter Teil 2 2025", "MailMessageTemplate", messageForVM, "Ausschreibung_VM2_2025.pdf");
+        this.sendMailToAllBscMembers("1.BSC Vereinsmeisterschafter Teil 2 2025", "MailMessageTemplate", messageForVM, null);
     }
 
     public void sendMailToAllBscMembers(final String title, final String templateFileName, final String message, final String attachmentTitle) {
