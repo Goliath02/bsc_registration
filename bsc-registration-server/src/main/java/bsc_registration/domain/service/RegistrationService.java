@@ -60,7 +60,7 @@ public class RegistrationService {
             EmailService.BscNameMailInfo info = new EmailService.BscNameMailInfo(
                     String.join(",", receiver),
                     "Neue Anmeldung vom für den 1.BSC!",
-                    "MailMessageTemplate",
+                    "MailMessageTemplate.html",
                     "Neue Anmeldedaten im Anhang",
                     "NeueMitglieder.csv",
                     inputStream,
@@ -83,7 +83,7 @@ public class RegistrationService {
             EmailService.BscNameMailInfo info = new EmailService.BscNameMailInfo(
                     String.join(",", owner),
                     "Neue Anmeldung für deinen Kurs",
-                    "MailMessageTemplate",
+                    "MailMessageTemplate.html",
                     buildCourseOwnerHtml(formData),
                     null,
                     null
@@ -103,7 +103,7 @@ public class RegistrationService {
             EmailService.BscNameMailInfo info = new EmailService.BscNameMailInfo(
                     formData.mainData().email(),
                     "Anmeldebestätigung",
-                    "MailMessageTemplate",
+                    "MailMessageTemplate.html",
                     buildUserMailHtml(formData),
                     null,
                     null

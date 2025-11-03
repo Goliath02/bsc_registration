@@ -27,12 +27,12 @@ export const useRegistrationStore = defineStore("registrationStore", {
         iban: "",
         nameOfBankOwner: "",
         sureNameBankOwner: "",
+        dataProtection: false,
+        dataStatute: false,
+        dataCorrectness: false,
+        hiddenSecurityCheck: false,
       },
 
-      dataProtection: false,
-      statute: false,
-      correctness: false,
-      hiddenSecurityCheck: false,
     },
 
     studentIdentification: [],

@@ -1,6 +1,6 @@
 services:
   api:
-    image: goliath02/bsc_registration:2.0
+    image: goliath02/bsc_registration:latest
     container_name: bsc-registration-server
     platform: ${DOCKER_DEFAULT_PLATFORM}
     env_file:

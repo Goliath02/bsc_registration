@@ -149,7 +149,7 @@ const onFormSubmit = (values) => {
       <Checkbox
         inputId="dd-dataProtection"
         name="dataProtection"
-        v-model="useRegistrationStore().registrationData.dataProtection"
+        v-model="useRegistrationStore().registrationData.financial.dataProtection"
         binary
       />
       <label for="dd-dataProtection">
@@ -165,12 +165,12 @@ const onFormSubmit = (values) => {
 
     <div class="flex items-center gap-4">
       <Checkbox
-        inputId="dd-dataCorectness"
+        inputId="dd-dataCorrectness"
         name="dataCorrectness"
-        v-model="useRegistrationStore().registrationData.correctness"
+        v-model="useRegistrationStore().registrationData.financial.dataCorrectness"
         binary
       />
-      <label for="dd-dataCorectness">
+      <label for="dd-dataCorrectness">
         <p>
           Hiermit bestätige ich, dass alle angegebenen Daten der Richtigkeit
           ensprechen.
@@ -182,7 +182,7 @@ const onFormSubmit = (values) => {
       <Checkbox
         inputId="dd-dataStatute"
         name="dataStatute"
-        v-model="useRegistrationStore().registrationData.statute"
+        v-model="useRegistrationStore().registrationData.financial.dataStatute"
         binary
       />
       <label for="dd-dataStatute">
@@ -194,7 +194,7 @@ const onFormSubmit = (values) => {
     </div>
 
     <input
-      v-model="useRegistrationStore().registrationData.hiddenSecurityCheck"
+      v-model="useRegistrationStore().registrationData.financial.hiddenSecurityCheck"
       class="invisible h-0"
       type="checkbox"
     />
