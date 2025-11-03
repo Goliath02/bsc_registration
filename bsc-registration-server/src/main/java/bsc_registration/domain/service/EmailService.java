@@ -13,20 +13,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.CharEncoding;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-
-import static java.lang.String.format;
 
 
 @Service
@@ -35,12 +36,12 @@ import static java.lang.String.format;
 public class EmailService {
 
     public static final String BASIC_MAIL_TITEL = "1.BSC Pforzheim Info";
-	private final MailSenderConfig mailSenderConfig;
+    private final MailSenderConfig mailSenderConfig;
 
     private final BscMemberRepository bscMemberRepository;
 
-	@Value("${mail.from}")
-	private String sendFrom;
+    @Value("${mail.from}")
+    private String sendFrom;
 
     public void sendInviteToVM() {
 
@@ -76,7 +77,7 @@ public class EmailService {
                                 log.error("Fehler beim Senden an {}: {}", member.getEmail(), e.getMessage());
                                 return member.getEmail(); // Fehleradresse zurückgeben
                             }
-                        }, executor
+                        }
                 ))
                 .toList();
 
@@ -247,7 +248,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
-	public void sendInfoEmailToUsers(final List<String> emails) throws
+    public void sendInfoEmailToUsers(final List<String> emails) throws
             IOException {
 
         final ArrayList<BscNameMail> invalidMails = new ArrayList<>();
@@ -308,19 +309,6 @@ public class EmailService {
 
         return template.replace("${title}", title)
                 .replace("${message}", message);
-    }
-
-    private String buildInviteMailHtml(final String title, final String message, final String signUpKey) throws IOException {
-
-        final String template = loadTemplate(INVITE_TEMPLATE);
-
-        return template.replace("${title}", title)
-                .replace("${message}", message)
-                .replace("${link}", signUpKey);
-    }
-
-    private String buildLinkToken(final String signUpKey) {
-        return format("https://registration.erster-bsc-pforzheim.de/sign-up?token=%s", signUpKey);
     }
 
     private String loadTemplate(final String fileName) throws IOException {

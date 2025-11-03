@@ -1,7 +1,6 @@
 package bsc_registration.domain.service;
 
 import bsc_registration.domain.entities.BscMember;
-import bsc_registration.domain.entities.NswRegistration;
 import bsc_registration.domain.utils.CsvUtil;
 import bsc_registration.domain.utils.DevUtil;
 import bsc_registration.infrastructure.config.BscCourseConfig;
@@ -12,23 +11,17 @@ import bsc_registration.webInterface.dto.ExtraPerson;
 import bsc_registration.webInterface.dto.FinancialData;
 import bsc_registration.webInterface.dto.FormData;
 import bsc_registration.webInterface.dto.MainData;
-import jakarta.mail.MessagingException;
 import jakarta.mail.util.ByteArrayDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSendException;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 import static bsc_registration.domain.utils.FormUtil.calculateAge;
 import static bsc_registration.domain.utils.FormUtil.formatDate;
