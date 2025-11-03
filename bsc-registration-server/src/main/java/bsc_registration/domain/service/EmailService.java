@@ -13,9 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.CharEncoding;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-
-import static java.lang.String.format;
 
 
 @Service
@@ -76,7 +76,7 @@ public class EmailService {
                                 log.error("Fehler beim Senden an {}: {}", member.getEmail(), e.getMessage());
                                 return member.getEmail(); // Fehleradresse zurückgeben
                             }
-                        }, executor
+                        }
                 ))
                 .toList();
 
@@ -308,24 +308,6 @@ public class EmailService {
 
         return template.replace("${title}", title)
                 .replace("${message}", message);
-    }
-
-    private String buildInviteMailHtml(final String title, final String message, final String signUpKey) throws IOException {
-
-        final String template = loadTemplate(INVITE_TEMPLATE);
-
-        return template.replace("${title}", title)
-                .replace("${message}", message)
-                .replace("${link}", signUpKey);
-    }
-
-    private String buildLinkToken(final String signUpKey) {
-        return format("https://registration.erster-bsc-pforzheim.de/sign-up?token=%s", signUpKey);
-    }
-
-    private String loadTemplate(final String fileName) throws IOException {
-        var resource = new ClassPathResource("templates/email/" + fileName + ".html");
-        return Files.readString(resource.getFile().toPath());
     }
 
     private InputStreamSource loadPdfFromResource(final String filename) throws IOException {
