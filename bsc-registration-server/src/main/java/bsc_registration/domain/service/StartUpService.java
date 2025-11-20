@@ -51,14 +51,14 @@ public class StartUpService {
 
             admin.setAuthorities(List.of(adminAuthority));
 
-            final SignUpKey signUpKey = authService.createSignUpKey(AuthorityType.ADMIN);
-            admin.setSignUpKey(signUpKey);
+                final SignUpKey signUpKey = authService.createSignUpKey(AuthorityType.ADMIN);
+                admin.setSignUpKey(signUpKey);
 
-            userRepository.save(admin);
+                userRepository.save(admin);
+            }
         }
-    }
 
-    private void createUserAuthoritiesIfNotPresent() {
+        private void createUserAuthoritiesIfNotPresent() {
 
         List<BscAuthority> allAuthorities = authRepository.findAll();
 

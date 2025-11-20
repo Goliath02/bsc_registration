@@ -42,8 +42,8 @@ public class BscUser implements UserDetails {
 			inverseJoinColumns = @JoinColumn(name = "courseId"))
 	private List<Course> courses;
 
-	@OneToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "sign_up_key_id", referencedColumnName = "signUpKeyId")
+    @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "sign_up_key_id", referencedColumnName = "signUpKeyId")
     @OnDelete(action = OnDeleteAction.CASCADE)
 	private SignUpKey signUpKey;
 
