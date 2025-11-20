@@ -92,6 +92,39 @@ public class EmailService {
         this.sendMailToAllBscMembers("1.BSC Vereinsmeisterschafter Teil 2 2025", "MailMessageTemplate", messageForVM, null);
     }
 
+    public void sendInviteToXmas() {
+
+        final String messageForXmas = """
+                <!-- Betreff: Einladung zur Weihnachtsfeier des 1. BSC Pforzheim 🎄 -->
+                
+                                 Liebe Mitglieder, liebe Eltern, liebe Kinder,<br>
+                                 <br>
+                                 wir laden euch herzlich zu unserer diesjährigen <b>Weihnachtsfeier des 1. BSC Pforzheim</b> ein!<br>
+                                 Die Feier findet am <b>6. Dezember um 14:30 Uhr</b> im <b>Bürgerhaus Buckenberg-Haidach</b> (Marienburger Str. 18, 75181 Pforzheim) statt.<br>
+                                 <br>
+                                 Euch erwartet ein gemütliches Beisammensein mit einem <b>Basteltisch für die Kinder</b> sowie einem kleinen <b>Überraschungsunterhaltungsprogramm</b>.<br>
+                                 Außerdem freuen wir uns darauf, im Rahmen der Feier die <b>Ehrungen der Vereinsmeisterschaften</b> vorzunehmen.<br>
+                                 <br>
+                                 Wie jedes Jahr wird es einen <b>Kuchenverkauf</b> geben – dafür freuen wir uns sehr über Kuchen- oder auch <b>Salatspenden</b> für das warme Essen und die Getränke, die ebenfalls angeboten werden.<br>
+                                 <br>
+                                 Damit wir besser planen können, bitten wir euch, euch kurz über folgendes Formular anzumelden:<br>
+                                 <br>
+                                 👉 <b><a href="https://forms.office.com/e/5vM4QALD4A">Zur Anmeldung für die Weihnachtsfeier</a></b><br>
+                                 <br>
+                                 Dort könnt ihr uns mitteilen,<br>
+                                 – ob ihr kommt,<br>
+                                 – wie viele Personen ihr mitbringt und<br>
+                                 – ob ihr Kuchen oder Salat spendet.<br>
+                                 <br>
+                                 Wir freuen uns auf einen schönen Nachmittag mit euch! ✨<br>
+                                 <br>
+                                 Mit vorweihnachtlichen Grüßen<br>
+                                 <b>Euer Trainerteam und die Vorstandschaft des 1. BSC</b><br>
+                """;
+
+        this.sendMailToAllBscMembers("Einladung zur Weihnachtsfeier des 1. BSC Pforzheim \uD83C\uDF84", "MailMessageTemplate", messageForXmas, "1BSC Einladung Weihnachtsfeier 2025.pdf");
+    }
+
     public void sendMailToAllBscMembers(final String title, final String templateFileName, final String message, final String attachmentTitle) {
 
         List<CompletableFuture<String>> futures = bscMemberRepository.findAll().stream()

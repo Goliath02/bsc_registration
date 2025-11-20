@@ -35,4 +35,9 @@ public class MailController {
         emailService.sendInviteToVM();
     }
 
+    @PostMapping("/sendVMInvite")
+    public void sendXmasInvite() throws IOException {
+        emailService.sendInviteToXmas();
+    }
+
 }
