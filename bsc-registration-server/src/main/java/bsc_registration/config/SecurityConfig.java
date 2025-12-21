@@ -1,8 +1,8 @@
-package bsc_registration.infrastructure.config;
+package bsc_registration.config;
 
 import bsc_registration.adapter.JwtAuthFilter;
 import bsc_registration.adapter.LoginRateFilter;
-import bsc_registration.infrastructure.repository.UserRepository;
+import bsc_registration.features.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

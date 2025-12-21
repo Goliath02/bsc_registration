@@ -1,4 +1,4 @@
-package bsc_registration.webInterface.controller;
+package bsc_registration.features.registration.controller;
 
 import bsc_registration.domain.service.RegistrationService;
 import bsc_registration.webInterface.dto.Errors;

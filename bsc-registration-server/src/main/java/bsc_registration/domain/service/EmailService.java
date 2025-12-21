@@ -1,8 +1,8 @@
 package bsc_registration.domain.service;
 
 
-import bsc_registration.infrastructure.config.MailSenderConfig;
-import bsc_registration.infrastructure.repository.BscMemberRepository;
+import bsc_registration.config.MailSenderConfig;
+import bsc_registration.features.auth.repository.BscMemberRepository;
 import bsc_registration.webInterface.dto.BscNameMail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;

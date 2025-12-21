@@ -1,4 +1,4 @@
-package bsc_registration.webInterface.controller;
+package bsc_registration.features.invite.controller;
 
 import bsc_registration.domain.entities.MemberInvite;
 import bsc_registration.domain.service.InviteService;

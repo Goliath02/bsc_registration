@@ -2,7 +2,7 @@ package bsc_registration.domain.service;
 
 import bsc_registration.domain.entities.MemberInvite;
 import bsc_registration.domain.entities.SignUpKey;
-import bsc_registration.infrastructure.repository.MemberInviteRepository;
+import bsc_registration.features.invite.repository.MemberInviteRepository;
 import bsc_registration.webInterface.dto.AuthorityType;
 import bsc_registration.webInterface.dto.InviteDto;
 import jakarta.mail.MessagingException;

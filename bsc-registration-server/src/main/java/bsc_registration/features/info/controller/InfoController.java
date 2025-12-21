@@ -1,4 +1,4 @@
-package bsc_registration.webInterface.controller;
+package bsc_registration.features.info.controller;
 
 import bsc_registration.domain.entities.CourseType;
 import bsc_registration.domain.entities.TrainingPlace;

@@ -1,4 +1,4 @@
-package bsc_registration.webInterface.controller;
+package bsc_registration.features.course.controller;
 
 import bsc_registration.domain.service.CourseService;
 import bsc_registration.domain.utils.DateUtil;

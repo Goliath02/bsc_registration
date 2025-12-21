@@ -1,4 +1,4 @@
-package bsc_registration.webInterface.controller;
+package bsc_registration.features.trainer.controller;
 
 import bsc_registration.domain.service.TrainerService;
 import bsc_registration.webInterface.dto.TrainerDto;

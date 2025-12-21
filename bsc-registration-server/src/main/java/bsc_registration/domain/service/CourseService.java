@@ -2,10 +2,10 @@ package bsc_registration.domain.service;
 
 import bsc_registration.domain.entities.*;
 import bsc_registration.domain.utils.DateUtil;
-import bsc_registration.infrastructure.repository.CourseRepository;
-import bsc_registration.infrastructure.repository.CourseTypeRepository;
-import bsc_registration.infrastructure.repository.TrainingPlaceRepository;
-import bsc_registration.infrastructure.repository.UserRepository;
+import bsc_registration.features.course.repository.CourseRepository;
+import bsc_registration.features.course.repository.CourseTypeRepository;
+import bsc_registration.features.trainingPlace.repository.TrainingPlaceRepository;
+import bsc_registration.features.auth.repository.UserRepository;
 import bsc_registration.webInterface.dto.CourseDetails;
 import bsc_registration.webInterface.dto.CourseDto;
 import bsc_registration.webInterface.dto.CreateCourseRequestDto;

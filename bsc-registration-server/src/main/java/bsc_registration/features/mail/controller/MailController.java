@@ -1,4 +1,4 @@
-package bsc_registration.webInterface.controller;
+package bsc_registration.features.mail.controller;
 
 import bsc_registration.domain.service.EmailService;
 import jakarta.mail.MessagingException;

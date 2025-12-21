@@ -1,7 +1,7 @@
 package bsc_registration.domain.service;
 
 import bsc_registration.domain.entities.TrainingPlace;
-import bsc_registration.infrastructure.repository.TrainingPlaceRepository;
+import bsc_registration.features.trainingPlace.repository.TrainingPlaceRepository;
 import bsc_registration.webInterface.dto.TrainingPlaceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

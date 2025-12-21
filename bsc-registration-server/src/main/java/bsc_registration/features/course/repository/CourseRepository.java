@@ -1,4 +1,4 @@
-package bsc_registration.infrastructure.repository;
+package bsc_registration.features.course.repository;
 
 import bsc_registration.domain.entities.Course;
 import bsc_registration.domain.entities.HolidayDateInfo;

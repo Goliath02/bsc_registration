@@ -1,4 +1,4 @@
-package bsc_registration.infrastructure.repository;
+package bsc_registration.features.auth.repository;
 
 import bsc_registration.domain.entities.BscAuthority;
 import bsc_registration.webInterface.dto.AuthorityType;

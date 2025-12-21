@@ -1,4 +1,4 @@
-package bsc_registration.infrastructure.config;
+package bsc_registration.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package bsc_registration.webInterface.controller;
+package bsc_registration.features.auth.controller;
 
 import bsc_registration.domain.entities.BscUser;
 import bsc_registration.domain.entities.SignUpKey;

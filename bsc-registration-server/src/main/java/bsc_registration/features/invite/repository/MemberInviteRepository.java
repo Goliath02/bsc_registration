@@ -1,4 +1,4 @@
-package bsc_registration.infrastructure.repository;
+package bsc_registration.features.invite.repository;
 
 import bsc_registration.domain.entities.MemberInvite;
 import org.springframework.data.jpa.repository.JpaRepository;
