@@ -1,7 +1,7 @@
 package bsc_registration.features.course.controller;
 
-import bsc_registration.domain.service.CourseService;
-import bsc_registration.domain.utils.DateUtil;
+import bsc_registration.features.course.service.CourseService;
+import bsc_registration.utils.DateUtil;
 import bsc_registration.webInterface.dto.CourseDetails;
 import bsc_registration.webInterface.dto.CourseDto;
 import bsc_registration.webInterface.dto.CreateCourseRequestDto;

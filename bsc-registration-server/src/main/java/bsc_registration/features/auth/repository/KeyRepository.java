@@ -1,6 +1,6 @@
 package bsc_registration.features.auth.repository;
 
-import bsc_registration.domain.entities.SignUpKey;
+import bsc_registration.features.auth.entity.SignUpKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

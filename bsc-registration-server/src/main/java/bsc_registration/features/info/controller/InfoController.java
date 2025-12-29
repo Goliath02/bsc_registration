@@ -1,8 +1,8 @@
 package bsc_registration.features.info.controller;
 
-import bsc_registration.domain.entities.CourseType;
-import bsc_registration.domain.entities.TrainingPlace;
-import bsc_registration.domain.service.InfoService;
+import bsc_registration.features.course.entity.CourseType;
+import bsc_registration.features.trainingPlace.entity.TrainingPlace;
+import bsc_registration.features.info.service.InfoService;
 import bsc_registration.webInterface.dto.TrainerInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

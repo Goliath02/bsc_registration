@@ -1,7 +1,6 @@
 package bsc_registration.utils;
 
 
-import bsc_registration.domain.utils.CsvUtil;
 import bsc_registration.webInterface.dto.ExtraPerson;
 import bsc_registration.webInterface.dto.FinancialData;
 import bsc_registration.webInterface.dto.FormData;

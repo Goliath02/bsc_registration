@@ -1,7 +1,7 @@
 package bsc_registration.features.course.repository;
 
-import bsc_registration.domain.entities.Course;
-import bsc_registration.domain.entities.HolidayDateInfo;
+import bsc_registration.features.course.entity.Course;
+import bsc_registration.features.info.entity.HolidayDateInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

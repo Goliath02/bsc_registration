@@ -1,7 +1,7 @@
 package bsc_registration.features.trainingPlace.controller;
 
-import bsc_registration.domain.entities.TrainingPlace;
-import bsc_registration.domain.service.TrainingPlaceService;
+import bsc_registration.features.trainingPlace.entity.TrainingPlace;
+import bsc_registration.features.trainingPlace.service.TrainingPlaceService;
 import bsc_registration.webInterface.dto.TrainingPlaceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

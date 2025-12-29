@@ -1,9 +1,9 @@
 package bsc_registration.features.auth.controller;
 
-import bsc_registration.domain.entities.BscUser;
-import bsc_registration.domain.entities.SignUpKey;
-import bsc_registration.domain.service.AuthService;
-import bsc_registration.domain.service.JwtService;
+import bsc_registration.features.auth.entity.BscUser;
+import bsc_registration.features.auth.entity.SignUpKey;
+import bsc_registration.features.auth.service.AuthService;
+import bsc_registration.features.auth.service.JwtService;
 import bsc_registration.webInterface.dto.AuthorityType;
 import bsc_registration.webInterface.dto.LoginDto;
 import bsc_registration.webInterface.dto.SignUpDto;

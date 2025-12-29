@@ -1,6 +1,6 @@
 package bsc_registration.webInterface.dto;
 
-import bsc_registration.domain.entities.HolidayDateInfo;
+import bsc_registration.features.info.entity.HolidayDateInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

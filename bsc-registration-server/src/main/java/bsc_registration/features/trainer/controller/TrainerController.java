@@ -1,6 +1,6 @@
 package bsc_registration.features.trainer.controller;
 
-import bsc_registration.domain.service.TrainerService;
+import bsc_registration.features.trainer.service.TrainerService;
 import bsc_registration.webInterface.dto.TrainerDto;
 import bsc_registration.webInterface.dto.TrainerInfoDto;
 import lombok.RequiredArgsConstructor;

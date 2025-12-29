@@ -1,6 +1,6 @@
 package bsc_registration.features.mail.controller;
 
-import bsc_registration.domain.service.EmailService;
+import bsc_registration.features.mail.service.EmailService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

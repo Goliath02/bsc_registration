@@ -1,6 +1,6 @@
 package bsc_registration.features.registration.controller;
 
-import bsc_registration.domain.service.RegistrationService;
+import bsc_registration.features.registration.service.RegistrationService;
 import bsc_registration.webInterface.dto.Errors;
 import bsc_registration.webInterface.dto.FormData;
 import jakarta.mail.MessagingException;
