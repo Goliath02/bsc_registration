@@ -9,7 +9,6 @@ import bsc_registration.feature.registration.dto.FormData;
 import bsc_registration.feature.registration.dto.MainData;
 import bsc_registration.feature.registration.entities.BscMember;
 import bsc_registration.feature.registration.repository.BscMemberRepository;
-import bsc_registration.feature.registration.repository.NswRegistrationRepository;
 import bsc_registration.utils.CsvUtil;
 import bsc_registration.utils.DevUtil;
 import jakarta.mail.util.ByteArrayDataSource;
@@ -37,7 +36,6 @@ public class RegistrationService {
     final private EmailService emailService;
     final private ConfigLoader configLoader;
 
-    final private NswRegistrationRepository nswRepository;
     final private BscMemberRepository memberRepository;
 
     final private DevUtil devUtil;
@@ -58,15 +56,7 @@ public class RegistrationService {
 
             final var inputStream = new ByteArrayDataSource(csv.getBytes(StandardCharsets.UTF_8), "application/octet-stream");
 
-            EmailService.BscNameMailInfo info = new EmailService.BscNameMailInfo(
-                    String.join(",", receiver),
-                    "Neue Anmeldung vom für den 1.BSC!",
-                    "MailMessageTemplate.html",
-                    "Neue Anmeldedaten im Anhang",
-                    "NeueMitglieder.csv",
-                    inputStream,
-                    files
-            );
+            EmailService.BscNameMailInfo info = new EmailService.BscNameMailInfo(String.join(",", receiver), "Neue Anmeldung vom für den 1.BSC!", "MailMessageTemplate.html", "Neue Anmeldedaten im Anhang", "NeueMitglieder.csv", inputStream, files);
 
             return emailService.sendMail(info);
         } catch (Exception e) {
@@ -81,14 +71,7 @@ public class RegistrationService {
             BscCourseConfig config = configLoader.loadConfig();
             List<String> owner = devUtil.getEmailFromConfig(config.getCourses().get(formData.mainData().reason()));
 
-            EmailService.BscNameMailInfo info = new EmailService.BscNameMailInfo(
-                    String.join(",", owner),
-                    "Neue Anmeldung für deinen Kurs",
-                    "MailMessageTemplate.html",
-                    buildCourseOwnerHtml(formData),
-                    null,
-                    null
-            );
+            EmailService.BscNameMailInfo info = new EmailService.BscNameMailInfo(String.join(",", owner), "Neue Anmeldung für deinen Kurs", "MailMessageTemplate.html", buildCourseOwnerHtml(formData), null, null);
 
             return emailService.sendMail(info);
         } catch (Exception e) {
@@ -101,12 +84,8 @@ public class RegistrationService {
     public CompletableFuture<Void> sendEmailToRegisteredUser(FormData formData) {
         try {
             EmailService.BscNameMailInfo info = new EmailService.BscNameMailInfo(
-                    formData.mainData().email(),
-                    "Anmeldebestätigung",
-                    "MailMessageTemplate.html",
-                    buildUserMailHtml(formData),
-                    null,
-                    null
+                    formData.mainData()
+                            .email(), "Anmeldebestätigung", "MailMessageTemplate.html", buildUserMailHtml(formData), null, null
             );
             return emailService.sendMail(info);
         } catch (Exception e) {
@@ -128,47 +107,12 @@ public class RegistrationService {
 
         final List<BscMember> registrations = new ArrayList<>();
 
-        final var mainRegistration = new BscMember(
-                null,
-                mainData.name(),
-                mainData.surename(),
-                mainData.email(),
-                mainData.phone(),
-                LocalDate.now(),
-                mainData.type(),
-                mainData.reason(),
-                mainData.birthday(),
-                mainData.gender(),
-                mainData.street(),
-                mainData.plz(),
-                mainData.place(),
-                mainData.entryDate(),
-                financialData.iban(),
-                financialData.nameOfBankOwner(),
-                financialData.sureNameBankOwner()
-        );
+        final var mainRegistration = new BscMember(null, mainData.name(), mainData.surename(), mainData.email(), mainData.phone(), LocalDate.now(), mainData.type(), mainData.reason(), mainData.birthday(), mainData.gender(), mainData.street(), mainData.plz(), mainData.place(), mainData.entryDate(), financialData.iban(), financialData.nameOfBankOwner(), financialData.sureNameBankOwner());
 
         registrations.add(mainRegistration);
 
         for (ExtraPerson extraPerson : extraPeople) {
-            final var extraRegistration = new BscMember(
-                    null,
-                    extraPerson.extraName(),
-                    extraPerson.extraSureName(),
-                    mainData.email(),
-                    mainData.phone(),
-                    LocalDate.now(),
-                    mainData.type(),
-                    mainData.reason(),
-                    extraPerson.extraBirthday(),
-                    extraPerson.extraGender(),
-                    mainData.street(),
-                    mainData.plz(),
-                    mainData.place(),
-                    mainData.entryDate(),
-                    financialData.iban(),
-                    financialData.nameOfBankOwner(),
-                    financialData.sureNameBankOwner()
+            final var extraRegistration = new BscMember(null, extraPerson.extraName(), extraPerson.extraSureName(), mainData.email(), mainData.phone(), LocalDate.now(), mainData.type(), mainData.reason(), extraPerson.extraBirthday(), extraPerson.extraGender(), mainData.street(), mainData.plz(), mainData.place(), mainData.entryDate(), financialData.iban(), financialData.nameOfBankOwner(), financialData.sureNameBankOwner()
 
             );
             registrations.add(extraRegistration);
@@ -226,10 +170,7 @@ public class RegistrationService {
                         <p>Bitte gedulden Sie sich bitte noch etwas und warten Sie auf eine Antwort von einem unserer Spaten-Leitung.</p>
                         <p>Wir melden uns persönlich bei Ihnen und teilen Sie in eine passende Gruppe ein, dass Ihrem Niveu entspricht.</p>
                         
-                        """,
-                mainData.type(), mainData.reason(), mainData.gender(), mainData.name(),
-                mainData.surename(), mainData.birthday(), mainData.email(), mainData.phone(),
-                mainData.street(), mainData.plz(), mainData.place(),
+                        """, mainData.type(), mainData.reason(), mainData.gender(), mainData.name(), mainData.surename(), mainData.birthday(), mainData.email(), mainData.phone(), mainData.street(), mainData.plz(), mainData.place(),
 
                 fData.iban(), fData.nameOfBankOwner(), fData.sureNameBankOwner(),
 
@@ -269,14 +210,7 @@ public class RegistrationService {
                                 <div>
                                  Telefon: %s
                                 </div>
-                        """,
-                mainData.name(),
-                mainData.surename(),
-                mainData.gender(),
-                formatDate(mainData.birthday()),
-                calculateAge(mainData.birthday()),
-                mainData.email(),
-                mainData.phone()
+                        """, mainData.name(), mainData.surename(), mainData.gender(), formatDate(mainData.birthday()), calculateAge(mainData.birthday()), mainData.email(), mainData.phone()
         );
     }
 
