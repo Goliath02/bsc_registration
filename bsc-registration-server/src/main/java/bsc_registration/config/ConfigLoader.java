@@ -14,22 +14,22 @@ import java.util.List;
 @Configuration
 public class ConfigLoader {
 
-	@Value("${config.path}")
-	private String configPath;
+    @Value("${config.path}")
+    private String configPath;
 
-	public BscCourseConfig loadConfig() {
+    public BscCourseConfig loadConfig() {
 
-		final var objectMapper = new ObjectMapper();
-		try (InputStream inputStream = getClass().getResourceAsStream(configPath)) {
-			return objectMapper.readValue(inputStream, BscCourseConfig.class);
-		} catch (IOException e) {
-			throw new RuntimeException("Failed to load configuration file", e);
-		}
-	}
+        final var objectMapper = new ObjectMapper();
+        try (InputStream inputStream = getClass().getResourceAsStream(configPath)) {
+            return objectMapper.readValue(inputStream, BscCourseConfig.class);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load configuration file", e);
+        }
+    }
 
-	public List<String> loadCourses() {
-		final var config = this.loadConfig();
-		final var courses = config.getCourses();
-		return new ArrayList<>(courses.keySet());
-	}
+    public List<String> loadCourses() {
+        final var config = this.loadConfig();
+        final var courses = config.getCourses();
+        return new ArrayList<>(courses.keySet());
+    }
 }

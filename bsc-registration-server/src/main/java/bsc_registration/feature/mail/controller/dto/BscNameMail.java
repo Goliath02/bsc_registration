@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class BscNameMail {
 
-	private String name;
-	private String email;
+    private String name;
+    private String email;
 }

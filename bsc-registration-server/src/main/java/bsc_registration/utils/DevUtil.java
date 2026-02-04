@@ -8,35 +8,35 @@ import java.util.List;
 @Service
 public class DevUtil {
 
-	@Value("${dev.email}")
-	private String devEmail;
+    @Value("${dev.email}")
+    private String devEmail;
 
-	public String getEmailFromConfig(final String email) {
+    public String getEmailFromConfig(final String email) {
 
-		if (devEmail == null) {
-			return email;
-		}
+        if (devEmail == null) {
+            return email;
+        }
 
-		if (email.isBlank() || email.equals("example@mail.com")) {
-			return devEmail;
-		}
+        if (email.isBlank() || email.equals("example@mail.com")) {
+            return devEmail;
+        }
 
-		return email;
-	}
+        return email;
+    }
 
-	public List<String> getEmailFromConfig(final List<String> emails) {
+    public List<String> getEmailFromConfig(final List<String> emails) {
 
-		if (devEmail == null) {
-			return emails;
-		}
+        if (devEmail == null) {
+            return emails;
+        }
 
-		return emails.stream().map(email -> {
+        return emails.stream().map(email -> {
 
-			if (email.isBlank() || email.equals("example@mail.com")) {
-				return devEmail;
-			}
+            if (email.isBlank() || email.equals("example@mail.com")) {
+                return devEmail;
+            }
 
-			return email;
-		}).toList();
-	}
+            return email;
+        }).toList();
+    }
 }

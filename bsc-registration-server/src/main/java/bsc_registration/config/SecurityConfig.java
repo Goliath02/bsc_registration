@@ -32,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Configuration
     public class WebConfig implements WebMvcConfigurer {
@@ -45,61 +45,62 @@ public class SecurityConfig {
 
 
     @Bean
-	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter, LoginRateFilter loginRateFilter) throws Exception {
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter, LoginRateFilter loginRateFilter) throws Exception {
 
-		return http
-				.cors(cors -> cors.configurationSource(corsConfigurationSource())) // <-- Aktivieren statt deaktivieren
+        return http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // <-- Aktivieren statt deaktivieren
                 .csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(authorizeRequests ->
-						authorizeRequests.requestMatchers("/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/api/auth/login",
-                                         "/index.html",
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests.requestMatchers(
+                                        "/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/api/auth/login",
+                                        "/index.html",
                                         "/assets/**",
                                         "/BSCSpear.ico",
                                         "/**/*.css", "/**/*.js",
                                         "/**/*.png", "/**/*.jpg", "/**/*.svg", "/**/*.ico"
                                 )
-								.permitAll()
+                                .permitAll()
                                 .requestMatchers(HttpMethod.POST, "/registrate").permitAll()
-								.requestMatchers(HttpMethod.POST, "/api/auth/key/create", "/api/mail/send", "/api/mail/sendAll")
-								.hasAuthority("ADMIN")
-								.requestMatchers("api/course/", "api/info/**")
-								.authenticated()
-								.anyRequest()
-								.authenticated())
-				.sessionManagement(sessionManagement ->
-						sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				)
-				.authenticationProvider(authenticationProvider())
-				.addFilterBefore(loginRateFilter, UsernamePasswordAuthenticationFilter.class)
-				.addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-				.build();
-	}
+                                .requestMatchers(HttpMethod.POST, "/api/auth/key/create", "/api/mail/send", "/api/mail/sendAll")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers("api/course/", "api/info/**")
+                                .authenticated()
+                                .anyRequest()
+                                .authenticated())
+                .sessionManagement(sessionManagement ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(loginRateFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
 
-	@Bean
-	UserDetailsService userDetailsService() {
-		return email -> userRepository.findByEmail(email)
-				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-	}
+    @Bean
+    UserDetailsService userDetailsService() {
+        return email -> userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 
-	@Bean
-	BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-		return config.getAuthenticationManager();
-	}
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 
-	@Bean
-	AuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    @Bean
+    AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-		authProvider.setUserDetailsService(userDetailsService());
-		authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
 
-		return authProvider;
-	}
+        return authProvider;
+    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {

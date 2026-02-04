@@ -11,10 +11,10 @@ import java.util.List;
 @AllArgsConstructor
 public class TrainingUnitsDto {
 
-	private List<LocalDate> dates;
+    private List<LocalDate> dates;
 
-	private int numberOfTrainingUnits;
+    private int numberOfTrainingUnits;
 
-	private List<HolidayDateInfo> holidayDates;
+    private List<HolidayDateInfo> holidayDates;
 
 }

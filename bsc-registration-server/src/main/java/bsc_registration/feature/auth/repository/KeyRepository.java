@@ -10,9 +10,11 @@ import java.util.Optional;
 @Repository
 public interface KeyRepository extends JpaRepository<SignUpKey, String> {
 
-	@Query("""
-			SELECT k FROM SignUpKey k
-			    WHERE k.key = :signUpKey
-			""")
-	Optional<SignUpKey> getKeyByKey(final String signUpKey);
+    @Query(
+            """
+                    SELECT k FROM SignUpKey k
+                        WHERE k.key = :signUpKey
+                    """
+    )
+    Optional<SignUpKey> getKeyByKey(final String signUpKey);
 }

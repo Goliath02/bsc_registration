@@ -9,11 +9,13 @@ import java.util.List;
 public interface NswRegistrationRepository extends JpaRepository<NswRegistration, Integer> {
 
 
-	@Query("""
-			SELECT nswr FROM NSWRegistration AS nswr
-			
-			""")
-	public List<NswRegistration> getAllNswRegistrations();
+    @Query(
+            """
+                    SELECT nswr FROM NSWRegistration AS nswr
+                    
+                    """
+    )
+    public List<NswRegistration> getAllNswRegistrations();
 
 
 }

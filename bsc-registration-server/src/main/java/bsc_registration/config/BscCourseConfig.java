@@ -8,8 +8,8 @@ import java.util.Map;
 @Data
 public class BscCourseConfig {
 
-	private List<String> registrationReceiver;
-	private Map<String, List<String>> courses;
-	private List<String> priceList;
+    private List<String> registrationReceiver;
+    private Map<String, List<String>> courses;
+    private List<String> priceList;
 
 }

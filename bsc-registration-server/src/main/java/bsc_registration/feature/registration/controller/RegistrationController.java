@@ -1,8 +1,8 @@
 package bsc_registration.feature.registration.controller;
 
-import bsc_registration.feature.registration.sevice.RegistrationService;
 import bsc_registration.common.dto.Errors;
 import bsc_registration.feature.registration.dto.FormData;
+import bsc_registration.feature.registration.sevice.RegistrationService;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -22,25 +22,25 @@ import java.util.concurrent.CompletionException;
 @Slf4j
 public class RegistrationController {
 
-	public static final long EIGHT_MB = 8000000L;
-	private final RegistrationService registrationService;
+    public static final long EIGHT_MB = 8000000L;
+    private final RegistrationService registrationService;
 
-	public RegistrationController(final RegistrationService registrationModule) {
-		this.registrationService = registrationModule;
-	}
+    public RegistrationController(final RegistrationService registrationModule) {
+        this.registrationService = registrationModule;
+    }
 
-	@GetMapping("/courses")
-	@ResponseBody()
-	public ResponseEntity<List<String>> getConfig() {
-		return ResponseEntity.ok(registrationService.getCourses());
-	}
+    @GetMapping("/courses")
+    @ResponseBody()
+    public ResponseEntity<List<String>> getConfig() {
+        return ResponseEntity.ok(registrationService.getCourses());
+    }
 
-	@GetMapping("/priceList")
-	@ResponseBody()
-	public ResponseEntity<List<String>> getPriceList() {
+    @GetMapping("/priceList")
+    @ResponseBody()
+    public ResponseEntity<List<String>> getPriceList() {
 
-		return ResponseEntity.ok(registrationService.getPriceList());
-	}
+        return ResponseEntity.ok(registrationService.getPriceList());
+    }
 
     @PostMapping(value = "/registrate", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity validateRegistration(

@@ -1,7 +1,7 @@
 package bsc_registration.feature.trainer.controller;
 
-import bsc_registration.feature.auth.entities.BscUser;
 import bsc_registration.common.InfoService;
+import bsc_registration.feature.auth.entities.BscUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;

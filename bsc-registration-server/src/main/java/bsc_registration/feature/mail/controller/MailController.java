@@ -16,21 +16,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MailController {
 
-	private final EmailService emailService;
+    private final EmailService emailService;
 
 
-	@PostMapping("/send")
-	public void sendMail() throws MessagingException, IOException {
+    @PostMapping("/send")
+    public void sendMail() throws MessagingException, IOException {
 
-		emailService.sendInfoEmailToUser("");
+        emailService.sendInfoEmailToUser("");
 
-	}
+    }
 
-	@PostMapping("/sendAll")
-	public void sendMails(@RequestBody final List<String> emails) throws IOException {
+    @PostMapping("/sendAll")
+    public void sendMails(@RequestBody final List<String> emails) throws IOException {
 
-		emailService.sendInfoEmailToUsers(emails);
+        emailService.sendInfoEmailToUsers(emails);
 
-	}
+    }
 
 }

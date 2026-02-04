@@ -14,17 +14,17 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class HolidayDateInfo {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
 
-	@Column
-	private String holidayName;
+    @Column
+    private String holidayName;
 
-	@Column
-	private LocalDate fromDate;
+    @Column
+    private LocalDate fromDate;
 
-	@Column
-	private LocalDate toDate;
+    @Column
+    private LocalDate toDate;
 }

@@ -1,17 +1,17 @@
 package bsc_registration.feature.registration.sevice;
 
-import bsc_registration.feature.registration.entities.BscMember;
-import bsc_registration.feature.mail.service.EmailService;
-import bsc_registration.utils.CsvUtil;
-import bsc_registration.utils.DevUtil;
 import bsc_registration.config.BscCourseConfig;
 import bsc_registration.config.ConfigLoader;
-import bsc_registration.feature.registration.repository.BscMemberRepository;
-import bsc_registration.feature.registration.repository.NswRegistrationRepository;
+import bsc_registration.feature.mail.service.EmailService;
 import bsc_registration.feature.registration.dto.ExtraPerson;
 import bsc_registration.feature.registration.dto.FinancialData;
 import bsc_registration.feature.registration.dto.FormData;
 import bsc_registration.feature.registration.dto.MainData;
+import bsc_registration.feature.registration.entities.BscMember;
+import bsc_registration.feature.registration.repository.BscMemberRepository;
+import bsc_registration.feature.registration.repository.NswRegistrationRepository;
+import bsc_registration.utils.CsvUtil;
+import bsc_registration.utils.DevUtil;
 import jakarta.mail.util.ByteArrayDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,21 +34,21 @@ import static java.lang.String.format;
 @Slf4j
 public class RegistrationService {
 
-	final private EmailService emailService;
-	final private ConfigLoader configLoader;
+    final private EmailService emailService;
+    final private ConfigLoader configLoader;
 
-	final private NswRegistrationRepository nswRepository;
-	final private BscMemberRepository memberRepository;
+    final private NswRegistrationRepository nswRepository;
+    final private BscMemberRepository memberRepository;
 
-	final private DevUtil devUtil;
-	final private CsvUtil csvUtil;
+    final private DevUtil devUtil;
+    final private CsvUtil csvUtil;
 
-	public List<String> getPriceList() {
+    public List<String> getPriceList() {
 
-		BscCourseConfig bscCourseConfig = configLoader.loadConfig();
+        BscCourseConfig bscCourseConfig = configLoader.loadConfig();
 
-		return bscCourseConfig.getPriceList();
-	}
+        return bscCourseConfig.getPriceList();
+    }
 
     public CompletableFuture<Void> sendEmailToRegistration(FormData formData, List<MultipartFile> files) {
         try {
@@ -90,7 +90,6 @@ public class RegistrationService {
                     null
             );
 
-
             return emailService.sendMail(info);
         } catch (Exception e) {
             CompletableFuture<Void> failed = new CompletableFuture<>();
@@ -117,65 +116,65 @@ public class RegistrationService {
         }
     }
 
-	public List<String> getCourses() {
-		return configLoader.loadCourses();
-	}
-
-  public void saveRegistration(final FormData formData) {
-
-    final MainData mainData = formData.mainData();
-    final FinancialData financialData = formData.financial();
-    final List<ExtraPerson> extraPeople = formData.mainData().morePersons();
-
-    final List<BscMember> registrations = new ArrayList<>();
-
-    final var mainRegistration = new BscMember(
-      null,
-      mainData.name(),
-      mainData.surename(),
-      mainData.email(),
-      mainData.phone(),
-      LocalDate.now(),
-      mainData.type(),
-      mainData.reason(),
-      mainData.birthday(),
-      mainData.gender(),
-      mainData.street(),
-      mainData.plz(),
-      mainData.place(),
-      mainData.entryDate(),
-      financialData.iban(),
-      financialData.nameOfBankOwner(),
-      financialData.sureNameBankOwner()
-    );
-
-    registrations.add(mainRegistration);
-
-    for (ExtraPerson extraPerson : extraPeople) {
-      final var extraRegistration = new BscMember(
-        null,
-        extraPerson.extraName(),
-        extraPerson.extraSureName(),
-        mainData.email(),
-        mainData.phone(),
-        LocalDate.now(),
-        mainData.type(),
-        mainData.reason(),
-        extraPerson.extraBirthday(),
-        extraPerson.extraGender(),
-        mainData.street(),
-        mainData.plz(),
-        mainData.place(),
-        mainData.entryDate(),
-        financialData.iban(),
-        financialData.nameOfBankOwner(),
-        financialData.sureNameBankOwner()
-
-      );
-      registrations.add(extraRegistration);
+    public List<String> getCourses() {
+        return configLoader.loadCourses();
     }
-    memberRepository.saveAll(registrations);
-  }
+
+    public void saveRegistration(final FormData formData) {
+
+        final MainData mainData = formData.mainData();
+        final FinancialData financialData = formData.financial();
+        final List<ExtraPerson> extraPeople = formData.mainData().morePersons();
+
+        final List<BscMember> registrations = new ArrayList<>();
+
+        final var mainRegistration = new BscMember(
+                null,
+                mainData.name(),
+                mainData.surename(),
+                mainData.email(),
+                mainData.phone(),
+                LocalDate.now(),
+                mainData.type(),
+                mainData.reason(),
+                mainData.birthday(),
+                mainData.gender(),
+                mainData.street(),
+                mainData.plz(),
+                mainData.place(),
+                mainData.entryDate(),
+                financialData.iban(),
+                financialData.nameOfBankOwner(),
+                financialData.sureNameBankOwner()
+        );
+
+        registrations.add(mainRegistration);
+
+        for (ExtraPerson extraPerson : extraPeople) {
+            final var extraRegistration = new BscMember(
+                    null,
+                    extraPerson.extraName(),
+                    extraPerson.extraSureName(),
+                    mainData.email(),
+                    mainData.phone(),
+                    LocalDate.now(),
+                    mainData.type(),
+                    mainData.reason(),
+                    extraPerson.extraBirthday(),
+                    extraPerson.extraGender(),
+                    mainData.street(),
+                    mainData.plz(),
+                    mainData.place(),
+                    mainData.entryDate(),
+                    financialData.iban(),
+                    financialData.nameOfBankOwner(),
+                    financialData.sureNameBankOwner()
+
+            );
+            registrations.add(extraRegistration);
+        }
+        memberRepository.saveAll(registrations);
+    }
 
     private String buildUserMailHtml(final FormData formData) {
 

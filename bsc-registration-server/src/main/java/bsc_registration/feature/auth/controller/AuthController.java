@@ -1,13 +1,13 @@
 package bsc_registration.feature.auth.controller;
 
-import bsc_registration.feature.auth.entities.BscUser;
-import bsc_registration.feature.auth.entities.SignUpKey;
-import bsc_registration.feature.auth.service.AuthService;
-import bsc_registration.feature.auth.service.JwtService;
 import bsc_registration.feature.auth.dto.AuthorityType;
 import bsc_registration.feature.auth.dto.LoginDto;
 import bsc_registration.feature.auth.dto.LoginResponse;
 import bsc_registration.feature.auth.dto.SignUpDto;
+import bsc_registration.feature.auth.entities.BscUser;
+import bsc_registration.feature.auth.entities.SignUpKey;
+import bsc_registration.feature.auth.service.AuthService;
+import bsc_registration.feature.auth.service.JwtService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,72 +22,72 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/auth")
 public class AuthController {
 
-	private final AuthService authService;
-	private final JwtService jwtService;
-	private final UserDetailsService userDetailsService;
+    private final AuthService authService;
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
 
-	@PostMapping("/signUp")
-	public ResponseEntity<BscUser> signUp(@RequestBody final SignUpDto signUpDto) {
+    @PostMapping("/signUp")
+    public ResponseEntity<BscUser> signUp(@RequestBody final SignUpDto signUpDto) {
 
-		final BscUser signup = authService.signup(signUpDto);
+        final BscUser signup = authService.signup(signUpDto);
 
-		return ResponseEntity.ok(signup);
+        return ResponseEntity.ok(signup);
 
-	}
+    }
 
-	@PostMapping("/key/create")
-	public ResponseEntity<String> createSignUpKey(@RequestParam final AuthorityType authority) {
+    @PostMapping("/key/create")
+    public ResponseEntity<String> createSignUpKey(@RequestParam final AuthorityType authority) {
 
-		final SignUpKey signUpKey = authService.createSignUpKey(authority);
+        final SignUpKey signUpKey = authService.createSignUpKey(authority);
 
-		authService.saveSignUpKey(signUpKey);
+        authService.saveSignUpKey(signUpKey);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(signUpKey.getKey());
-	}
+        return ResponseEntity.status(HttpStatus.CREATED).body(signUpKey.getKey());
+    }
 
-	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody final LoginDto loginDto, HttpServletResponse response) {
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody final LoginDto loginDto, HttpServletResponse response) {
 
-		final BscUser authenticate = authService.authenticate(loginDto);
+        final BscUser authenticate = authService.authenticate(loginDto);
 
-		if (authenticate == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		}
+        if (authenticate == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-		final String token = jwtService.generateToken(authenticate);
+        final String token = jwtService.generateToken(authenticate);
 
-		final var loginResponse = new LoginResponse();
+        final var loginResponse = new LoginResponse();
 
-		Cookie cookie = new Cookie("jwt", token);
-		cookie.setHttpOnly(true);
-		cookie.setSecure(true); // in dev ggf. false
-		cookie.setPath("/");
-		cookie.setMaxAge(7 * 24 * 60 * 60); // 7 Tage
-		response.addCookie(cookie);
+        Cookie cookie = new Cookie("jwt", token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true); // in dev ggf. false
+        cookie.setPath("/");
+        cookie.setMaxAge(7 * 24 * 60 * 60); // 7 Tage
+        response.addCookie(cookie);
 
-		return ResponseEntity.ok("Login successfull");
-	}
+        return ResponseEntity.ok("Login successfull");
+    }
 
-	@GetMapping("/authenticated")
-	public ResponseEntity<String> authenticated(HttpServletRequest request) {
+    @GetMapping("/authenticated")
+    public ResponseEntity<String> authenticated(HttpServletRequest request) {
 
-		Cookie[] cookies = request.getCookies();
-		String token = null;
+        Cookie[] cookies = request.getCookies();
+        String token = null;
 
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if ("jwt".equals(cookie.getName())) {
-					token = cookie.getValue();
-				}
-			}
-		}
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                }
+            }
+        }
 
-		if (token == null || !jwtService.isTokenValid(token)) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		}
+        if (token == null || ! jwtService.isTokenValid(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-		return ResponseEntity.ok("valid");
+        return ResponseEntity.ok("valid");
 
-	}
+    }
 }

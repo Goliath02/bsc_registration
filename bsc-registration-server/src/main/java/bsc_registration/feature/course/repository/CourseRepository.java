@@ -1,7 +1,7 @@
 package bsc_registration.feature.course.repository;
 
-import bsc_registration.feature.course.entities.Course;
 import bsc_registration.feature.course.HolidayDateInfo;
+import bsc_registration.feature.course.entities.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,25 +15,27 @@ import java.util.Optional;
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
 
-	@Query("SELECT c FROM Course c")
-	List<Course> getAllCourses();
+    @Query("SELECT c FROM Course c")
+    List<Course> getAllCourses();
 
-	@Query("""
-			    SELECT h FROM HolidayDateInfo h
-			    WHERE h.fromDate <= :endDate
-			    AND h.toDate >= :startDate
-			""")
-	List<HolidayDateInfo> getHolidayDateInfoBetweenDates(
-			final LocalDate startDate,
-			final LocalDate endDate
-	);
+    @Query(
+            """
+                        SELECT h FROM HolidayDateInfo h
+                        WHERE h.fromDate <= :endDate
+                        AND h.toDate >= :startDate
+                    """
+    )
+    List<HolidayDateInfo> getHolidayDateInfoBetweenDates(
+            final LocalDate startDate,
+            final LocalDate endDate
+    );
 
-	@Query("SELECT h FROM HolidayDateInfo h")
-	List<HolidayDateInfo> getAllHolidays();
+    @Query("SELECT h FROM HolidayDateInfo h")
+    List<HolidayDateInfo> getAllHolidays();
 
-	@Query("SELECT CASE WHEN :date BETWEEN h.fromDate AND h.toDate THEN TRUE ELSE FALSE END FROM HolidayDateInfo h")
-	boolean isDateInHoliday(final LocalDate date);
+    @Query("SELECT CASE WHEN :date BETWEEN h.fromDate AND h.toDate THEN TRUE ELSE FALSE END FROM HolidayDateInfo h")
+    boolean isDateInHoliday(final LocalDate date);
 
-	@Query("SELECT h FROM HolidayDateInfo h WHERE :trainingDate BETWEEN h.fromDate AND h.toDate")
-	Optional<HolidayDateInfo> getDateInHoliday(@Param("trainingDate") LocalDate trainingDate);
+    @Query("SELECT h FROM HolidayDateInfo h WHERE :trainingDate BETWEEN h.fromDate AND h.toDate")
+    Optional<HolidayDateInfo> getDateInHoliday(@Param("trainingDate") LocalDate trainingDate);
 }

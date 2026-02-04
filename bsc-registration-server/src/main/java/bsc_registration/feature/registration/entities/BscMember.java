@@ -14,55 +14,55 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class BscMember {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column
-  private String name;
+    @Column
+    private String name;
 
-  @Column
-  private String sureName;
+    @Column
+    private String sureName;
 
-  @Column
-  private String email;
+    @Column
+    private String email;
 
-  @Column
-  private String phone;
+    @Column
+    private String phone;
 
-  @Column
-  private LocalDate registrationDate;
+    @Column
+    private LocalDate registrationDate;
 
-  @Column
-  private String type;
+    @Column
+    private String type;
 
-  @Column
-  private String reason;
+    @Column
+    private String reason;
 
-  @Column
-  private LocalDate birthday;
+    @Column
+    private LocalDate birthday;
 
-  @Column
-  private String gender;
+    @Column
+    private String gender;
 
-  @Column
-  private String street;
+    @Column
+    private String street;
 
-  @Column
-  private String plz;
+    @Column
+    private String plz;
 
-  @Column
-  private String place;
+    @Column
+    private String place;
 
-  @Column
-  private LocalDate entryDate;
+    @Column
+    private LocalDate entryDate;
 
-  @Column
-  private String iban;
+    @Column
+    private String iban;
 
-  @Column
-  private String nameOfBankOwner;
+    @Column
+    private String nameOfBankOwner;
 
-  @Column
-  private String sureNameBankOwner;
+    @Column
+    private String sureNameBankOwner;
 }

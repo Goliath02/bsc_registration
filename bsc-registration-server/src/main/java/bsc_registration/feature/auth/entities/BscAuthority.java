@@ -13,21 +13,21 @@ import org.springframework.security.core.GrantedAuthority;
 @NoArgsConstructor
 public class BscAuthority implements GrantedAuthority {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long authorityId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long authorityId;
 
-	@Column(nullable = false, unique = true)
-	@Enumerated(EnumType.STRING)
-	private AuthorityType authority;
+    @Column(nullable = false, unique = true)
+    @Enumerated(EnumType.STRING)
+    private AuthorityType authority;
 
-	@Override
-	public String getAuthority() {
-		return authority.name();
-	}
+    @Override
+    public String getAuthority() {
+        return authority.name();
+    }
 
-	@Override
-	public String toString() {
-		return authority.name();
-	}
+    @Override
+    public String toString() {
+        return authority.name();
+    }
 }
