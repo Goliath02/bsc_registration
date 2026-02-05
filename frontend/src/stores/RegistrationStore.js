@@ -32,7 +32,6 @@ export const useRegistrationStore = defineStore("registrationStore", {
         dataCorrectness: false,
         hiddenSecurityCheck: false,
       },
-
     },
 
     studentIdentification: [],
@@ -67,159 +66,93 @@ export const useRegistrationStore = defineStore("registrationStore", {
     triedToValidateBasicForm: false,
     triedToValidateFinancialForm: false,
 
-    price: 0.0,
-
     isLoadingRequest: false,
     requestFailed: false,
     requestFailedWithError: "",
   }),
 
-    getters: {
-        calculatePrice(state) {
-            const main = state.registrationData.mainData;
-            let total = 0;
+  getters: {
+    price(state) {
+      const main = state.registrationData.mainData;
+      let total = 0;
 
-            switch (main.type) {
-                case RegistrationType.MEMBER:
-                    total = 105.0;
-                    break;
-
-                case RegistrationType.STUDENT:
-                    total = 85.0;
-                    break;
-
-                case RegistrationType.FAMILY:
-                    total = 85.0;
-
-                    for (const person of main.morePersons) {
-                        if (dateUtil.getTypeByBirthday(person.birthday) === AgeType.CHILD) {
-                            total += 15.0;
-                        } else {
-                            total += 25.0;
-                        }
-                    }
-                    break;
-            }
-
-            return total;
-        },
+      switch (main.type) {
+        case RegistrationType.MEMBER:
+          total = 105;
+          break;
+        case RegistrationType.STUDENT:
+          total = 85;
+          break;
+        case RegistrationType.FAMILY:
+          total = 85;
+          for (const person of main.morePersons) {
+            total +=
+              dateUtil.getTypeByBirthday(person.birthday) === AgeType.CHILD
+                ? 15
+                : 25;
+          }
+          break;
+      }
+      return total;
     },
 
+    isStudentIdentificationActive(state) {
+      return state.registrationData.mainData.type === "Schüler/Student über 18";
+    },
 
-    actions: {
+    isBasicFormValid(state) {
+      const m = state.registrationData.mainData;
 
+      const baseValid =
+        !!m.type &&
+        !!m.reason &&
+        !!m.name &&
+        !!m.surename &&
+        !!m.birthday &&
+        !!m.gender &&
+        !!m.email &&
+        !!m.phone &&
+        !!m.street &&
+        !!m.plz &&
+        !!m.place;
+
+      const morePersonsValid = m.morePersons.every(
+        (p) => !!p.name && !!p.surename && !!p.birthday && !!p.gender,
+      );
+
+      const studentIdValid = !this.isStudentIdentificationActive
+        ? true
+        : state.studentIdentification.length > 0;
+
+      return baseValid && morePersonsValid && studentIdValid;
+    },
+
+    isFinancialFormValid(state) {
+      const f = state.registrationData.financial;
+
+      return (
+        !!f.iban &&
+        !!f.nameOfBankOwner &&
+        !!f.sureNameBankOwner &&
+        f.dataProtection === true &&
+        f.dataStatute === true &&
+        f.dataCorrectness === true
+      );
+    },
+  },
+
+  actions: {
     removeExtraPersonForm(index) {
-      useRegistrationStore().registrationData.mainData.morePersons.splice(
-        index,
-        1,
-      );
+      this.registrationData.mainData.morePersons.splice(index, 1);
     },
 
-    isDefaultDataFormCorrect() {
-      useRegistrationStore().triedToValidateBasicForm = true;
-
-      useRegistrationStore().updateBasicValidation();
-
-      return (
-        useRegistrationStore().isFilled.defaultData.type &&
-        useRegistrationStore().isFilled.defaultData.reason &&
-        (useRegistrationStore().isFilled.studentIdentification ||
-          !this.isStudenIdentificationActive()) &&
-        useRegistrationStore().isFilled.defaultData.name &&
-        useRegistrationStore().isFilled.defaultData.surename &&
-        useRegistrationStore().isFilled.defaultData.birthday &&
-        useRegistrationStore().isFilled.defaultData.gender &&
-        useRegistrationStore().isFilled.defaultData.email &&
-        useRegistrationStore().isFilled.defaultData.phone &&
-        useRegistrationStore().isFilled.defaultData.street &&
-        useRegistrationStore().isFilled.defaultData.plz &&
-        useRegistrationStore().isFilled.defaultData.place &&
-        useRegistrationStore().checkMorePersonsData()
-      );
+    validateBasic() {
+      this.triedToValidateBasicForm = true;
+      return this.isBasicFormValid;
     },
-
-    isStudenIdentificationActive() {
-      if (
-        useRegistrationStore().registrationData.mainData.type ===
-        "Schüler/Student über 18"
-      ) {
-        return true;
-      }
-      return useRegistrationStore().isFilled.studentIdentification;
-    },
-
-    isFinancialFormCorrect() {
-      useRegistrationStore().triedToValidateFinancialForm = true;
-
-      useRegistrationStore().updateFinancialValidation();
-
-      return (
-        useRegistrationStore().isFilled.financialData.iban &&
-        useRegistrationStore().isFilled.financialData.nameOfBankOwner &&
-        useRegistrationStore().isFilled.financialData.surenameOfBankOwner &&
-        useRegistrationStore().isFilled.dataProtection &&
-        useRegistrationStore().isFilled.correctness &&
-        useRegistrationStore().isFilled.statute
-      );
-    },
-
-    updateBasicValidation() {
-      useRegistrationStore().isFilled.defaultData.type =
-        !!useRegistrationStore().registrationData.mainData.type;
-      useRegistrationStore().isFilled.defaultData.reason =
-        !!useRegistrationStore().registrationData.mainData.reason;
-      useRegistrationStore().isFilled.studentIdentification = !(
-        useRegistrationStore().studentIdentification.length === 0 ||
-        !this.isStudenIdentificationActive()
-      );
-      useRegistrationStore().isFilled.defaultData.name =
-        !!useRegistrationStore().registrationData.mainData.name;
-      useRegistrationStore().isFilled.defaultData.surename =
-        !!useRegistrationStore().registrationData.mainData.surename;
-      useRegistrationStore().isFilled.defaultData.birthday =
-        !!useRegistrationStore().registrationData.mainData.birthday;
-      useRegistrationStore().isFilled.defaultData.gender =
-        !!useRegistrationStore().registrationData.mainData.gender;
-      useRegistrationStore().isFilled.defaultData.email =
-        !!useRegistrationStore().registrationData.mainData.email;
-      useRegistrationStore().isFilled.defaultData.phone =
-        !!useRegistrationStore().registrationData.mainData.phone;
-      useRegistrationStore().isFilled.defaultData.street =
-        !!useRegistrationStore().registrationData.mainData.street;
-      useRegistrationStore().isFilled.defaultData.plz =
-        !!useRegistrationStore().registrationData.mainData.plz;
-      useRegistrationStore().isFilled.defaultData.place =
-        !!useRegistrationStore().registrationData.mainData.place;
-    },
-
-    updateFinancialValidation() {
-      useRegistrationStore().isFilled.financialData.nameOfBankOwner =
-        !!useRegistrationStore().registrationData.financial.nameOfBankOwner;
-      useRegistrationStore().isFilled.financialData.surenameOfBankOwner =
-        !!useRegistrationStore().registrationData.financial.sureNameBankOwner;
-      useRegistrationStore().isFilled.dataProtection =
-        !!useRegistrationStore().registrationData.dataProtection;
-      useRegistrationStore().isFilled.statute =
-        !!useRegistrationStore().registrationData.statute;
-      useRegistrationStore().isFilled.correctness =
-        !!useRegistrationStore().registrationData.correctness;
-    },
-
-    checkMorePersonsData() {
-      const morePersons =
-        useRegistrationStore().registrationData.mainData.morePersons;
-
-      for (let i = 0; i < morePersons.length; i++) {
-        if (
-          !morePersons[i].name ||
-          !morePersons[i].surename ||
-          !morePersons[i].birthday ||
-          !morePersons[i].gender
-        ) {
-          return false;
-        }
-      }
-      return true;
+    validateFinancial() {
+      this.triedToValidateFinancialForm = true;
+      return this.isFinancialFormValid;
     },
 
     getTargetURL() {
