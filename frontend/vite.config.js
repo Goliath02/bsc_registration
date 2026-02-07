@@ -14,14 +14,15 @@ export default defineConfig({
       resolvers: [PrimeVueResolver()],
     }),
   ],
+  base: './', // Für Production (wird in index.html eingebunden)
   server: {
+    port: 3000,
     proxy: {
-      "/api": {
-        target: "http://localhost:8080/",
-        changeOrigin: true, // Ensure the request appears to come from the frontend server
-        rewrite: (path) => path.replace(/^\/api/, ""), // Optional: Remove '/api' prefix
-      },
-    },
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true
+      }
+    }
   },
   resolve: {
     alias: {
