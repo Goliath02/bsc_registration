@@ -4,6 +4,7 @@ import router from "@/router.js";
 import axios from "axios";
 import PriceDisplay from "@/components/BasicRegistration/PriceDisplay.vue";
 import StepDots from "@/components/StepDots.vue";
+import { getTargetURL } from "@/apiClient.ts";
 
 export default {
   name: "RegistrationNavigation",
@@ -62,7 +63,7 @@ export default {
 
         axios
           .post(
-            useRegistrationStore().getTargetURL() + "/registrate",
+            getTargetURL() + "/registrate",
             formData,
             { headers: { "Content-Type": "multipart/form-data" } },
           )

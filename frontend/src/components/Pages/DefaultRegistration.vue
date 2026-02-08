@@ -1,10 +1,9 @@
-<script setup>
+<script setup >
 import FormHeader from "@/components/FormHeader.vue";
 import AddMemberButton from "@/components/BasicRegistration/AddMemberButton.vue";
 import ExtraPersonForm from "@/components/BasicRegistration/ExtraPersonForm.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore.js";
 import NachweisFeld from "@/components/BasicRegistration/NachweisFeld.vue";
-import { RegistrationType } from "@/components/BasicRegistration/dto/RegistrationType.js";
 import { Form } from "@primevue/forms";
 import { computed, onMounted, ref } from "vue";
 import axios from "axios";
@@ -15,6 +14,8 @@ import FloatLabel from "primevue/floatlabel";
 import * as yup from "yup";
 import { yupResolver } from "@primevue/forms/resolvers/yup";
 import router from "@/router.js";
+import { RegistrationType } from "@/stores/Registration.ts";
+import { getTargetURL } from "@/apiClient.ts";
 
 const resolver = yupResolver(
   yup.object().shape({
@@ -24,10 +25,16 @@ const resolver = yupResolver(
     surename: yup.string().required("Nachname wird benötigt."),
     birthday: yup.date().required("Geburtsdatum angeben."),
     gender: yup.string().required("Geschlecht angeben."),
-    email: yup.string().email("Bitte ein gültige Email angeben").required("Email wird benötigt."),
+    email: yup
+      .string()
+      .email("Bitte ein gültige Email angeben")
+      .required("Email wird benötigt."),
     phone: yup.string().required("Telefonnummer wird benötigt."),
     street: yup.string().required("Straße wird benötigt."),
-    plz: yup.string().matches(/^[0-9]+$/, "Es sind nur Zahlen erlaubt").required("Postleitzahl wird benötigt."),
+    plz: yup
+      .string()
+      .matches(/^[0-9]+$/, "Es sind nur Zahlen erlaubt")
+      .required("Postleitzahl wird benötigt."),
     place: yup.string().required("Ort wird benötigt."),
     file: yup
       .mixed()
@@ -73,7 +80,7 @@ const toggle = (event) => {
 
 onMounted(() => {
   axios
-    .get(useRegistrationStore().getTargetURL() + "/priceList")
+    .get(getTargetURL() + "/priceList")
     .then((res) => {
       prices.value = res.data;
     })
@@ -117,7 +124,7 @@ const props = defineProps({
 
 onMounted(() => {
   axios
-    .get(useRegistrationStore().getTargetURL() + "/courses")
+    .get(getTargetURL() + "/courses")
     .then((res) => {
       courses.value = res.data;
     })

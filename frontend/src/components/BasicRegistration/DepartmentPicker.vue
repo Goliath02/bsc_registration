@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import axios from "axios";
-import { useRegistrationStore } from "@/stores/RegistrationStore.js";
+import { getTargetURL } from "@/apiClient.ts";
 
 let courses = ref([]);
 
@@ -12,7 +12,7 @@ const props = defineProps({
 
 onMounted(() => {
   axios
-    .get(useRegistrationStore().getTargetURL() + "/courses")
+    .get(getTargetURL() + "/courses")
     .then((res) => {
       courses.value = res.data;
     })

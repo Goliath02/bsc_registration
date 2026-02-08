@@ -2,9 +2,8 @@ services:
   api:
     image: goliath02/bsc_registration:latest
     container_name: bsc-registration-server
-    platform: ${DOCKER_DEFAULT_PLATFORM}
     env_file:
-      - prod.env
+      - dev.env
     volumes:
       - ./logs:/app/logs
       - ./config:/app/config
@@ -17,7 +16,6 @@ services:
   nginx:
     image: nginx:1.27.2-alpine-slim
     container_name: nginx_proxy
-    platform: ${DOCKER_DEFAULT_PLATFORM}
     ports:
       - "80:80"
     volumes:
@@ -28,11 +26,10 @@ services:
 
   postgres_db:
     image: postgres:17-alpine
-    platform: ${DOCKER_DEFAULT_PLATFORM}
     container_name: PostgresCont
     restart: always
     env_file:
-      - prod.env
+      - dev.env
     ports:
       - '127.0.0.1:5432:5432'
     volumes:

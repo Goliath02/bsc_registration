@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
-import { RegistrationType } from "@/components/BasicRegistration/dto/RegistrationType.js";
-import { AgeType } from "@/components/BasicRegistration/dto/AgeType.js";
 import * as dateUtil from "@/utils/dateUtil.js";
+import { RegistrationType } from "@/stores/Registration.ts";
 
 export const useRegistrationStore = defineStore("registrationStore", {
   state: () => ({
@@ -155,9 +154,6 @@ export const useRegistrationStore = defineStore("registrationStore", {
       return this.isFinancialFormValid;
     },
 
-    getTargetURL() {
-      return import.meta.env.DEV ? "http://localhost:8080" : "";
-    },
   },
 });
 

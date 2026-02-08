@@ -98,9 +98,5 @@ export const MemberRegistrationStore = defineStore("memberRegistrationStore", {
       return this.isFinancialFormValid;
     },
 
-    getTargetURL() {
-
-      return import.meta.env.DEV ? "http://localhost:8080" : "";
-    },
   },
 });

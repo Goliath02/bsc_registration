@@ -1,10 +1,9 @@
 <script setup>
-import { RegistrationType } from "@/components/BasicRegistration/dto/RegistrationType.js";
 import { onMounted, ref } from "vue";
 import Popover from "primevue/popover";
 import Button from "primevue/button";
 import axios from "axios";
-import { useRegistrationStore } from "@/stores/RegistrationStore.js";
+import { getTargetURL } from "@/apiClient.ts";
 
 const modelValue = defineModel();
 const props = defineProps({
@@ -20,7 +19,7 @@ const toggle = (event) => {
 
 onMounted(() => {
   axios
-    .get(useRegistrationStore().getTargetURL() + "/priceList")
+    .get(getTargetURL() + "/priceList")
     .then((res) => {
       prices.value = res.data;
     })

@@ -1,4 +1,4 @@
-import { AgeType } from "@/components/BasicRegistration/dto/AgeType";
+import { AgeType } from "@/stores/Registration";
 
 const FULL_AGE = 18;
 

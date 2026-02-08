@@ -14,16 +14,6 @@ export default defineConfig({
       resolvers: [PrimeVueResolver()],
     }),
   ],
-  base: './', // Für Production (wird in index.html eingebunden)
-  server: {
-    port: 3000,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true
-      }
-    }
-  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
