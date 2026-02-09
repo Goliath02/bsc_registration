@@ -48,7 +48,7 @@ public class SecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter, LoginRateFilter loginRateFilter) throws Exception {
 
         return http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // <-- Aktivieren statt deaktivieren
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests.requestMatchers(
@@ -56,14 +56,14 @@ public class SecurityConfig {
                                         "/index.html",
                                         "/assets/**",
                                         "/BSCSpear.ico",
-                                        "/**/*.css", "/**/*.js",
-                                        "/**/*.png", "/**/*.jpg", "/**/*.svg", "/**/*.ico"
+                                        "/*.css", "/*.js",
+                                        "/*.png", "/*.jpg", "/*.svg", "/*.ico"
                                 )
                                 .permitAll()
                                 .requestMatchers(HttpMethod.POST, "/registrate").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/auth/key/create", "/api/mail/send", "/api/mail/sendAll")
                                 .hasAuthority("ADMIN")
-                                .requestMatchers("api/course/", "api/info/**")
+                                .requestMatchers("/api/course/", "/api/info/**")
                                 .authenticated()
                                 .anyRequest()
                                 .authenticated())
