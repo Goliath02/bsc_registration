@@ -1,11 +1,11 @@
 <script>
-import { useRegistrationStore } from "@/stores/RegistrationStore.js";
+import { MemberRegistrationStore } from "@/stores/MemberRegistrationStore.ts";
 
 export default {
   data() {
     return {
       isDragging: false,
-      files: useRegistrationStore().studentIdentification,
+      files: MemberRegistrationStore().registrationData.verificationFiles,
     };
   },
 
@@ -15,7 +15,6 @@ export default {
   },
 
   methods: {
-    useRegistrationStore,
     onChange() {
       if (
         this.$refs.file.files.length <= 2 &&
@@ -63,7 +62,6 @@ export default {
 
     remove(i) {
       this.files.splice(i, 1);
-      useRegistrationStore().updateBasicValidation();
     },
 
     generateURL(file) {

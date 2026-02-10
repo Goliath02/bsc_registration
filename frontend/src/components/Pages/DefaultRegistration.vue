@@ -1,8 +1,8 @@
-<script setup >
+<script setup lang="ts">
 import FormHeader from "@/components/FormHeader.vue";
 import AddMemberButton from "@/components/BasicRegistration/AddMemberButton.vue";
 import ExtraPersonForm from "@/components/BasicRegistration/ExtraPersonForm.vue";
-import { useRegistrationStore } from "@/stores/RegistrationStore.js";
+import { MemberRegistrationStore } from "@/stores/MemberRegistrationStore.ts";
 import NachweisFeld from "@/components/BasicRegistration/NachweisFeld.vue";
 import { Form } from "@primevue/forms";
 import { computed, onMounted, ref } from "vue";
@@ -14,58 +14,60 @@ import FloatLabel from "primevue/floatlabel";
 import * as yup from "yup";
 import { yupResolver } from "@primevue/forms/resolvers/yup";
 import router from "@/router.js";
-import { RegistrationType } from "@/stores/Registration.ts";
+import { MorePersonDetails, RegistrationType } from "@/stores/Registration.ts";
 import { getTargetURL } from "@/apiClient.ts";
 
-const resolver = yupResolver(
-  yup.object().shape({
-    type: yup.string().required("Kategorie wählen."),
-    reason: yup.string().required("Abteilung wählen."),
-    name: yup.string().required("Name wird benötigt."),
-    surename: yup.string().required("Nachname wird benötigt."),
-    birthday: yup.date().required("Geburtsdatum angeben."),
-    gender: yup.string().required("Geschlecht angeben."),
-    email: yup
-      .string()
-      .email("Bitte ein gültige Email angeben")
-      .required("Email wird benötigt."),
-    phone: yup.string().required("Telefonnummer wird benötigt."),
-    street: yup.string().required("Straße wird benötigt."),
-    plz: yup
-      .string()
-      .matches(/^[0-9]+$/, "Es sind nur Zahlen erlaubt")
-      .required("Postleitzahl wird benötigt."),
-    place: yup.string().required("Ort wird benötigt."),
-    file: yup
-      .mixed()
-      .test("isValidUpload", "Bitte Datei hochladen.", (value) =>
-        isvalidUpload(value),
-      ),
-    morePersons: yup.array().of(
-      yup.object({
-        extraName: yup.string().required("Name ist erforderlich"),
-        extraSureName: yup.string().required("Nachname ist erforderlich"),
-        extraBirthday: yup
-          .date()
-          .required("Geburtstag ist erforderlich")
-          .typeError("Ungültiges Datum"),
-        extraGender: yup.string().required("Geschlecht ist erforderlich"),
-      }),
-    ),
-  }),
-);
+const requiredString = (message: string) => yup.string().required(message);
 
-const isvalidUpload = () => {
-  const upload = useRegistrationStore().studentIdentification;
+const requiredDate = (message: string) =>
+  yup.date().required(message).typeError("Ungültiges Datum");
+
+// Schema für zusätzliche Personen (wiederverwendbar)
+const personSchema = yup.object({
+  name: requiredString("Name ist erforderlich"),
+  surename: requiredString("Nachname ist erforderlich"),
+  birthday: requiredDate("Geburtstag ist erforderlich"),
+  gender: requiredString("Geschlecht ist erforderlich"),
+});
+
+// Hauptschema
+const registrationSchema = yup.object({
+  type: requiredString("Kategorie wählen."),
+  reason: requiredString("Abteilung wählen."),
+  name: requiredString("Name wird benötigt."),
+  surename: requiredString("Nachname wird benötigt."),
+  birthday: requiredDate("Geburtsdatum angeben."),
+  gender: requiredString("Geschlecht angeben."),
+  email: yup
+    .string()
+    .email("Bitte eine gültige Email angeben")
+    .required("Email wird benötigt."),
+  phone: requiredString("Telefonnummer wird benötigt."),
+  street: requiredString("Straße wird benötigt."),
+  plz: yup
+    .string()
+    .matches(/^\d+$/, "Es sind nur Zahlen erlaubt")
+    .required("Postleitzahl wird benötigt."),
+  place: requiredString("Ort wird benötigt."),
+  file: yup
+    .mixed()
+    .test("isValidUpload", "Bitte Datei hochladen.", () => isValidUpload()),
+  morePersons: yup.array().of(personSchema),
+});
+
+const basicRegistrationSchema = yupResolver(registrationSchema);
+
+const isValidUpload = () => {
+  const upload = MemberRegistrationStore().registrationData.verificationFiles;
 
   return (
     upload.length > 0 ||
-    useRegistrationStore().registrationData.mainData.type !==
+    MemberRegistrationStore().registrationData.mainData.type !==
       RegistrationType.STUDENT
   );
 };
 
-const onFormSubmit = (values) => {
+const onFormSubmit = (values: any) => {
   if (values.valid) {
     router.push("/kontodaten");
   }
@@ -74,43 +76,45 @@ const onFormSubmit = (values) => {
 const op = ref();
 const prices = ref();
 
-const toggle = (event) => {
+const toggle = (event: any) => {
   op.value.toggle(event);
 };
 
-onMounted(() => {
+const getPriceList = () => {
   axios
     .get(getTargetURL() + "/priceList")
     .then((res) => {
       prices.value = res.data;
     })
-    .catch((err) => {});
+    .catch((err) => {
+      console.error("Could not fetch priceList: " + err);
+    });
+};
+
+onMounted(() => {
+  getPriceList();
 });
 
 const addPersonForm = () => {
-  let newPerson = {
-    extraName: "",
-    extraSureName: "",
-    extraBirthday: "",
-    extraGender: "",
+  const morePerson: MorePersonDetails = {
+    name: "",
+    surename: "",
+    gender: "",
+    birthday: null,
   };
 
-  useRegistrationStore().registrationData.mainData.morePersons.push(newPerson);
+  MemberRegistrationStore().registrationData.mainData.morePersons.push(
+    morePerson,
+  );
 };
 
 const toggleNachweisActivation = computed(() => {
-  useRegistrationStore().isFilled.studentIdentification =
-    !useRegistrationStore().registrationData.mainData.type ===
-    "Schüler/Student über 18";
-  return (
-    useRegistrationStore().registrationData.mainData.type ===
-    RegistrationType.STUDENT
-  );
+  return MemberRegistrationStore().isStudentIdentificationActive;
 });
 
 const isFamilyRegistration = computed(() => {
   return (
-    useRegistrationStore().registrationData.mainData.type ===
+    MemberRegistrationStore().registrationData.mainData.type ===
     RegistrationType.FAMILY
   );
 });
@@ -136,9 +140,9 @@ onMounted(() => {
   <FormHeader header-text="Mitgliederregistrierung" />
   <Form
     v-slot="$form"
-    :initialValues="useRegistrationStore().registrationData.mainData"
+    :initialValues="MemberRegistrationStore().registrationData.mainData"
     id="defaultRegistrationForm"
-    :resolver="resolver"
+    :resolver="basicRegistrationSchema"
     @submit="onFormSubmit"
     class="flex flex-1 flex-col gap-[1em] max-h-[65vh] overflow-y-auto px-[2em] py-[1em]"
   >
@@ -161,7 +165,7 @@ onMounted(() => {
       <Select
         inputId="dd-categorie"
         name="type"
-        v-model="useRegistrationStore().registrationData.mainData.type"
+        v-model="MemberRegistrationStore().registrationData.mainData.type"
         :options="Object.values(RegistrationType)"
         class="w-full"
       />
@@ -192,7 +196,7 @@ onMounted(() => {
       <Select
         inputId="dd-department"
         name="reason"
-        v-model="useRegistrationStore().registrationData.mainData.reason"
+        v-model="MemberRegistrationStore().registrationData.mainData.reason"
         :options="courses"
         class="w-full"
       />
@@ -212,7 +216,7 @@ onMounted(() => {
           class="w-full"
           inputId="dd-name"
           name="name"
-          v-model="useRegistrationStore().registrationData.mainData.name"
+          v-model="MemberRegistrationStore().registrationData.mainData.name"
         />
         <Message
           v-if="$form.name?.invalid"
@@ -229,7 +233,7 @@ onMounted(() => {
           class="w-full"
           inputId="dd-secondName"
           name="surename"
-          v-model="useRegistrationStore().registrationData.mainData.surename"
+          v-model="MemberRegistrationStore().registrationData.mainData.surename"
         />
         <label for="dd-secondName"> Nachname </label>
       </FloatLabel>
@@ -240,7 +244,7 @@ onMounted(() => {
         <DatePicker
           class="w-full"
           name="birthday"
-          v-model="useRegistrationStore().registrationData.mainData.birthday"
+          v-model="MemberRegistrationStore().registrationData.mainData.birthday"
           dateFormat="dd.mm.yy"
           fluid
           inputId="dd-date"
@@ -261,7 +265,7 @@ onMounted(() => {
         <Select
           inputId="dd-gender"
           name="gender"
-          v-model="useRegistrationStore().registrationData.mainData.gender"
+          v-model="MemberRegistrationStore().registrationData.mainData.gender"
           :options="genders"
           class="w-full"
         />
@@ -282,7 +286,7 @@ onMounted(() => {
           class="w-full"
           inputId="dd-email"
           name="email"
-          v-model="useRegistrationStore().registrationData.mainData.email"
+          v-model="MemberRegistrationStore().registrationData.mainData.email"
         />
         <label for="dd-email">Email</label>
         <Message
@@ -299,7 +303,7 @@ onMounted(() => {
           class="w-full"
           inputId="dd-phone"
           name="phone"
-          v-model="useRegistrationStore().registrationData.mainData.phone"
+          v-model="MemberRegistrationStore().registrationData.mainData.phone"
         />
         <Message
           v-if="$form.phone?.invalid"
@@ -318,7 +322,7 @@ onMounted(() => {
           class="w-full"
           inputId="dd-street"
           name="street"
-          v-model="useRegistrationStore().registrationData.mainData.street"
+          v-model="MemberRegistrationStore().registrationData.mainData.street"
         />
         <Message
           v-if="$form.street?.invalid"
@@ -335,7 +339,7 @@ onMounted(() => {
           class="w-full"
           inputId="dd-plz"
           name="plz"
-          v-model="useRegistrationStore().registrationData.mainData.plz"
+          v-model="MemberRegistrationStore().registrationData.mainData.plz"
         />
         <Message
           v-if="$form.plz?.invalid"
@@ -355,7 +359,7 @@ onMounted(() => {
             class="w-full"
             inputId="dd-Place"
             name="place"
-            v-model="useRegistrationStore().registrationData.mainData.place"
+            v-model="MemberRegistrationStore().registrationData.mainData.place"
           />
           <Message
             v-if="$form.place?.invalid"
@@ -373,7 +377,9 @@ onMounted(() => {
           <DatePicker
             class="w-full"
             name="entryDate"
-            v-model="useRegistrationStore().registrationData.mainData.entryDate"
+            v-model="
+              MemberRegistrationStore().registrationData.mainData.entryDate
+            "
             inputId="dd-entry"
             showIcon
             fluid
@@ -389,13 +395,13 @@ onMounted(() => {
 
     <div
       v-if="isFamilyRegistration"
-      v-for="(person, index) in useRegistrationStore().registrationData.mainData
-        .morePersons"
+      v-for="(person, index) in MemberRegistrationStore().registrationData
+        .mainData.morePersons"
       :key="index"
     >
       <ExtraPersonForm
         v-model="
-          useRegistrationStore().registrationData.mainData.morePersons[index]
+          MemberRegistrationStore().registrationData.mainData.morePersons[index]
         "
         :index="index"
       />

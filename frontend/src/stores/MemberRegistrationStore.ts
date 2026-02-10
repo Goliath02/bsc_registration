@@ -10,7 +10,30 @@ import { ImageFile } from "@/stores/Registration";
 
 export const MemberRegistrationStore = defineStore("memberRegistrationStore", {
   state: () => ({
-    registrationData: {} as RegistrationData,
+    registrationData: {
+      verificationFiles: [],
+      mainData: {
+        type: "",
+        reason: "",
+        name: "",
+        surename: "",
+        birthday: null,
+        gender: "",
+        email: "",
+        phone: "",
+        street: "",
+      },
+      financialData: {
+        iban: "",
+        nameOfBankOwner: "",
+        sureNameBankOwner: "",
+      },
+      dataApproval: {
+        dataProtection: false,
+        dataStatute: false,
+        dataCorrectness: false,
+      },
+    } as RegistrationData,
     studentVerification: [] as ImageFile[],
   }),
 
@@ -39,7 +62,7 @@ export const MemberRegistrationStore = defineStore("memberRegistrationStore", {
       return total;
     },
     isStudentIdentificationActive(state) {
-      return state.registrationData.mainData.type === "Schüler/Student über 18";
+      return state.registrationData.mainData.type === RegistrationType.STUDENT;
     },
 
     isBasicFormValid(state) {

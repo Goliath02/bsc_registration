@@ -1,11 +1,11 @@
-
 export interface RegistrationData {
+  verificationFiles: ImageFile[] | null;
   mainData: MainDetails;
   financialData: FinancialDetails;
   dataApproval: DataApproval;
 }
 
-export type ImageFile = File & { type: 'image/jpeg' | 'image/png'};
+export type ImageFile = File & { type: "image/jpeg" | "image/png" };
 
 export interface MainDetails {
   type: string;

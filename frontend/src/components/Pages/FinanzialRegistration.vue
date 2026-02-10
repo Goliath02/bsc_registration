@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { yupResolver } from "@primevue/forms/resolvers/yup";
 import * as yup from "yup";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
@@ -7,6 +7,7 @@ import IBANInput from "@/components/FinancesRegistration/IBANInput.vue";
 import { Form } from "@primevue/forms";
 import router from "@/router.js";
 import { ref } from "vue";
+import { MemberRegistrationStore } from "@/stores/MemberRegistrationStore.ts";
 
 const resolver = yupResolver(
   yup.object().shape({
@@ -36,8 +37,8 @@ const resolver = yupResolver(
   }),
 );
 
-const isValidGermanIBAN = (iban) => {
-  iban = useRegistrationStore().registrationData.financial.iban;
+const isValidGermanIBAN = (iban: string) => {
+  iban = MemberRegistrationStore().registrationData.financialData.iban;
 
   // deutsche IBANs sind immer 22 Zeichen und starten mit "DE"
   const validIbanLength = iban.length === 22 && iban.startsWith("DE");
@@ -73,7 +74,7 @@ const isValidGermanIBAN = (iban) => {
 
 const ibanErrorMessage = ref("");
 
-const onFormSubmit = (values) => {
+const onFormSubmit = (values: any) => {
   if (values.errors.iban) {
     ibanErrorMessage.value = values?.errors?.iban[0];
   }
@@ -97,7 +98,7 @@ const onFormSubmit = (values) => {
   >
     <i-b-a-n-input
       name="iban"
-      v-model="useRegistrationStore().registrationData.financial.iban"
+      v-model="MemberRegistrationStore().registrationData.financialData.iban"
     />
     <Message v-if="$form.iban?.invalid" severity="error" variant="simple">
       {{ $form.iban.error.message }}</Message
@@ -110,7 +111,8 @@ const onFormSubmit = (values) => {
           inputId="dd-accountName"
           name="nameOfBankOwner"
           v-model="
-            useRegistrationStore().registrationData.financial.nameOfBankOwner
+            MemberRegistrationStore().registrationData.financialData
+              .nameOfBankOwner
           "
         />
         <label for="dd-accountName"> Vorname des Kontoinhabers </label>
@@ -130,7 +132,8 @@ const onFormSubmit = (values) => {
           inputId="dd-accountSureName"
           name="sureNameBankOwner"
           v-model="
-            useRegistrationStore().registrationData.financial.sureNameBankOwner
+            MemberRegistrationStore().registrationData.financialData
+              .sureNameBankOwner
           "
         />
         <label for="dd-accountSureName"> Nachname des Kontoinhabers </label>
@@ -149,7 +152,9 @@ const onFormSubmit = (values) => {
       <Checkbox
         inputId="dd-dataProtection"
         name="dataProtection"
-        v-model="useRegistrationStore().registrationData.financial.dataProtection"
+        v-model="
+          MemberRegistrationStore().registrationData.dataApproval.dataProtection
+        "
         binary
       />
       <label for="dd-dataProtection">
@@ -167,7 +172,10 @@ const onFormSubmit = (values) => {
       <Checkbox
         inputId="dd-dataCorrectness"
         name="dataCorrectness"
-        v-model="useRegistrationStore().registrationData.financial.dataCorrectness"
+        v-model="
+          MemberRegistrationStore().registrationData.dataApproval
+            .dataCorrectness
+        "
         binary
       />
       <label for="dd-dataCorrectness">
@@ -182,7 +190,9 @@ const onFormSubmit = (values) => {
       <Checkbox
         inputId="dd-dataStatute"
         name="dataStatute"
-        v-model="useRegistrationStore().registrationData.financial.dataStatute"
+        v-model="
+          MemberRegistrationStore().registrationData.dataApproval.dataStatute
+        "
         binary
       />
       <label for="dd-dataStatute">
@@ -194,7 +204,10 @@ const onFormSubmit = (values) => {
     </div>
 
     <input
-      v-model="useRegistrationStore().registrationData.financial.hiddenSecurityCheck"
+      v-model="
+        MemberRegistrationStore().registrationData
+          .dataApprovalhiddenSecurityCheck
+      "
       class="invisible h-0"
       type="checkbox"
     />
