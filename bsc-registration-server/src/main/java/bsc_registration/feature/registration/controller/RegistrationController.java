@@ -1,9 +1,12 @@
 package bsc_registration.feature.registration.controller;
 
 import bsc_registration.common.dto.Errors;
+import bsc_registration.feature.registration.dto.BscConfig;
 import bsc_registration.feature.registration.dto.FormData;
+import bsc_registration.feature.registration.sevice.BscConfigService;
 import bsc_registration.feature.registration.sevice.RegistrationService;
 import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,18 +23,26 @@ import java.util.concurrent.CompletionException;
 @Controller
 @CrossOrigin
 @Slf4j
+@RequiredArgsConstructor
 public class RegistrationController {
 
     public static final long EIGHT_MB = 8000000L;
     private final RegistrationService registrationService;
+    private final BscConfigService configService;
 
-    public RegistrationController(final RegistrationService registrationModule) {
-        this.registrationService = registrationModule;
+
+    @GetMapping("/config")
+    @ResponseBody()
+    public ResponseEntity<BscConfig> getConfig() {
+
+        BscConfig config = configService.getConfig();
+
+        return ResponseEntity.ok(config);
     }
 
     @GetMapping("/courses")
     @ResponseBody()
-    public ResponseEntity<List<String>> getConfig() {
+    public ResponseEntity<List<String>> getCourseConfig() {
         return ResponseEntity.ok(registrationService.getCourses());
     }
 

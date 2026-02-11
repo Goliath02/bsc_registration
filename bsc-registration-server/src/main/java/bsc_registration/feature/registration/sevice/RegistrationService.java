@@ -1,5 +1,6 @@
 package bsc_registration.feature.registration.sevice;
 
+import bsc_registration.config.AppConfig;
 import bsc_registration.config.BscCourseConfig;
 import bsc_registration.config.ConfigLoader;
 import bsc_registration.feature.mail.service.EmailService;
@@ -21,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static bsc_registration.utils.FormUtil.calculateAge;
@@ -33,24 +35,22 @@ import static java.lang.String.format;
 @Slf4j
 public class RegistrationService {
 
-    final private EmailService emailService;
-    final private ConfigLoader configLoader;
+    private final EmailService emailService;
 
-    final private BscMemberRepository memberRepository;
+    private final AppConfig config;
 
-    final private DevUtil devUtil;
-    final private CsvUtil csvUtil;
+    private final BscMemberRepository memberRepository;
+
+    private final DevUtil devUtil;
+    private final CsvUtil csvUtil;
 
     public List<String> getPriceList() {
 
-        BscCourseConfig bscCourseConfig = configLoader.loadConfig();
-
-        return bscCourseConfig.getPriceList();
+        return config.getPriceList();
     }
 
     public CompletableFuture<Void> sendEmailToRegistration(FormData formData, List<MultipartFile> files) {
         try {
-            BscCourseConfig config = configLoader.loadConfig();
             String csv = csvUtil.createCsvFromFormData(formData);
             List<String> receiver = devUtil.getEmailFromConfig(config.getRegistrationReceiver());
 
@@ -68,7 +68,6 @@ public class RegistrationService {
 
     public CompletableFuture<Void> sendEmailToCourseOwner(FormData formData) {
         try {
-            BscCourseConfig config = configLoader.loadConfig();
             List<String> owner = devUtil.getEmailFromConfig(config.getCourses().get(formData.mainData().reason()));
 
             EmailService.BscNameMailInfo info = new EmailService.BscNameMailInfo(String.join(",", owner), "Neue Anmeldung für deinen Kurs", "MailMessageTemplate.html", buildCourseOwnerHtml(formData), null, null);
@@ -96,7 +95,8 @@ public class RegistrationService {
     }
 
     public List<String> getCourses() {
-        return configLoader.loadCourses();
+        Map<String, List<String>> courses = config.getCourses();
+        return new ArrayList<>(courses.keySet());
     }
 
     public void saveRegistration(final FormData formData) {

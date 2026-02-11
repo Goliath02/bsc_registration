@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests.requestMatchers(
-                                        "/", "/courses", "/priceList", "/registrate", "/registrateNsw", "/api/auth/login",
+                                        "/", "/config", "/courses", "/priceList", "/registrate", "/registrateNsw", "/api/auth/login",
                                         "/index.html",
                                         "/assets/**",
                                         "/BSCSpear.ico",
