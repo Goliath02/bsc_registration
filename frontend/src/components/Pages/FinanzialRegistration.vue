@@ -197,16 +197,16 @@ const onFormSubmit = (values: any) => {
       />
       <label for="dd-dataStatute">
         <p>
-          Ich erkenne die <a href="">Satzung</a> des Vereins an und verpflichte
-          mich zur Zahlung des Mitgliedsbeitrags durch SEPA Lastschrift Mandat.
+          Hiermit erkenne ich die <a href="">Satzung</a> in ihrer aktuellen
+          Fassung an und erteile die Erlaubnis zur Einziehung des
+          Mitgliedsbeitrags mittels SEPA-Lastschriftmandat.
         </p>
       </label>
     </div>
 
     <input
       v-model="
-        MemberRegistrationStore().registrationData
-          .dataApprovalhiddenSecurityCheck
+        MemberRegistrationStore().registrationData.dataApproval.dataProtection
       "
       class="invisible h-0"
       type="checkbox"
