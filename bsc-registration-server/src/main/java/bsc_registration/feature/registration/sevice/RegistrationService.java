@@ -1,8 +1,6 @@
 package bsc_registration.feature.registration.sevice;
 
 import bsc_registration.config.AppConfig;
-import bsc_registration.config.BscCourseConfig;
-import bsc_registration.config.ConfigLoader;
 import bsc_registration.feature.mail.service.EmailService;
 import bsc_registration.feature.registration.dto.ExtraPerson;
 import bsc_registration.feature.registration.dto.FinancialData;
@@ -102,7 +100,7 @@ public class RegistrationService {
     public void saveRegistration(final FormData formData) {
 
         final MainData mainData = formData.mainData();
-        final FinancialData financialData = formData.financial();
+        final FinancialData financialData = formData.financialData();
         final List<ExtraPerson> extraPeople = formData.mainData().morePersons();
 
         final List<BscMember> registrations = new ArrayList<>();
@@ -144,7 +142,7 @@ public class RegistrationService {
         }
 
         final MainData mainData = formData.mainData();
-        final FinancialData fData = formData.financial();
+        final FinancialData fData = formData.financialData();
 
         final String infoText = format(
                 """

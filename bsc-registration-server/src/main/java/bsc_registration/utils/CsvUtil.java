@@ -22,7 +22,7 @@ public class CsvUtil {
     public String createCsvFromFormData(final FormData formData) {
 
         final MainData mainData = formData.mainData();
-        final FinancialData financial = formData.financial();
+        final FinancialData financial = formData.financialData();
 
         final List<ExtraPerson> extraPeople = formData.mainData().morePersons();
 

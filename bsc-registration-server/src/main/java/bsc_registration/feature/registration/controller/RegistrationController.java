@@ -53,6 +53,18 @@ public class RegistrationController {
         return ResponseEntity.ok(registrationService.getPriceList());
     }
 
+    private void checkFormData(FormData formData) {
+        if (formData.mainData().name().isBlank() || formData.mainData().surename().isBlank() || formData.mainData().email().isBlank() || formData.mainData()
+                .phone()
+                .isBlank() || formData.mainData().street().isBlank() || formData.mainData().plz().isBlank() || formData.mainData().place().isBlank()
+                || formData.financialData().iban().isBlank() || formData.financialData().nameOfBankOwner().isBlank() || formData.financialData()
+                .sureNameBankOwner()
+                .isBlank()
+        ) {
+            throw new IllegalArgumentException("Form data is invalid");
+        }
+    }
+
     @PostMapping(value = "/registrate", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity validateRegistration(
             @RequestPart final FormData formData,
@@ -60,7 +72,13 @@ public class RegistrationController {
     ) {
 
         if (formData == null) {
-            return ResponseEntity.status(400).body("Form-data is empty");
+            return ResponseEntity.status(400).body(Errors.FORM_INVALID);
+        }
+
+        try{
+            checkFormData(formData);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
 
         log.info("Received registration data: {}", formData);

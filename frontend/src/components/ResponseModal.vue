@@ -34,9 +34,7 @@ export default {
     >
       <h1 class="text-2xl font-bold mb-2">
         Wir konnten keine Email mit der Adresse
-        {{
-          MemberRegistrationStore().registrationData.mainData.email
-        }}
+        {{ MemberRegistrationStore().registrationData.mainData.email }}
         erreichen
       </h1>
 
@@ -63,6 +61,20 @@ export default {
 
       <div>
         <p>Es sind maximal 8MB erlaubt</p>
+      </div>
+    </div>
+
+    <div
+      v-else-if="
+        MemberRegistrationStore().requestFailedWithError ===
+        ErrorType.FORM_INVALID
+      "
+      class="lg:w-1/4 flex flex-col justify-center bg-bsc-lightgray rounded-lg text-white p-[1em] shadow-lg shadow-black"
+    >
+      <h1 class="text-2xl font-bold mb-2">Daten invalid</h1>
+
+      <div>
+        <p>Bitte laden sie die Seite unter der Basis URL neu!</p>
       </div>
     </div>
 
