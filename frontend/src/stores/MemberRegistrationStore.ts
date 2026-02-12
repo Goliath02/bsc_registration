@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import {
   AgeType,
+  ErrorType,
+  MorePersonDetails,
   RegistrationData,
   RegistrationType,
 } from "@/stores/Registration";
@@ -22,19 +24,20 @@ export const MemberRegistrationStore = defineStore("memberRegistrationStore", {
         email: "",
         phone: "",
         street: "",
+        morePersons: [] as MorePersonDetails[],
       },
       financialData: {
         iban: "",
         nameOfBankOwner: "",
         sureNameBankOwner: "",
-      },
-      dataApproval: {
         dataProtection: false,
         dataStatute: false,
         dataCorrectness: false,
       },
     } as RegistrationData,
     studentVerification: [] as ImageFile[],
+    isLoadingPostRequest: false,
+    requestFailedWithError: null as ErrorType | null,
   }),
 
   getters: {
@@ -94,7 +97,7 @@ export const MemberRegistrationStore = defineStore("memberRegistrationStore", {
 
     isFinancialFormValid(state) {
       const financialData = state.registrationData.financialData;
-      const dataApproval = state.registrationData.dataApproval;
+      const dataApproval = state.registrationData.financialData;
 
       return (
         !!financialData.iban &&
@@ -120,6 +123,5 @@ export const MemberRegistrationStore = defineStore("memberRegistrationStore", {
       this.triedToValidateFinancialForm = true;
       return this.isFinancialFormValid;
     },
-
   },
 });

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { yupResolver } from "@primevue/forms/resolvers/yup";
 import * as yup from "yup";
-import { useRegistrationStore } from "@/stores/RegistrationStore";
 import FormHeader from "@/components/FormHeader.vue";
 import IBANInput from "@/components/FinancesRegistration/IBANInput.vue";
 import { Form } from "@primevue/forms";
@@ -9,36 +8,34 @@ import router from "@/router.js";
 import { ref } from "vue";
 import { MemberRegistrationStore } from "@/stores/MemberRegistrationStore.ts";
 
-const resolver = yupResolver(
-  yup.object().shape({
-    iban: yup
-      .string()
+const financialSchema = yup.object().shape({
+  iban: yup
+    .string()
 
-      .test("is-valid-iban", "Ungültige IBAN", (value) =>
-        isValidGermanIBAN(value),
-      ),
-    nameOfBankOwner: yup.string().required("Name wird benötigt."),
-    sureNameBankOwner: yup.string().required("Nachname wird benötigt."),
-    dataProtection: yup
-      .boolean()
-      .oneOf(
-        [true],
-        "Zustimmung der Datenschutzbestimmungen ist erforderlich.",
-      ),
-    dataCorrectness: yup
-      .boolean()
-      .oneOf(
-        [true],
-        "Zustimmung der Datenschutzbestimmungen ist erforderlich.",
-      ),
-    dataStatute: yup
-      .boolean()
-      .oneOf([true], "Erkennung der Satzung des Vereins ist erforderlich."),
-  }),
-);
+    .test("is-valid-iban", "Ungültige IBAN", (value: string | undefined) =>
+      isValidGermanIBAN(value),
+    ),
+  nameOfBankOwner: yup.string().required("Name wird benötigt."),
+  sureNameBankOwner: yup.string().required("Nachname wird benötigt."),
+  dataProtection: yup
+    .boolean()
+    .oneOf([true], "Zustimmung der Datenschutzbestimmungen ist erforderlich."),
+  dataCorrectness: yup
+    .boolean()
+    .oneOf([true], "Zustimmung der Datenschutzbestimmungen ist erforderlich."),
+  dataStatute: yup
+    .boolean()
+    .oneOf([true], "Erkennung der Satzung des Vereins ist erforderlich."),
+});
 
-const isValidGermanIBAN = (iban: string) => {
+const financialRegistrationSchema = yupResolver(financialSchema);
+
+const isValidGermanIBAN = (iban: string | undefined) => {
   iban = MemberRegistrationStore().registrationData.financialData.iban;
+
+  if (iban === undefined) {
+    return false;
+  }
 
   // deutsche IBANs sind immer 22 Zeichen und starten mit "DE"
   const validIbanLength = iban.length === 22 && iban.startsWith("DE");
@@ -90,9 +87,9 @@ const onFormSubmit = (values: any) => {
 
   <Form
     v-slot="$form"
-    :initialValues="useRegistrationStore().registrationData.financial"
+    :initialValues="MemberRegistrationStore().registrationData.financialData"
     id="financialRegistrationForm"
-    :resolver="resolver"
+    :resolver="financialRegistrationSchema"
     @submit="onFormSubmit"
     class="flex flex-1 flex-col gap-[1em] max-h-[65vh] overflow-y-auto px-[2em] py-[1em]"
   >
@@ -153,7 +150,8 @@ const onFormSubmit = (values: any) => {
         inputId="dd-dataProtection"
         name="dataProtection"
         v-model="
-          MemberRegistrationStore().registrationData.dataApproval.dataProtection
+          MemberRegistrationStore().registrationData.financialData
+            .dataProtection
         "
         binary
       />
@@ -173,7 +171,7 @@ const onFormSubmit = (values: any) => {
         inputId="dd-dataCorrectness"
         name="dataCorrectness"
         v-model="
-          MemberRegistrationStore().registrationData.dataApproval
+          MemberRegistrationStore().registrationData.financialData
             .dataCorrectness
         "
         binary
@@ -191,7 +189,7 @@ const onFormSubmit = (values: any) => {
         inputId="dd-dataStatute"
         name="dataStatute"
         v-model="
-          MemberRegistrationStore().registrationData.dataApproval.dataStatute
+          MemberRegistrationStore().registrationData.financialData.dataStatute
         "
         binary
       />
@@ -206,7 +204,7 @@ const onFormSubmit = (values: any) => {
 
     <input
       v-model="
-        MemberRegistrationStore().registrationData.dataApproval.dataProtection
+        MemberRegistrationStore().registrationData.financialData.dataProtection
       "
       class="invisible h-0"
       type="checkbox"

@@ -2,7 +2,6 @@ export interface RegistrationData {
   verificationFiles: ImageFile[] | null;
   mainData: MainDetails;
   financialData: FinancialDetails;
-  dataApproval: DataApproval;
 }
 
 export type ImageFile = File & { type: "image/jpeg" | "image/png" };
@@ -34,14 +33,12 @@ export interface FinancialDetails {
   iban: string;
   nameOfBankOwner: string;
   sureNameBankOwner: string;
-}
-
-export interface DataApproval {
   dataProtection: boolean;
-  dataStatute: boolean;
   dataCorrectness: boolean;
+  dataStatute: boolean;
   hiddenSecurityCheck: boolean;
 }
+
 
 export enum RegistrationType {
   MEMBER = "Mitglied",
@@ -53,4 +50,10 @@ export enum AgeType {
   ADULT,
   CHILD,
   SENIOR,
+}
+
+export enum ErrorType {
+  EMAIL_NOT_FOUND = "EMAIL_NOT_FOUND",
+  IMAGE_TOO_LARGE = "IMAGE_TOO_LARGE",
+  INTERNAL = "INTERNAL_SERVER_ERROR",
 }

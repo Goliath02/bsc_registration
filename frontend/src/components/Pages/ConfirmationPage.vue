@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FormHeader from "@/components/FormHeader.vue";
-import { useRegistrationStore } from "../../stores/RegistrationStore.js";
 import { formatDate } from "@/utils/dateUtil";
+import { MemberRegistrationStore } from "../../stores/MemberRegistrationStore";
 </script>
 
 <template>
@@ -16,19 +16,23 @@ import { formatDate } from "@/utils/dateUtil";
     >
       <div class="flex flex-row gap-[0.8em] px-[1em] py-[0.5em] w-1/2">
         <div class="font-bold">Name</div>
-        <div>{{ useRegistrationStore().registrationData.mainData.name }}</div>
+        <div>
+          {{ MemberRegistrationStore().registrationData.mainData.name }}
+        </div>
       </div>
 
       <div class="flex flex-row gap-[1em] px-[1em] py-[0.5em] w-1/2">
         <div class="font-bold">Nachname</div>
         <div>
-          {{ useRegistrationStore().registrationData.mainData.surename }}
+          {{ MemberRegistrationStore().registrationData.mainData.surename }}
         </div>
       </div>
 
       <div class="flex flex-row gap-[1em] px-[1em] py-[0.5em] w-1/2">
         <div class="font-bold">Geschlecht</div>
-        <div>{{ useRegistrationStore().registrationData.mainData.gender }}</div>
+        <div>
+          {{ MemberRegistrationStore().registrationData.mainData.gender }}
+        </div>
       </div>
 
       <div class="flex flex-row gap-[1em] px-[1em] py-[0.5em] w-1/2">
@@ -36,7 +40,7 @@ import { formatDate } from "@/utils/dateUtil";
         <div>
           {{
             formatDate(
-              useRegistrationStore().registrationData.mainData.birthday,
+              MemberRegistrationStore().registrationData.mainData.birthday,
             )
           }}
         </div>
@@ -44,7 +48,8 @@ import { formatDate } from "@/utils/dateUtil";
     </div>
 
     <div
-      v-for="person in useRegistrationStore().registrationData.morePersons"
+      v-for="person in MemberRegistrationStore().registrationData.mainData
+        .morePersons"
       class="p-[1em] bg-[#141414] rounded-lg flex flex-wrap max-[1024px]:flex-col"
     >
       <div class="flex flex-row gap-[1em] px-[1em] w-1/2">
@@ -75,37 +80,49 @@ import { formatDate } from "@/utils/dateUtil";
     >
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">Art der Anmeldung</div>
-        <div>{{ useRegistrationStore().registrationData.mainData.type }}</div>
+        <div>
+          {{ MemberRegistrationStore().registrationData.mainData.type }}
+        </div>
       </div>
 
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">Grund</div>
-        <div>{{ useRegistrationStore().registrationData.mainData.reason }}</div>
+        <div>
+          {{ MemberRegistrationStore().registrationData.mainData.reason }}
+        </div>
       </div>
 
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">Straße</div>
-        <div>{{ useRegistrationStore().registrationData.mainData.street }}</div>
+        <div>
+          {{ MemberRegistrationStore().registrationData.mainData.street }}
+        </div>
       </div>
 
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">Email</div>
-        <div>{{ useRegistrationStore().registrationData.mainData.email }}</div>
+        <div>
+          {{ MemberRegistrationStore().registrationData.mainData.email }}
+        </div>
       </div>
 
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">Telefon/Mobil</div>
-        <div>{{ useRegistrationStore().registrationData.mainData.phone }}</div>
+        <div>
+          {{ MemberRegistrationStore().registrationData.mainData.phone }}
+        </div>
       </div>
 
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">Ort</div>
-        <div>{{ useRegistrationStore().registrationData.mainData.place }}</div>
+        <div>
+          {{ MemberRegistrationStore().registrationData.mainData.place }}
+        </div>
       </div>
 
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">Postleitzahl</div>
-        <div>{{ useRegistrationStore().registrationData.mainData.plz }}</div>
+        <div>{{ MemberRegistrationStore().registrationData.mainData.plz }}</div>
       </div>
 
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
@@ -113,7 +130,7 @@ import { formatDate } from "@/utils/dateUtil";
         <div>
           {{
             formatDate(
-              useRegistrationStore().registrationData.mainData.birthday,
+              MemberRegistrationStore().registrationData.mainData.birthday,
             )
           }}
         </div>
@@ -127,14 +144,17 @@ import { formatDate } from "@/utils/dateUtil";
     >
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">IBAN</div>
-        <div>{{ useRegistrationStore().registrationData.financial.iban }}</div>
+        <div>
+          {{ MemberRegistrationStore().registrationData.financialData.iban }}
+        </div>
       </div>
 
       <div class="flex flex-row gap-[1em] py-[0.5em] px-[1em] w-1/2">
         <div class="font-bold">Name des Kontoinhabers</div>
         <div>
           {{
-            useRegistrationStore().registrationData.financial.nameOfBankOwner
+            MemberRegistrationStore().registrationData.financialData
+              .nameOfBankOwner
           }}
         </div>
       </div>
@@ -143,7 +163,8 @@ import { formatDate } from "@/utils/dateUtil";
         <div class="font-bold">Nachname des Kontoinhabers</div>
         <div>
           {{
-            useRegistrationStore().registrationData.financial.sureNameBankOwner
+            MemberRegistrationStore().registrationData.financialData
+              .sureNameBankOwner
           }}
         </div>
       </div>

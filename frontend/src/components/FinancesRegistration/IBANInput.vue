@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useRegistrationStore } from "@/stores/RegistrationStore.js";
 import { onMounted, ref, watch } from "vue";
+import { MemberRegistrationStore } from "@/stores/MemberRegistrationStore";
 
 const IBANSection1 = ref("");
 const IBANSection2 = ref("");
@@ -15,7 +15,7 @@ onMounted(() => {
 
 const setIbanIfAlreadyTyped = () => {
   const currentInputIban =
-    useRegistrationStore().registrationData.financial.iban;
+    MemberRegistrationStore().registrationData.financialData.iban;
 
   if (currentInputIban) {
     let slicedIban = [];
@@ -50,7 +50,7 @@ const getIBAN = () => {
   ].join("");
 };
 
-const onIbanInput = (event, max) => {
+const onIbanInput = (event: any, max : number) => {
   postInput(event.data);
   if (event.target.value && event.target.value.length < max) {
   } else {
@@ -58,10 +58,10 @@ const onIbanInput = (event, max) => {
     focusNext(event, max);
   }
   fixPostInputSection();
-  useRegistrationStore().registrationData.financial.iban = getIBAN();
+  MemberRegistrationStore().registrationData.financialData.iban = getIBAN();
 };
 
-const postInput = (input) => {
+const postInput = (input : string) => {
   if (input != null && input.length > 4) {
     let slices = [];
 
@@ -128,7 +128,7 @@ const updateIBAN = () => {
     IBANSection6.value,
   ].join("");
   emit("update:modelValue", iban);
-  useRegistrationStore().registrationData.financial.iban = iban;
+  MemberRegistrationStore().registrationData.financialData.iban = iban;
 };
 
 // whenever sections change → IBAN updaten
@@ -200,7 +200,7 @@ watch(
       <input
         type="hidden"
         name="iban"
-        :value="useRegistrationStore().registrationData.financial.iban"
+        :value="MemberRegistrationStore().registrationData.financialData.iban"
       />
     </FormField>
   </div>

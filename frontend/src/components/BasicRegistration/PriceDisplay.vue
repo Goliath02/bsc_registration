@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { useRegistrationStore } from "@/stores/RegistrationStore";
 
-const store = useRegistrationStore();
+import { MemberRegistrationStore } from "@/stores/MemberRegistrationStore";
+
+const store = MemberRegistrationStore();
 
 const getPrice = () => {
   return store.price.toFixed(2);

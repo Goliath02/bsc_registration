@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useRegistrationStore } from "@/stores/RegistrationStore.js";
 import ResponseModal from "@/components/ResponseModal.vue";
 import { onMounted } from "vue";
 import { InitialData, useAppState } from "@/service/AppStateService";
 import api from "@/service/Api";
 import LoadingScreen from "@/components/Pages/LoadingScreen.vue";
 import ErrorScreen from "@/components/Pages/ErrorScreen.vue";
+import { MemberRegistrationStore } from "@/stores/MemberRegistrationStore";
 
 const { isLoading, hasError, errorMessage, setLoading, setError, reset } =
   useAppState();
@@ -15,9 +15,7 @@ const initializeApp = async (): Promise<void> => {
   setLoading(true);
 
   try {
-    const [config] = await Promise.all([
-      api.get<any>("/config"),
-    ]);
+    const [config] = await Promise.all([api.get<any>("/config")]);
 
     const initialData: InitialData = {
       config: config.data,
@@ -48,7 +46,7 @@ onMounted((): void => {
     </router-view>
   </div>
 
-  <ResponseModal v-if="useRegistrationStore().requestFailed" />
+  <ResponseModal v-if="MemberRegistrationStore().requestFailedWithError" />
 </template>
 
 <style scoped>

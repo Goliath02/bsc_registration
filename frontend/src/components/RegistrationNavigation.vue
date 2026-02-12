@@ -1,17 +1,16 @@
 <script>
-import { useRegistrationStore } from "@/stores/RegistrationStore.js";
 import router from "@/router.js";
 import axios from "axios";
 import PriceDisplay from "@/components/BasicRegistration/PriceDisplay.vue";
 import StepDots from "@/components/StepDots.vue";
 import { getTargetURL } from "@/apiClient.ts";
+import { MemberRegistrationStore } from "@/stores/MemberRegistrationStore.ts";
 
 export default {
   name: "RegistrationNavigation",
   components: { StepDots, PriceDisplay },
   methods: {
-    useRegistrationStore,
-
+    MemberRegistrationStore,
     routerToPastSite() {
       if (this.isSecondPage) {
         router.push("/");
@@ -44,37 +43,43 @@ export default {
     },
 
     postData() {
-      useRegistrationStore().updateFinancialValidation();
-      if (!useRegistrationStore().registrationData.hiddenSecurityCheck) {
-        useRegistrationStore().isLoadingRequest = true;
+      if (
+        !MemberRegistrationStore().registrationData.financialData
+          .hiddenSecurityCheck
+      ) {
+        MemberRegistrationStore().isLoadingRequest = true;
 
         let formData = new FormData();
 
         formData.append(
           "formData",
-          new Blob([JSON.stringify(useRegistrationStore().registrationData)], {
-            type: "application/json",
-          }),
+          new Blob(
+            [JSON.stringify(MemberRegistrationStore().registrationData)],
+            {
+              type: "application/json",
+            },
+          ),
         );
 
-        useRegistrationStore().studentIdentification.forEach((file, index) => {
-          formData.append(`studentIdentificationFiles`, file);
-        });
+        MemberRegistrationStore().registrationData.verificationFiles.forEach(
+          (file, index) => {
+            formData.append(`studentIdentificationFiles`, file);
+          },
+        );
 
         axios
-          .post(
-            getTargetURL() + "/registrate",
-            formData,
-            { headers: { "Content-Type": "multipart/form-data" } },
-          )
+          .post(getTargetURL() + "/registrate", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          })
           .then(function (response) {
-            useRegistrationStore().isLoadingRequest = false;
+            MemberRegistrationStore().isLoadingPostRequest = false;
             router.push("/erfolg");
           })
           .catch(function (error) {
-            useRegistrationStore().requestFailedWithError = error.response.data;
-            useRegistrationStore().isLoadingRequest = false;
-            useRegistrationStore().requestFailed = true;
+            MemberRegistrationStore().requestFailedWithError =
+              error.response.data;
+            MemberRegistrationStore().isLoadingPostRequest = false;
+            MemberRegistrationStore().requestFailed = true;
           });
       }
     },
@@ -136,7 +141,7 @@ export default {
         class="font-bold bg-red-600 px-[1em] py-[0.5em] rounded !cursor-pointer"
         @click="postFormData"
       >
-        <span v-if="!useRegistrationStore().isLoadingRequest">{{
+        <span v-if="!MemberRegistrationStore().isLoadingPostRequest">{{
           getLastPageButtonText
         }}</span>
         <span v-else>

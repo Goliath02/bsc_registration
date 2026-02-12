@@ -57,6 +57,10 @@ const registrationSchema = yup.object({
 
 const basicRegistrationSchema = yupResolver(registrationSchema);
 
+const formKey = computed(() => {
+  return MemberRegistrationStore().registrationData.mainData.morePersons.length;
+});
+
 const isValidUpload = () => {
   const upload = MemberRegistrationStore().registrationData.verificationFiles;
 
@@ -139,6 +143,7 @@ onMounted(() => {
 <template>
   <FormHeader header-text="Mitgliederregistrierung" />
   <Form
+    :key="formKey"
     v-slot="$form"
     :initialValues="MemberRegistrationStore().registrationData.mainData"
     id="defaultRegistrationForm"

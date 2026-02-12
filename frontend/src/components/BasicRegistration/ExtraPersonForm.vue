@@ -1,5 +1,5 @@
 <script setup>
-import { useRegistrationStore } from "@/stores/RegistrationStore.js";
+import { MemberRegistrationStore } from "@/stores/MemberRegistrationStore.ts";
 
 const extraModelValues = defineModel();
 
@@ -16,7 +16,8 @@ const genders = ["Männlich", "Weiblich", "Divers"];
       <h3 class="font-bold text-[1.2em]">Extra Person {{ props.index + 1 }}</h3>
       <button
         class="fill-stone-400 hover:fill-stone-200 hover:cursor-pointer"
-        @click="useRegistrationStore().removeExtraPersonForm(props.index)"
+        @click="MemberRegistrationStore().removeExtraPersonForm(props.index)"
+        type="button"
       >
         <svg
           class="bi bi-x-circle-fill"
@@ -37,16 +38,16 @@ const genders = ["Männlich", "Weiblich", "Divers"];
       <div class="flex gap-2">
         <FormField
           class="flex-1"
-          :name="`morePersons[${index}].extraName`"
-          label="extraName"
+          :name="`morePersons[${index}].name`"
+          label="name"
           v-slot="{ error }"
         >
           <FloatLabel variant="in" class="w-full">
             <InputText
               class="w-full"
-              :inputId="`extraName-${index}`"
-              :name="`morePersons[${index}].extraName`"
-              v-model="extraModelValues.extraName"
+              :inputId="`name-${index}`"
+              :name="`morePersons[${index}].name`"
+              v-model="extraModelValues.name"
             />
             <Message
               v-if="error?.message"
@@ -56,22 +57,22 @@ const genders = ["Männlich", "Weiblich", "Divers"];
             >
               {{ error.message }}
             </Message>
-            <label :for="`extraName-${index}`">Name</label>
+            <label :for="`name-${index}`">Name</label>
           </FloatLabel>
         </FormField>
 
         <FormField
           class="flex-1"
-          :name="`morePersons[${index}].extraSureName`"
-          label="extraSureName"
+          :name="`morePersons[${index}].surename`"
+          label="surename"
           v-slot="{ error }"
         >
           <FloatLabel variant="in" class="w-full">
             <InputText
               class="w-full"
-              :inputId="`extraSureName-${index}`"
-              :name="`morePersons[${index}].extraSureName`"
-              v-model="extraModelValues.extraSureName"
+              :inputId="`surename-${index}`"
+              :name="`morePersons[${index}].surename`"
+              v-model="extraModelValues.surename"
             />
             <Message
               v-if="error?.message"
@@ -81,7 +82,7 @@ const genders = ["Männlich", "Weiblich", "Divers"];
             >
               {{ error.message }}
             </Message>
-            <label :for="`extraSureName-${index}`">Nachname</label>
+            <label :for="`surename-${index}`">Nachname</label>
           </FloatLabel>
         </FormField>
       </div>
@@ -89,22 +90,22 @@ const genders = ["Männlich", "Weiblich", "Divers"];
       <div class="flex gap-2">
         <FormField
           class="flex-1"
-          :name="`morePersons[${index}].extraBirthday`"
+          :name="`morePersons[${index}].birthday`"
           label="Geburtstag"
           v-slot="{ error }"
         >
           <FloatLabel variant="in" class="w-full">
             <DatePicker
               class="w-full"
-              :inputId="`extraBirthday-${index}`"
-              :name="`morePersons[${index}].extraBirthday`"
-              v-model="extraModelValues.extraBirthday"
+              :inputId="`birthday-${index}`"
+              :name="`morePersons[${index}].birthday`"
+              v-model="extraModelValues.birthday"
               dateFormat="dd.mm.yy"
               showIcon
               fluid
               iconDisplay="input"
             />
-            <label :for="`extraBirthday-${index}`">Geburtsdatum</label>
+            <label :for="`birthday-${index}`">Geburtsdatum</label>
             <Message
               v-if="error?.message"
               severity="error"
@@ -118,19 +119,19 @@ const genders = ["Männlich", "Weiblich", "Divers"];
 
         <FormField
           class="flex-1"
-          :name="`morePersons[${index}].extraGender`"
+          :name="`morePersons[${index}].gender`"
           label="Gender"
           v-slot="{ error }"
         >
           <FloatLabel variant="in" class="w-full">
             <Select
-              :inputId="`extraGender-${index}`"
-              :name="`morePersons[${index}].extraGender`"
-              v-model="extraModelValues.extraGender"
+              :inputId="`gender-${index}`"
+              :name="`morePersons[${index}].gender`"
+              v-model="extraModelValues.gender"
               :options="genders"
               class="w-full"
             />
-            <label :for="`extraGender-${index}`">Geschlecht</label>
+            <label :for="`gender-${index}`">Geschlecht</label>
             <Message
               v-if="error?.message"
               severity="error"

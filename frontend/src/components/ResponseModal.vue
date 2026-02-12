@@ -1,14 +1,20 @@
 <script>
-import { useRegistrationStore } from "@/stores/RegistrationStore.js";
+import { MemberRegistrationStore } from "@/stores/MemberRegistrationStore.ts";
+import { ErrorType } from "@/stores/Registration.ts";
 
 export default {
   name: "ResponseModal",
+  computed: {
+    ErrorType() {
+      return ErrorType;
+    },
+  },
   methods: {
-    useRegistrationStore,
+    MemberRegistrationStore,
 
     setErrorBack() {
-      useRegistrationStore().requestFailedWithError = "";
-      useRegistrationStore().requestFailed = false;
+      MemberRegistrationStore().requestFailedWithError = null;
+      MemberRegistrationStore().requestFailed = false;
     },
   },
 };
@@ -20,12 +26,18 @@ export default {
     class="fixed top-0 bottom-0 left-0 right-0 modalBackground flex justify-center items-center"
   >
     <div
-      v-if="useRegistrationStore().requestFailedWithError === 'EMAIL_NOT_FOUND'"
+      v-if="
+        MemberRegistrationStore().requestFailedWithError ===
+        ErrorType.EMAIL_NOT_FOUND
+      "
       class="lg:w-1/4 flex flex-col justify-center bg-bsc-lightgray rounded-lg text-white p-[1em] shadow-lg shadow-black"
     >
       <h1 class="text-2xl font-bold mb-2">
         Wir konnten keine Email mit der Adresse
-        {{ useRegistrationStore().registrationData.mainData.email }} erreichen
+        {{
+          MemberRegistrationStore().registrationData.mainData.email
+        }}
+        erreichen
       </h1>
 
       <div>
@@ -42,7 +54,8 @@ export default {
 
     <div
       v-else-if="
-        useRegistrationStore().requestFailedWithError === 'IMAGE_TOO_LARGE'
+        MemberRegistrationStore().requestFailedWithError ===
+        ErrorType.IMAGE_TOO_LARGE
       "
       class="lg:w-1/4 flex flex-col justify-center bg-bsc-lightgray rounded-lg text-white p-[1em] shadow-lg shadow-black"
     >
