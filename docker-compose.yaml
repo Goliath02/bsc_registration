@@ -7,6 +7,9 @@ services:
     volumes:
       - ./logs:/app/logs
       - ./config:/app/config
+      - ./src/main/resources/bscConf.json:/app/config/bscConf.json:ro
+    environment:
+      - CONFIG_FILE_PATH=/app/config/bscConf.json
     restart: always
     depends_on:
       - postgres_db
